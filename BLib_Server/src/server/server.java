@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import common.*;
+import controllers.*;
 import gui.ConnectionEntryController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -17,8 +18,9 @@ import ocsf.server.ConnectionToClient;
 //BLib server-side
 public class server extends AbstractServer{
 	
-		private DBController db;
+		public static DBController db;
 		private ConnectionEntryController conEntry;
+		private SubscriberController sc;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -33,7 +35,8 @@ public class server extends AbstractServer{
 	  public server(int port) 
 	  {
 	    super(port);
-  		db = new DBController();
+  		db = DBController.getInstance();
+  		sc = SubscriberController.getInstance();
 
 	  }
 
@@ -48,40 +51,83 @@ public class server extends AbstractServer{
 	   */
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
   {
-	  	if(msg instanceof ArrayList) {
-	  		System.out.println("the server received the data successfully!");
-	  		try {
-	  			//passing off the relevant classes to handle requests
-	  			if (((ArrayList<String>) msg).get(0).contains("subscriber"))
-	  			{
-	  				if (((ArrayList<String>) msg).get(0).contains("info"))
-	  				{	
-	  					client.sendToClient(db.inputOutput("output", (ArrayList<String>) msg));
-	  				}
-	  				if (((ArrayList<String>) msg).get(0).contains("edit"))
-	  				{	
-	  					client.sendToClient(db.inputOutput("input", (ArrayList<String>) msg));
-	  				}
-	  				
-	  			}
-	  			
-	  			else
-	  				client.sendToClient(db.inputOutput("input",(ArrayList<String>) msg));
-	  				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		SubMessage sm;
+		try {
+		
+			
+			if (msg instanceof SubMessage)
+			{
+				sm = ((SubMessage) msg);
+				if (!sc.verifyPassword(sm.pKey, sm.password)) {
+					client.sendToClient("wrong user id or password");
+					return;//exiting the function to prevent it from completing DB operations on unverified user.
+				}
+				//this is a fetch info request
+				if(!sm.editBool) 
+						client.sendToClient(sc.fetchSubscriber(sm.pKey));
+					
+				//this is an edit request
+				else
+				{
+					sc.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
+					client.sendToClient(sc.fetchSubscriber(sm.pKey));
+				}
+				
 			}
-	  		
-	  	}
-	  	else
-  			System.out.println("poorly formatted message, message discarded");
-	  	
-	  	if (msg instanceof String)
-	  		System.out.println("user " + client.toString() + " says: " + msg.toString());
+		
+		
+		
+		
+		
+		}catch (IOException e) {
+			e.printStackTrace();
+			
+			
+		}
+		
+		
+		
+	}
+		
+		
+		
+		
+		
+		
+//	  	if(msg instanceof ArrayList) {
+//	  		System.out.println("the server received the data successfully!");
+//	  		try {
+//	  			//passing off the relevant classes to handle requests
+//	  			if (((ArrayList<String>) msg).get(0).contains("subscriber"))
+//	  			{
+//	  				if (((ArrayList<String>) msg).get(0).contains("info"))
+//	  				{	
+//	  					client.sendToClient(db.inputOutput("output", (ArrayList<String>) msg));
+//	  				}
+//	  				if (((ArrayList<String>) msg).get(0).contains("edit"))
+//	  				{	
+//	  					client.sendToClient(db.inputOutput("input", (ArrayList<String>) msg));
+//	  				}
+//	  				
+//	  			}
+//	  			
+//	  			else
+//	  				client.sendToClient(db.inputOutput("input",(ArrayList<String>) msg));
+//	  				
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//	  		
+//	  	}
+//	  	else
+//  			System.out.println("poorly formatted message, message discarded");
+//	  	
+//	  	if (msg instanceof String)
+//	  		System.out.println("user " + client.toString() + " says: " + msg.toString());
 
 	    //System.out.println("Message received: " + msg + " from " + client);
-	  }
+//	  }
 	
 	
 	
