@@ -143,7 +143,35 @@ public class DBController {
 //		
 //	}
 	
-	
+	public ResultSet retrieveRowsWithConditions(String table, String[] fields, String[] values) {
+	    if (fields.length != values.length) {
+	        //throw new IllegalArgumentException("Fields and values must have the same length");
+	    }
+
+	    StringBuilder query = new StringBuilder("SELECT * FROM ");
+	    query.append(table);
+	    query.append(" WHERE ");
+	    for (int i = 0; i < fields.length; i++) {
+	        query.append(fields[i]);
+	        query.append(" LIKE ?");
+	        if (i < fields.length - 1) {
+	            query.append(" AND ");
+	        }
+	    }
+	    
+	    try {
+	        PreparedStatement stmt = con.prepareStatement(query.toString());
+	        for (int i = 0; i < values.length; i++) {
+	            //stmt.setString(i + 1, "%" + values[i] + "%");
+	            setStmt(stmt,i+1,fields[i],"%" + values[i] + "%");
+	        }
+	        return stmt.executeQuery();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	    
+	}
 	
 	//consideration for changes:
 	//create a string array for keyfields and keys and concat a statement that can have as many ANDS as i want
@@ -213,25 +241,25 @@ public class DBController {
 		}
 		catch(SQLException e) {
 			System.out.println("SQL Exception at savetoDB error: " + e.getMessage());
-	}
+		}
 		
 	}
 	
-	public void insertRow(String table, String[] Fields, String[] Vals) {
+	public void insertRow(String table, String[] fields, String[] vals) {
 		int rows;
 		PreparedStatement stmt = null;
 		//INSERT INTO subscriber (subscriber_id, subscriber_name, detailed_subscription_history, subscriber_phone_number, subscriber_email) VALUES  (5, 'nofar', 5, 2253150559,'eSemailS@fake.com')
 		StringBuilder query = new StringBuilder ("INSERT INTO ");
 		query.append(table);
 		//query.append(" ");
-		if (Fields!=null)
+		if (fields!=null)
 		{
 			query.append(" (");
-			for (int i = 0; i < Fields.length-1; i++) {
-				query.append(Fields[i]);
+			for (int i = 0; i < fields.length-1; i++) {
+				query.append(fields[i]);
 				query.append(", ");
 			}
-			query.append(Fields[Fields.length-1]);
+			query.append(fields[fields.length-1]);
 			query.append(")");
 			
 		}
@@ -246,13 +274,18 @@ public class DBController {
 		
 		
 		query.append(" VALUES (");
-	    for (int i = 0; i < Vals.length-1; i++) {
+	    for (int i = 0; i < vals.length-1; i++) {
 	        query.append("?, ");
 	    }
 	    	query.append("?)");
+	    	
 
+	    
 	    	try {
 				stmt = con.prepareStatement(query.toString());
+				for (int i = 0; i < vals.length; i++) {
+					setStmt(stmt,i+1,fields[i],vals[i]);
+				}
 				rows=stmt.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println("DBController.insertRows failed");
