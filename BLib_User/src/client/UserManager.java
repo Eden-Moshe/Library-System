@@ -35,6 +35,7 @@ public final class UserManager extends AbstractClient
 	public static boolean awaitResponse = false;
 	public Subscriber  s1;
   	public BLibData udata;
+  	public static MyInbox inb=new MyInbox();
 
 
   //Constructors ****************************************************
@@ -64,9 +65,9 @@ public final class UserManager extends AbstractClient
 	}
   
   public static UserManager getInstance() {
-	    if (instance == null) {
-	        throw new IllegalStateException("UserManager is not initialized. Call getInstance(String host, int port) first.");
-	    }
+//	    if (instance == null) {
+//	        throw new IllegalStateException("UserManager is not initialized. Call getInstance(String host, int port) first.");
+//	    }
 	    return instance;
 	}
 
@@ -81,28 +82,7 @@ public final class UserManager extends AbstractClient
   {
 	  
 
-	  
-//	  awaitResponse = false;
-//	  ArrayList<String> data = new ArrayList<String>();
-//	  
-//	  System.out.println("--> handleMessageFromServer");
-//	  
-//	  if (msg instanceof ArrayList)
-//	  {
-//		 
-//		 data=(ArrayList<String>)msg;
-//		 if (data.get(0).contains("subscriber"))
-//		 {
-//			 s1.setSID(data.get(1));
-//		 	 s1.setName(data.get(2));
-//		 	 s1.setHistID(data.get(3));
-//		 	 s1.setPNumber(data.get(4));
-//		 	 s1.setEmail(data.get(5));
-//		 }
-//
-//		 
-//		 
-//	  }
+
 	  
 	  
 	  awaitResponse = false;
@@ -112,6 +92,9 @@ public final class UserManager extends AbstractClient
 		  s1=(Subscriber) msg;
 		  System.out.println(s1);
 	  }
+
+	  else
+		  inb.setMessage(msg);
 	  
 	  
 

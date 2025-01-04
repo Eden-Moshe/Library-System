@@ -103,6 +103,7 @@ public  class SubscriberEntryController   {
 		
 		UM.send(getSub);
 		
+		
 		//ChatClient.udata.setObj(new Subscriber (null,null,null,null,null));
 		
 		
@@ -121,7 +122,9 @@ public  class SubscriberEntryController   {
 			Pane root = loader.load(getClass().getResource("/gui/SubscriberForm.fxml").openStream());
 			SubscriberFormController subscriberFormController = loader.getController();		
 			subscriberFormController.loadSubscriber(UM.s1);
-		
+			
+				
+			
 			Scene scene = new Scene(root);			
 			scene.getStylesheets().add(getClass().getResource("/gui/SubscriberForm.css").toExternalForm());
 			primaryStage.setTitle("Subscriber Managment Tool");

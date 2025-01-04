@@ -70,6 +70,7 @@ public class SubscriberFormController implements Initializable {
 		this.txtSID.setText(s.getSID());
 		this.txtHistory.setText(s.getHistID());
 		
+		
 	}
 	
 	
