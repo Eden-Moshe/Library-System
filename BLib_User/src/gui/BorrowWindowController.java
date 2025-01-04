@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import client.UserManager;
@@ -37,6 +38,9 @@ public class BorrowWindowController {
     
     @FXML
     private TextField txtResponse;
+    
+    @FXML
+    private Button btnReset;
 
     private String getBorrowerId() {
         return txtBorrowerId.getText();
@@ -61,7 +65,16 @@ public class BorrowWindowController {
 		
 	}
 	
-    public void sendBorrowRequest(ActionEvent event) throws SQLException {
+	@FXML
+	private void resetFields(ActionEvent event) {
+	    txtBorrowerId.clear();
+	    txtBookBarcode.clear();
+	    txtBorrowDate.clear();
+	    txtReturnDate.clear();
+	    txtResponse.clear();
+	}
+	
+    public void sendBorrowRequest(ActionEvent event) throws SQLException, IOException {
 		FXMLLoader loader = new FXMLLoader();
 		UserManager UM = UserManager.getInstance();
     	String borrowerId = getBorrowerId();
@@ -83,6 +96,7 @@ public class BorrowWindowController {
 		getBorrow.barcode=bookBarcode;
 		
 		UM.send(getBorrow);
+		txtResponse.setText("Borrow request sent successfully.");
 
         
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -94,7 +108,7 @@ public class BorrowWindowController {
 	
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Subscriber Managment Tool");
+		primaryStage.setTitle("Borrow Managment Tool");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
