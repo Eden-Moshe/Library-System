@@ -35,6 +35,7 @@ public final class UserManager extends AbstractClient
 	public static boolean awaitResponse = false;
 	public Subscriber  s1;
   	public BLibData udata;
+  	public static MyInbox inb = new MyInbox();
 
 
   //Constructors ****************************************************

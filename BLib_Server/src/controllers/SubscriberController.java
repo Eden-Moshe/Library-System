@@ -23,6 +23,7 @@ public class SubscriberController {
 	{
 		db=DBController.getInstance();
 	}
+	
 	public Subscriber fetchSubscriber(String pKey)
 	{
 		
@@ -42,6 +43,7 @@ public class SubscriberController {
 			return null;
 		}
 	}
+	
 	public void editSubscriber(String pKey, String field, String val)
 	{
 		//list of valid editing Subscriber table columns. needed for validation

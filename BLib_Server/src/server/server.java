@@ -1,17 +1,14 @@
 package server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import common.*;
-import controllers.*;
+import common.BookMessage;
+import common.BorrowMessage;
+import common.SubMessage;
+import controllers.BookController;
+import controllers.BorrowController;
+import controllers.SubscriberController;
 import gui.ConnectionEntryController;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -21,6 +18,8 @@ public class server extends AbstractServer{
 		public static DBController db;
 		private ConnectionEntryController conEntry;
 		private SubscriberController sc;
+		private BorrowController bc;
+		private BookController bKc;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -37,7 +36,8 @@ public class server extends AbstractServer{
 	    super(port);
   		db = DBController.getInstance();
   		sc = SubscriberController.getInstance();
-
+  		bc = BorrowController.getInstance();
+  		bKc = BookController.getInstance();
 	  }
 
 	@Override
@@ -52,6 +52,9 @@ public class server extends AbstractServer{
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
   {
 		SubMessage sm;
+		BorrowMessage bm;
+		BookMessage bKm;
+		
 		try {
 		
 			
@@ -72,6 +75,22 @@ public class server extends AbstractServer{
 					sc.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
 					client.sendToClient(sc.fetchSubscriber(sm.pKey));
 				}
+				
+			}
+			
+			if (msg instanceof BorrowMessage) 
+			{
+				bm = ((BorrowMessage)msg);
+				
+				
+			}
+			
+			if (msg instanceof BookMessage) 
+			{
+				bKm = ((BookMessage)msg);
+				//this is a fetch info request
+				if(!bKm.editBool) 
+						client.sendToClient(bKc.fetchBook(bKm.pKey));
 				
 			}
 		

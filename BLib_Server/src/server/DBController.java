@@ -1,12 +1,13 @@
 package server;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.sql.*;
 
 public class DBController {
 	private static final DBController instance = new DBController();
@@ -33,7 +34,7 @@ public class DBController {
 		}
 		
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=IST","root","Aa123456");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=IST","root","eden1234");
 		} catch (SQLException e) {
 			System.out.print("cannot connect to the DB : " + e.getMessage());
 			return false;
