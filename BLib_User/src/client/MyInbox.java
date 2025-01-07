@@ -1,5 +1,5 @@
 package client;
-
+//aviad
 public class MyInbox {
 	private String awaiting_message;
 	private Object objMsg;
