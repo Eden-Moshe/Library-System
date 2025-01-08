@@ -1,6 +1,8 @@
 package client;
 
 import common.*;
+import gui.LoginController;
+import gui.MainMenuController;
 import gui.SubscriberEntryController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -43,8 +45,11 @@ public class SubscriberUI extends Application {
 		
 		UM = UM.getInstance(host,port);
 		SubscriberUI.primaryStage = primaryStage;				  		
-		SubscriberEntryController aFrame = new SubscriberEntryController(); // create SubscriberEntry
-		aFrame.start(primaryStage);
+		//SubscriberEntryController aFrame = new SubscriberEntryController(); // create SubscriberEntry
+		LoginController LC = new LoginController();
+		
+		
+		LC.start(primaryStage);
 		
 		
 	}

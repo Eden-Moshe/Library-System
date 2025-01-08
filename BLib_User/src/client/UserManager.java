@@ -36,6 +36,7 @@ public final class UserManager extends AbstractClient
 	public Subscriber  s1;
   	public BLibData udata;
   	public static MyInbox inb=new MyInbox();
+  	private String myPass;
 
 
   //Constructors ****************************************************
@@ -54,6 +55,10 @@ public final class UserManager extends AbstractClient
     super(host, port); //Call the superclass constructor
 	udata = new BLibData();
     openConnection();
+  }
+  public void setPass(String p)
+  {
+	  myPass = p;
   }
   
   

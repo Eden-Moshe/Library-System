@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import common.BookMessage;
 import common.BorrowMessage;
+import common.LoginMessage;
 import common.RequestMessage;
 import common.SubMessage;
 import controllers.BookController;
 import controllers.BorrowController;
-import controllers.RequestController;
+//import controllers.RequestController;
 import controllers.SubscriberController;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
@@ -22,7 +23,7 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
-		private RequestController requestController;
+		//private RequestController requestController;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -41,7 +42,7 @@ public class server extends AbstractServer{
   		subscriberController = SubscriberController.getInstance();
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
-  		requestController = RequestController.getInstance();
+  		//requestController = RequestController.getInstance();
 	  }
 
 	@Override
@@ -56,12 +57,24 @@ public class server extends AbstractServer{
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
   {
 		SubMessage sm;
+		LoginMessage lm;
 		BorrowMessage borrowMessage;
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
 		
 		try {
 		
+			if (msg instanceof LoginMessage)
+			{
+				lm = ((LoginMessage) msg);
+				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
+					client.sendToClient("wrong user id or password");
+					return;//exiting the function to prevent it from completing DB operations on unverified user.
+				}
+				else
+					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
+			}
+			
 			
 			if (msg instanceof SubMessage)
 			{
@@ -103,7 +116,7 @@ public class server extends AbstractServer{
 			{
 				reqMessage = ((RequestMessage)msg);
 				//this is a fetch info request
-				client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
+				//client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
 				
 			}
 		
