@@ -218,6 +218,7 @@ public class DBController {
 		
 	}
 	
+	//table = table name, fields = columns vals = value inside column
 	public void insertRow(String table, String[] Fields, String[] Vals) {
 		int rows;
 		PreparedStatement stmt = null;

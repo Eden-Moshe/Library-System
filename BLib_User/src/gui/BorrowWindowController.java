@@ -2,9 +2,11 @@ package gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import client.UserManager;
-import common.Borrow;
 import common.BorrowMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,12 +52,26 @@ public class BorrowWindowController {
         return txtBookBarcode.getText();
     }
 
-    private String getBorrowDate() {
-        return txtBorrowDate.getText();
+    private Date getBorrowDate() {
+        String borrowDateText = txtBorrowDate.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the format that matches your input
+        try {
+            return dateFormat.parse(borrowDateText); // Parse the String into a Date
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Return null if parsing fails
+        }
     }
 
-    private String getReturnDate() {
-        return txtReturnDate.getText();
+    private Date getReturnDate() {
+        String returnDateText = txtReturnDate.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the format that matches your input
+        try {
+            return dateFormat.parse(returnDateText); // Parse the String into a Date
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Return null if parsing fails
+        }
     }
     
 
@@ -79,21 +95,21 @@ public class BorrowWindowController {
 		UserManager UM = UserManager.getInstance();
     	String borrowerId = getBorrowerId();
         String bookBarcode = getBookBarcode();
-        String borrowDate = getBorrowDate();
-        String returnDate = getReturnDate();
+        Date borrowDate = getBorrowDate();
+        Date returnDate = getReturnDate();
 
-        if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || borrowDate.trim().isEmpty() || returnDate.trim().isEmpty()) {
+        if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || borrowDate == null || returnDate == null) {
             System.out.println("All fields are required.");
             return;
         }
         
 		BorrowMessage getBorrow = new BorrowMessage();
 		getBorrow.editBool=false;
-		//TO CHECK IF ITS TYPE STRING OR DATE
-		//getBorrow.borrowDate=borrowDate;
-		//getBorrow.returnDate=returnDate;
-		getBorrow.subscriber_id=borrowerId;
-		getBorrow.barcode=bookBarcode;
+		getBorrow.borrow.setBorrowDate(borrowDate);
+		//return date set inside Borrow class
+		getBorrow.borrow.setReturnDate(returnDate);
+		getBorrow.s.setSID(borrowerId);
+		getBorrow.b.setBarcode(bookBarcode);
 		
 		UM.send(getBorrow);
 		txtResponse.setText("Borrow request sent successfully.");

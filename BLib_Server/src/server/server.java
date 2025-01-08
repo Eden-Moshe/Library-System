@@ -4,9 +4,11 @@ import java.io.IOException;
 
 import common.BookMessage;
 import common.BorrowMessage;
+import common.RequestMessage;
 import common.SubMessage;
 import controllers.BookController;
 import controllers.BorrowController;
+import controllers.RequestController;
 import controllers.SubscriberController;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
@@ -17,9 +19,10 @@ public class server extends AbstractServer{
 	
 		public static DBController db;
 		private ConnectionEntryController conEntry;
-		private SubscriberController sc;
-		private BorrowController bc;
-		private BookController bKc;
+		private SubscriberController subscriberController;
+		private BorrowController borrowController;
+		private BookController bookController;
+		private RequestController requestController;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -35,9 +38,10 @@ public class server extends AbstractServer{
 	  {
 	    super(port);
   		db = DBController.getInstance();
-  		sc = SubscriberController.getInstance();
-  		bc = BorrowController.getInstance();
-  		bKc = BookController.getInstance();
+  		subscriberController = SubscriberController.getInstance();
+  		borrowController = BorrowController.getInstance();
+  		bookController = BookController.getInstance();
+  		requestController = RequestController.getInstance();
 	  }
 
 	@Override
@@ -52,8 +56,9 @@ public class server extends AbstractServer{
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
   {
 		SubMessage sm;
-		BorrowMessage bm;
-		BookMessage bKm;
+		BorrowMessage borrowMessage;
+		BookMessage bookMessage;
+		RequestMessage reqMessage;
 		
 		try {
 		
@@ -61,36 +66,44 @@ public class server extends AbstractServer{
 			if (msg instanceof SubMessage)
 			{
 				sm = ((SubMessage) msg);
-				if (!sc.verifyPassword(sm.pKey, sm.password)) {
+				if (!subscriberController.verifyPassword(sm.pKey, sm.password)) {
 					client.sendToClient("wrong user id or password");
 					return;//exiting the function to prevent it from completing DB operations on unverified user.
 				}
 				//this is a fetch info request
 				if(!sm.editBool) 
-						client.sendToClient(sc.fetchSubscriber(sm.pKey));
+						client.sendToClient(subscriberController.fetchSubscriber(sm.pKey));
 					
 				//this is an edit request
 				else
 				{
-					sc.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
-					client.sendToClient(sc.fetchSubscriber(sm.pKey));
+					subscriberController.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
+					client.sendToClient(subscriberController.fetchSubscriber(sm.pKey));
 				}
 				
 			}
 			
 			if (msg instanceof BorrowMessage) 
 			{
-				bm = ((BorrowMessage)msg);
-				
+				borrowMessage = ((BorrowMessage)msg);
+				client.sendToClient(borrowController.createBorrow(borrowMessage.s,borrowMessage.b,borrowMessage.borrow));
 				
 			}
 			
 			if (msg instanceof BookMessage) 
 			{
-				bKm = ((BookMessage)msg);
+				bookMessage = ((BookMessage)msg);
 				//this is a fetch info request
-				if(!bKm.editBool) 
-						client.sendToClient(bKc.fetchBook(bKm.pKey));
+				if(!bookMessage.editBool) 
+						client.sendToClient(bookController.fetchBook(bookMessage.pKey));
+				
+			}
+			
+			if (msg instanceof RequestMessage) 
+			{
+				reqMessage = ((RequestMessage)msg);
+				//this is a fetch info request
+				client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
 				
 			}
 		

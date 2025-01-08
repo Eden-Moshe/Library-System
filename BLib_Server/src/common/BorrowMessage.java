@@ -5,10 +5,9 @@ import java.util.Date;
 
 public class BorrowMessage implements Serializable {
     
-	public Date borrowDate;
-    public Date returnDate;
 	public boolean editBool;
 	public Subscriber s;
+	public Borrow borrow;
 	public Book b;
 	
 }
