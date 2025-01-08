@@ -33,13 +33,7 @@ public  class MainMenuController   {
 	@FXML
 	private TextField lblID;
 	private TextField lblPassword;
-	
-	private String getID() {
-		return lblID.getText();
-	}
-	private String getPass() {
-		return lblPassword.getText();
-	}
+
 
 	public void btnLendBook() {
 		
@@ -60,18 +54,20 @@ public  class MainMenuController   {
 		
 		FXMLLoader loader = new FXMLLoader();
 		
-		String id=getID();
-		String pass=getPass();
-		
 		UserManager UM = UserManager.getInstance();
-		
-		LoginMessage lm = new LoginMessage();
-		lm.id=id;
-		lm.password=pass;
-		
-		
-		UM.setPass(pass);
-		UM.send(lm);
+
+//		
+//		String id=UM.s1.getSID();
+//		String pass=UM.get
+//		
+//		UserManager UM = UserManager.getInstance();
+//		
+//		LoginMessage lm = new LoginMessage();
+//
+//		
+//		
+//		UM.setPass(pass);
+//		UM.send(lm);
 		
 		
 		if (UM.s1.getSID()!=null)
@@ -81,8 +77,8 @@ public  class MainMenuController   {
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 			Stage primaryStage = new Stage();
 			Pane root = loader.load(getClass().getResource("/gui/SubscriberForm.fxml").openStream());
-			//SubscriberFormController subscriberFormController = loader.getController();		
-			//subscriberFormController.loadSubscriber(UM.s1);
+			SubscriberFormController subscriberFormController = loader.getController();		
+			subscriberFormController.loadSubscriber(UM.s1);
 			
 			
 				
