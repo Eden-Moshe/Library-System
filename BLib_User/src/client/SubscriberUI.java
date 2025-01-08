@@ -4,7 +4,7 @@ import common.*;
 import gui.SubscriberEntryController;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+// het shaked
 public class SubscriberUI extends Application {
 	public static UserManager UM; //only one instance
 	public static Stage primaryStage ;
