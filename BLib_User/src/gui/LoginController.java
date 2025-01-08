@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,16 +25,21 @@ public  class LoginController   {
 	
 	@FXML
 	private Button btnLogin = null;
+
 	
-	@FXML
-	private TextField lblID;
-	private TextField lblPassword;
-	
+    @FXML
+    private TextField idtxt;
+
+    @FXML
+    private PasswordField passwordtxt;
+
+    @FXML
+
 	private String getID() {
-		return lblID.getText();
+		return idtxt.getText();
 	}
 	private String getPass() {
-		return lblPassword.getText();
+		return passwordtxt.getText();
 	}
 
 	
