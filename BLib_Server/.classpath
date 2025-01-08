@@ -9,6 +9,5 @@
 	<classpathentry kind="src" path="OCSF"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javafx"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.13.jar"/>
-	<classpathentry kind="src" path="/BLib_Common"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

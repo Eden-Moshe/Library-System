@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class Subscriber implements Serializable {
 	private String SID, histID;
-	private String name, pNumber, email;
+	private String name, pNumber, email, status;
 	
-	public Subscriber (String sid, String name, String histID, String pNumber, String email)
+	public Subscriber (String sid, String name, String histID, String pNumber, String email, String status)
 	{
 		this.email=email;
 		this.SID=sid;
 		this.pNumber=pNumber;
 		this.histID=histID;
 		this.name=name;
-		
+		this.status = "eligible";
 		
 	}
 	 
@@ -58,6 +58,22 @@ public class Subscriber implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    // Getter for status
+    public String getStatus() {
+        return status;
+    }
+    
+    // Setter for status
+    public void setStatus(String newStatus) {
+        if ("eligible".equalsIgnoreCase(newStatus) || "ineligible".equalsIgnoreCase(newStatus)) {
+            this.status = newStatus;
+        } else {
+            throw new IllegalArgumentException("Invalid status. Only 'eligible' or 'ineligible' are allowed.");
+        }
+    }
+    
+    
     
     @Override
     public String toString() {

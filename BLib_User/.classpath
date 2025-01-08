@@ -8,7 +8,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="OCSF"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javafx"/>
-	<classpathentry kind="src" path="/BLib_Common"/>
-	<classpathentry kind="src" path="/BLib_Common2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

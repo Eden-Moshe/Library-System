@@ -1,17 +1,17 @@
 package server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import common.*;
-import controllers.*;
+import common.BookMessage;
+import common.BorrowMessage;
+import common.LoginMessage;
+import common.RequestMessage;
+import common.SubMessage;
+import controllers.BookController;
+import controllers.BorrowController;
+//import controllers.RequestController;
+import controllers.SubscriberController;
 import gui.ConnectionEntryController;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -20,7 +20,10 @@ public class server extends AbstractServer{
 	
 		public static DBController db;
 		private ConnectionEntryController conEntry;
-		private SubscriberController sc;
+		private SubscriberController subscriberController;
+		private BorrowController borrowController;
+		private BookController bookController;
+		//private RequestController requestController;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -36,8 +39,10 @@ public class server extends AbstractServer{
 	  {
 	    super(port);
   		db = DBController.getInstance();
-  		sc = SubscriberController.getInstance();
-
+  		subscriberController = SubscriberController.getInstance();
+  		borrowController = BorrowController.getInstance();
+  		bookController = BookController.getInstance();
+  		//requestController = RequestController.getInstance();
 	  }
 
 	@Override
@@ -52,26 +57,66 @@ public class server extends AbstractServer{
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
   {
 		SubMessage sm;
+		LoginMessage lm;
+		BorrowMessage borrowMessage;
+		BookMessage bookMessage;
+		RequestMessage reqMessage;
+		
 		try {
 		
+			if (msg instanceof LoginMessage)
+			{
+				lm = ((LoginMessage) msg);
+				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
+					client.sendToClient("wrong user id or password");
+					return;//exiting the function to prevent it from completing DB operations on unverified user.
+				}
+				else
+					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
+			}
+			
 			
 			if (msg instanceof SubMessage)
 			{
 				sm = ((SubMessage) msg);
-				if (!sc.verifyPassword(sm.pKey, sm.password)) {
+				if (!subscriberController.verifyPassword(sm.pKey, sm.password)) {
 					client.sendToClient("wrong user id or password");
 					return;//exiting the function to prevent it from completing DB operations on unverified user.
 				}
 				//this is a fetch info request
 				if(!sm.editBool) 
-						client.sendToClient(sc.fetchSubscriber(sm.pKey));
+						client.sendToClient(subscriberController.fetchSubscriber(sm.pKey));
 					
 				//this is an edit request
 				else
 				{
-					sc.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
-					client.sendToClient(sc.fetchSubscriber(sm.pKey));
+					subscriberController.editSubscriber(sm.pKey,sm.fieldCol,sm.fieldVal);
+					client.sendToClient(subscriberController.fetchSubscriber(sm.pKey));
 				}
+				
+			}
+			
+			if (msg instanceof BorrowMessage) 
+			{
+				borrowMessage = ((BorrowMessage)msg);
+				client.sendToClient(borrowController.createBorrow(borrowMessage.s,borrowMessage.b,borrowMessage.borrow));
+				
+			}
+			
+			if (msg instanceof BookMessage) 
+			{
+				bookMessage = ((BookMessage)msg);
+				//this is a fetch info request
+				if(!bookMessage.editBool) 
+						client.sendToClient(bookController.fetchBook(bookMessage.pKey));
+				
+			}
+			
+			if (msg instanceof RequestMessage) 
+			{
+				reqMessage = ((RequestMessage)msg);
+				//this is a fetch info request
+				//client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
 				
 			}
 		
