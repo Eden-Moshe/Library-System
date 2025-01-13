@@ -16,6 +16,7 @@ public class BorrowController {
 	private static String tName="borrow";
 	private static String keyField="book_barcode";
 	
+	
 	public static BorrowController getInstance() {
 		return instance;
 	}

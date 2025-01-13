@@ -3,19 +3,31 @@ package common;
 import java.io.Serializable;
 
 public class Subscriber implements Serializable {
+<<<<<<< HEAD
 	
 	private String SID,name, pNumber, email, status;
 	
+=======
+	private String SID, histID;
+	private String name, pNumber, email, status, newPass;
+	
+>>>>>>> origin/main
 	public Subscriber (String sid, String name, String pNumber, String email, String status)
 	{
 		this.SID=sid;
+<<<<<<< HEAD
 		this.name=name;
 		this.pNumber=pNumber;
 		this.email=email;
 		this.status = status;
+=======
+		this.pNumber=pNumber;
+		this.name=name;
+		this.status = status;
+		
+>>>>>>> origin/main
 		
 	}
-	 
 	public void setSID(String s) 
 	{
         this.SID=s;
@@ -51,6 +63,7 @@ public class Subscriber implements Serializable {
         this.email = email;
     }
     
+    
     // Getter for status
     public String getStatus() {
         return status;
@@ -65,7 +78,13 @@ public class Subscriber implements Serializable {
         }
     }
     
-    
+    public void setTempPass(String pass) {
+        this.newPass = pass;
+    }
+    public String getTemporaryPassword() {
+		return newPass;
+		
+	}
     
     @Override
     public String toString() {
@@ -75,6 +94,8 @@ public class Subscriber implements Serializable {
         ", subscriber_phone_number='" + pNumber +  
         "', subscriber_email='" + email +'\'' ;
     }
+
+	
 
     
 }

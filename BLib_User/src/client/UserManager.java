@@ -4,6 +4,7 @@
 
 package client;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,6 +14,14 @@ import common.Borrow;
 import common.BorrowMessage;
 import common.Subscriber;
 import ocsf.client.AbstractClient;
+=======
+import ocsf.client.*;
+import client.*;
+import common.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+>>>>>>> origin/main
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -38,10 +47,14 @@ public final class UserManager extends AbstractClient
 	public Subscriber  s1;
 	public Borrow b;
   	public BLibData udata;
-  	public static MyInbox inb=new MyInbox();
+  	public MyInbox inb=new MyInbox();
   	private String myPass;
+<<<<<<< HEAD
   	
   	//private final BlockingQueue<Object> responseQueue = new LinkedBlockingQueue<>();
+=======
+  	public Librarian librarian;
+>>>>>>> origin/main
 
 
   //Constructors ****************************************************
@@ -66,6 +79,10 @@ public final class UserManager extends AbstractClient
 	  myPass = p;
   }
   
+  public String getPass()
+  {
+	  return myPass;
+  }
   
   public static UserManager getInstance(String host, int port) throws IOException {
 	    if (instance == null) {
@@ -97,9 +114,11 @@ public final class UserManager extends AbstractClient
 //	    }
 
 	  
-	  
+		System.out.println("received message");
+
 	  awaitResponse = false;
 	  
+<<<<<<< HEAD
 	  if (msg instanceof Subscriber)
 	  {
 		  s1=(Subscriber) msg;
@@ -113,6 +132,15 @@ public final class UserManager extends AbstractClient
 	  
 	  else
 		  inb.setMessage(msg);
+=======
+	  if (msg instanceof Librarian)
+		  librarian = (Librarian) msg;
+	  if (msg == null)
+		  inb.setMessage("received null");
+	  inb.setMessage(msg);
+	  
+	  
+>>>>>>> origin/main
 
 	 
   }

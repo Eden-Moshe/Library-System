@@ -54,9 +54,18 @@ public  class LoginController   {
 		UM.setPass(pass);
 		UM.send(lm);
 		
+		System.out.println("pre null instance");
+		//received null. something went wrong. temp code
+		if (UM.inb.getMessage().contains("null"))
+			return;
 		
-		if (UM.s1.getSID()!=null)
+		System.out.println("pre sub instance");
+		//login and show subscriber menu
+		if (UM.inb.getObj() instanceof Subscriber)
 		{
+			System.out.println("sub instance");
+			UM.s1=(Subscriber) UM.inb.getObj();
+			
 			
 			//start main menu process
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -73,10 +82,31 @@ public  class LoginController   {
 			
 			
 		}
-		else
+		else {
+		if (UM.librarian != null)
 		{
-			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
+			
+			
+			//start main menu process
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+			Stage primaryStage = new Stage();
+			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
+			//SubscriberFormController subscriberFormController = loader.getController();		
+			//subscriberFormController.loadSubscriber(UM.s1);
+			
+			Scene scene = new Scene(root);			
+			primaryStage.setTitle("Main Menu");
+
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+			
+			
+			}
 		}
+		//else
+		//{
+			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
+		//}
 		
 	}
 

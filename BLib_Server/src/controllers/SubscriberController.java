@@ -24,6 +24,7 @@ public class SubscriberController {
 		db=DBController.getInstance();
 	}
 	
+<<<<<<< HEAD
 	public Subscriber fetchSubscriber(String pKey) {
 	    Subscriber ret = null;
 	    ResultSet rs = db.retrieveRow(tName, keyField, pKey);
@@ -81,12 +82,15 @@ public class SubscriberController {
         	return;
         }
         
-        db.editRow(keyField, pKey, field, val);
+        db.editRow("subscriber",keyField, pKey, field, val);
         
 	}
-	public void addSubscriber()
+	public void addSubscriber(String name)
 	{
 		//needs to add subscriber to database
+		
+		
+		
 	}
 
 	

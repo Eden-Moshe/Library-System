@@ -24,19 +24,24 @@ public  class MainMenuController   {
 	private Button btnLogin = null;
 	
 	@FXML
-	private Button btnSend = null;
+	private Button btnCreateSubscriber = null;
 	
 	@FXML
 	private TextField lblID;
 	private TextField lblPassword;
 
 
+<<<<<<< HEAD
 	public void btnLendBook(ActionEvent event) throws Exception {
 		
+=======
+	public void btnCreateSubscriber(ActionEvent event) throws Exception {
+>>>>>>> origin/main
 		FXMLLoader loader = new FXMLLoader();
 		
 		UserManager UM = UserManager.getInstance();
 		
+<<<<<<< HEAD
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
 		Stage primaryStage = new Stage();
 		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
@@ -53,12 +58,31 @@ public  class MainMenuController   {
 	}
 	
 	public void btnViewHistory(ActionEvent event) throws Exception {
+=======
+
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
+
+		
+		Scene scene = new Scene(root);			
+		primaryStage.setTitle("Subscriber Creation Tool");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+		
+		
+
+	}
+	public void btnLendBook() {
+>>>>>>> origin/main
 		
 	}
 	public void btnSearchBook(ActionEvent event) throws Exception {
 		
 	}
 	public void btnReturnBook(ActionEvent event) throws Exception {
+		
 		
 	}
 	
@@ -89,19 +113,6 @@ public  class MainMenuController   {
 		FXMLLoader loader = new FXMLLoader();
 		
 		UserManager UM = UserManager.getInstance();
-
-//		
-//		String id=UM.s1.getSID();
-//		String pass=UM.get
-//		
-//		UserManager UM = UserManager.getInstance();
-//		
-//		LoginMessage lm = new LoginMessage();
-//
-//		
-//		
-//		UM.setPass(pass);
-//		UM.send(lm);
 		
 		
 		if (UM.s1.getSID()!=null)
