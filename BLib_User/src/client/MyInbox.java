@@ -1,5 +1,5 @@
 package client;
-
+//aviad
 public class MyInbox {
 	private String immediate_message="no new message";
 	private Object objMsg;
