@@ -1,12 +1,12 @@
 package server;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-import common.BookMessage;
-import common.BorrowMessage;
-import common.LoginMessage;
-import common.RequestMessage;
-import common.SubMessage;
+import common.*;
+
 import controllers.BookController;
 import controllers.BorrowController;
 //import controllers.RequestController;
@@ -23,6 +23,9 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
+		
+		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
+		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
 		//private RequestController requestController;
 	  /**
 	   * The default port to listen on.
@@ -45,8 +48,46 @@ public class server extends AbstractServer{
   		//requestController = RequestController.getInstance();
 	  }
 
+	
+	
+	private Object userLogin (ConnectionToClient client ,String id, String pass)
+	{
+		System.out.println("userlogin the fuck");
+		ResultSet auth = db.retrieveRow("users","user_id", id);
+		try {
+			if (auth.next())
+			{
+				System.out.println("auth.next the fuck");
+
+				if (!auth.getString("user_password").equals(pass))
+					return null;
+				System.out.println("auth.next pass is fine the fuck");
+				if (auth.getString("user_role").equals("Librarian")) {
+					System.out.println("Librarian the fuck");
+					connectedLibrarians.add(client);
+					System.out.println("Librarian connected the fuck");
+					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
+					if (ret.next())
+					{
+						return new Librarian(ret.getString("librarian_name"));
+					}
+					
+				}
+				else {
+					
+					connectedSubscribers.add(client);
+					return subscriberController.fetchSubscriber(id);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("userLogin failed");
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
 	@Override
-	  
 	  /**
 	   * This method handles any messages received from the client.
 	   *
@@ -55,7 +96,7 @@ public class server extends AbstractServer{
 	 * @throws IOException 
 	   */
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
-  {
+	{
 		SubMessage sm;
 		LoginMessage lm;
 		BorrowMessage borrowMessage;
@@ -67,15 +108,34 @@ public class server extends AbstractServer{
 			if (msg instanceof LoginMessage)
 			{
 				lm = ((LoginMessage) msg);
-				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
+				System.out.println("login the fuck " +  lm.id + " pass " + lm.password);
+				Object newUser = userLogin(client,lm.id,lm.password);
+				System.out.println("newuser the fuck");
+				if (newUser == null) {
 					client.sendToClient("wrong user id or password");
-					return;//exiting the function to prevent it from completing DB operations on unverified user.
+					System.out.println("wrong user id the fuck");
+				
 				}
-				else
-					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
+				System.out.println("newuser the fuck " +  newUser.toString());
+				client.sendToClient(newUser);
+				System.out.println("newuser the fuck 2" +  newUser.toString());
+
+				
+//				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
+//					client.sendToClient("wrong user id or password");
+//					return;//exiting the function to prevent it from completing DB operations on unverified user.
+//				}
+//				else
+//				{
+//					connectedSubscribers.add(client);
+//					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
+//					
+//				}
 			}
-			
-			
+			if (msg instanceof LibrarianMessage)
+			{
+				
+			}
 			if (msg instanceof SubMessage)
 			{
 				sm = ((SubMessage) msg);
@@ -226,6 +286,9 @@ public class server extends AbstractServer{
 	   */
 	  synchronized protected void clientDisconnected(
 	    ConnectionToClient client) {
+		  
+		  connectedSubscribers.remove(client);
+		  connectedLibrarians.remove(client);
 		  
 		  conEntry.removeConnection();
 

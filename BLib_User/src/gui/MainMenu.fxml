@@ -5,10 +5,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainMenuController">
    <children>
-      <Button id="btnUserInfo" fx:id="btnUserInfo" onAction="#btnUserInfo" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="User info" />
-      <Button id="btnLendBook" fx:id="btnLendBook" onAction="#btnLendBook" layoutX="14.0" layoutY="74.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Lend Book" />
-      <Button id="btnViewHistory" fx:id="btnViewHistory" onAction="#btnViewHistory" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="View History" />
-      <Button id="btnSearchBook" fx:id="btnSearchBook" onAction="#btnSearchBook" layoutX="14.0" layoutY="135.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Search book" />
-      <Button id="btnReturnBook" fx:id="btnReturnBook" onAction="#btnReturnBook" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Return Book" />
+      <Button id="btnUserInfo" fx:id="btnUserInfo" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnUserInfo" prefHeight="34.0" prefWidth="110.0" text="User info" />
+      <Button id="btnLendBook" fx:id="btnLendBook" layoutX="14.0" layoutY="74.0" mnemonicParsing="false" onAction="#btnLendBook" prefHeight="34.0" prefWidth="110.0" text="Lend Book" />
+      <Button id="btnViewHistory" fx:id="btnViewHistory" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" onAction="#btnViewHistory" prefHeight="34.0" prefWidth="110.0" text="View History" />
+      <Button id="btnSearchBook" fx:id="btnSearchBook" layoutX="14.0" layoutY="135.0" mnemonicParsing="false" onAction="#btnSearchBook" prefHeight="34.0" prefWidth="110.0" text="Search book" />
+      <Button id="btnReturnBook" fx:id="btnReturnBook" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" onAction="#btnReturnBook" prefHeight="34.0" prefWidth="110.0" text="Return Book" />
+      <Button id="btnCreateSubscriber" fx:id="btnCreateSubscriber" layoutX="204.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnCreateSubscriber" prefHeight="34.0" prefWidth="193.0" text="Librarian: Create Subscriber" />
    </children>
 </AnchorPane>

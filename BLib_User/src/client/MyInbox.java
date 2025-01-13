@@ -1,13 +1,13 @@
 package client;
 
 public class MyInbox {
-	private String awaiting_message;
+	private String immediate_message="no new message";
 	private Object objMsg;
-	
+	private Object arr[];
 	public void setMessage(Object msg)
 	{
 		if (msg instanceof String)
-			awaiting_message=(String)msg;
+			immediate_message=(String)msg;
 		else
 			objMsg=msg;
 		
@@ -20,8 +20,8 @@ public class MyInbox {
 	}
 	public String getMessage()
 	{
-		String temp=awaiting_message;
-		awaiting_message=null;
+		String temp=immediate_message;
+		immediate_message=null;
 		return temp;
 	}
 	

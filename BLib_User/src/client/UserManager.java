@@ -6,8 +6,7 @@ package client;
 
 import ocsf.client.*;
 import client.*;
-import common.BLibData;
-import common.Subscriber;
+import common.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,8 +34,9 @@ public final class UserManager extends AbstractClient
 	public static boolean awaitResponse = false;
 	public Subscriber  s1;
   	public BLibData udata;
-  	public static MyInbox inb=new MyInbox();
+  	public MyInbox inb=new MyInbox();
   	private String myPass;
+  	public Librarian librarian;
 
 
   //Constructors ****************************************************
@@ -61,6 +61,10 @@ public final class UserManager extends AbstractClient
 	  myPass = p;
   }
   
+  public String getPass()
+  {
+	  return myPass;
+  }
   
   public static UserManager getInstance(String host, int port) throws IOException {
 	    if (instance == null) {
@@ -89,17 +93,15 @@ public final class UserManager extends AbstractClient
 
 
 	  
-	  
+		System.out.println("received message");
+
 	  awaitResponse = false;
 	  
-	  if (msg instanceof Subscriber)
-	  {
-		  s1=(Subscriber) msg;
-		  System.out.println(s1);
-	  }
-
-	  else
-		  inb.setMessage(msg);
+	  if (msg instanceof Librarian)
+		  librarian = (Librarian) msg;
+	  if (msg == null)
+		  inb.setMessage("received null");
+	  inb.setMessage(msg);
 	  
 	  
 
