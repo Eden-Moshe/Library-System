@@ -4,13 +4,15 @@
 
 package client;
 
-import ocsf.client.*;
-import client.*;
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import common.BLibData;
+import common.Borrow;
+import common.BorrowMessage;
 import common.Subscriber;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import ocsf.client.AbstractClient;
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -34,9 +36,12 @@ public final class UserManager extends AbstractClient
 	private static UserManager instance=null;
 	public static boolean awaitResponse = false;
 	public Subscriber  s1;
+	public Borrow b;
   	public BLibData udata;
   	public static MyInbox inb=new MyInbox();
   	private String myPass;
+  	
+  	//private final BlockingQueue<Object> responseQueue = new LinkedBlockingQueue<>();
 
 
   //Constructors ****************************************************
@@ -86,7 +91,10 @@ public final class UserManager extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
 	  
-
+//	    synchronized (responseQueue) {
+//	        responseQueue.add(msg); // Add the response to the queue for sendAndWaitForResponse
+//	        responseQueue.notifyAll(); // Notify any thread waiting for a response
+//	    }
 
 	  
 	  
@@ -97,11 +105,14 @@ public final class UserManager extends AbstractClient
 		  s1=(Subscriber) msg;
 		  System.out.println(s1);
 	  }
-
+	  
+	  if (msg instanceof String) {
+	        UserManager.inb.setMessage(msg);  
+		}
+	  
+	  
 	  else
 		  inb.setMessage(msg);
-	  
-	  
 
 	 
   }
@@ -145,6 +156,37 @@ public final class UserManager extends AbstractClient
     }
     
   }
+  
+  
+  
+  
+
+//  /**
+//   * Sends a message to the server and waits for a response.
+//   *
+//   * @param message The message to send.
+//   * @return The response from the server.
+//   * @throws IOException If there's an issue communicating with the server.
+//   */
+//  public Object sendAndWaitForResponse(Object message) throws IOException {
+//	  send(message);
+//	  return inb.getObj();
+//	  
+//	  
+//      awaitResponse = true;
+//      sendToServer(message);
+//
+//      try {
+//          // Wait for a response from the server
+//          return responseQueue.take();
+//      } catch (InterruptedException e) {
+//          Thread.currentThread().interrupt();
+//          throw new IOException("Interrupted while waiting for server response", e);
+//      }
+//  }
+  
+  
+  
   
 //  public void handleSavingStudentInfo(Student newStudent , Student oldStudent) {
 //	  //SaveStudentInfo ssi = new SaveStudentInfo(newStudent , oldStudent) ;

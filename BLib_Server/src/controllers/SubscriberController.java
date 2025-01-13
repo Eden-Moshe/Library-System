@@ -24,25 +24,52 @@ public class SubscriberController {
 		db=DBController.getInstance();
 	}
 	
-	public Subscriber fetchSubscriber(String pKey)
-	{
-		
-		Subscriber ret=null;
-		ResultSet rs = db.retrieveRow(tName, keyField, pKey);
-		try {
-			rs.next();
-			System.out.println(rs.getString(1)+rs.getString(2)+rs.getString(3)+rs.getString(4)+rs.getString(5)+rs.getString(6));
-			
-			ret = new Subscriber (rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
-			System.out.println(ret);
-			return ret;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Failed to retrieve Subscriber table data");
-			e.printStackTrace();
-			return null;
-		}
+	public Subscriber fetchSubscriber(String pKey) {
+	    Subscriber ret = null;
+	    ResultSet rs = db.retrieveRow(tName, keyField, pKey);
+	    try {
+	        if (rs.next()) {
+	            // Populate the Subscriber details
+	            ret = new Subscriber(
+	                rs.getString("subscriber_id"),                 // subscriber_id column
+	                rs.getString("subscriber_name"),               // subscriber_name column
+	                rs.getString("subscriber_phone_number"),       // subscriber_phone_number column
+	                rs.getString("subscriber_email"),              // subscriber_email column
+	                rs.getString("subscriber_status")              // subscriber_status column
+	            );
+	            System.out.println(ret);
+	            return ret;
+	        } else {
+	            System.out.println("No Subscriber found with key: " + pKey);
+	            return null;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Failed to retrieve Subscriber table data");
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
+
+	
+//	public Subscriber fetchSubscriber(String pKey)
+//	{
+//		
+//		Subscriber ret=null;
+//		ResultSet rs = db.retrieveRow(tName, keyField, pKey);
+//		try {
+//			rs.next();
+//			System.out.println(rs.getString(1)+rs.getString(2)+rs.getString(3)+rs.getString(4)+rs.getString(5)+rs.getString(6));
+//			
+//			ret = new Subscriber (rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+//			System.out.println(ret);
+//			return ret;
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println("Failed to retrieve Subscriber table data");
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	
 	public void editSubscriber(String pKey, String field, String val)
 	{

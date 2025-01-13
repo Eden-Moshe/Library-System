@@ -10,5 +10,6 @@
       <Button id="btnViewHistory" fx:id="btnViewHistory" onAction="#btnViewHistory" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="View History" />
       <Button id="btnSearchBook" fx:id="btnSearchBook" onAction="#btnSearchBook" layoutX="14.0" layoutY="135.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Search book" />
       <Button id="btnReturnBook" fx:id="btnReturnBook" onAction="#btnReturnBook" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Return Book" />
+       <Button id="btnExtendBorrow" fx:id="btnExtendBorrow" onAction="#btnExtendBorrow" layoutX="14.0" layoutY="320.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Extend Borrow" />
    </children>
 </AnchorPane>

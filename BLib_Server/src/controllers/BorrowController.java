@@ -1,5 +1,7 @@
 package controllers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,7 +14,7 @@ public class BorrowController {
 	private static final BorrowController instance = new BorrowController();
 	private DBController db;
 	private static String tName="borrow";
-	private static String keyField="borrower_id";
+	private static String keyField="book_barcode";
 	
 	public static BorrowController getInstance() {
 		return instance;
@@ -26,43 +28,69 @@ public class BorrowController {
 	
 	
 	public String createBorrow(Subscriber s, Book b, Borrow borrow) {
-	    // Checking if account is eligible
+	    // Checking if account is active
 	    if (canBorrow(s)) {
 	        // Defining fields and values for the insert
-	        String[] fields = {
-	            "borrower_id", "borrower_name", "borrow_date", "return_date",
-	            "borrower_status", "borrower_phone_number", "borrower_email", "book_name"
-	        };
+	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
+	        		           "borrow_date", "return_date", "actual_returned_date"};
 	        
 	        // Convert the borrow date and return date to appropriate format
 	        String[] values = {
+	            b.getBookBarcode(),
+	            //need to implement librarian id
+	            //lib.getName();
+	            "1",
 	            s.getSID(),
-	            s.getName(),
 	            new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
 	            new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
-	            s.getStatus(),
-	            s.getPNumber(),
-	            s.getEmail(),
-	            b.getBookName()
+	            null,
 	        };
 
 	        // Call insertRow method with the table, fields, and values
 	        db.insertRow("borrow", fields, values);
 
-	        // Assuming insertRow handles success or failure internally, 
-	        // you could return true or false based on the outcome of the insert operation.
-	        return "Borrow created"; // Or handle failure case if insertRow signals an error
+	        return "Borrow request sent successfully."; 
 	    } else {
-	        return "Account status is frozen. Cannot create borrow record.";
+	        return "Account status is frozen. Cannot create borrow.";
 
 	    }
 	}
 	
     
-    // Method to check if borrowing is allowed
+    // Method to check if subscriber status is active
     public boolean canBorrow(Subscriber s) {
-        return "eligible".equalsIgnoreCase(s.getStatus());
+        return "active".equalsIgnoreCase(s.getStatus());
     }
+    
+    // method checks if book exists in library
+	public boolean bookExists(Book b) {
+	    String key = b.getBookBarcode(); // The barcode value to query
+
+	    // Retrieve the row corresponding to the book
+	    ResultSet rs = db.retrieveRow("book", "barcode", key);
+
+	    try {
+	        if (rs != null && rs.next()) { // Check if a result was returned
+	            boolean bookAvailable = rs.getBoolean("book_available"); // Fetch the book_available field
+
+	            // If book_available is false, return false
+	            if (!bookAvailable) {
+	                return false;
+	            }
+
+	            // If book_available is true, return true
+	            return true;
+	        } else {
+	            // No row found for the given barcode
+	            System.out.println("No book found with the given barcode: " + key);
+	            return false;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("SQL error while checking book availability: " + e.getMessage());
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
     
     
     
@@ -122,39 +150,6 @@ public class BorrowController {
         System.out.println("System message for subscriber " + subscriberId + ": " + message);
     }
     
-    
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	
-//    public boolean isEligible() {
-//    	
-//        return "eligible".equals(this.borrowerStatus);
-//    }
-//
-//    // Check if the borrower's loan is overdue
-//    public boolean isOverdue() {
-//        Date today = new Date();
-//        return today.after(this.returnDate);
-//    }
 	
 
 	

@@ -1,18 +1,13 @@
 package gui;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import client.UserManager;
-import client.SubscriberUI;
-import common.*;
+import common.Borrow;
+import common.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -21,7 +16,8 @@ import javafx.stage.Stage;
 
 
 public  class MainMenuController   {
-	private SubscriberFormController sfc;	
+	private SubscriberFormController sfc;
+	private BorrowWindowController bwc;
 	private static int itemIndex = 3;
 	
 	@FXML
@@ -35,17 +31,55 @@ public  class MainMenuController   {
 	private TextField lblPassword;
 
 
-	public void btnLendBook() {
+	public void btnLendBook(ActionEvent event) throws Exception {
+		
+		FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
+		//BorrowWindowController borrowWindowController = loader.getController();		
+		//borrowWindowController.loadBorrow(UM.b);
+	
+		
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
+		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+
+	}
+	
+	public void btnViewHistory(ActionEvent event) throws Exception {
 		
 	}
-	public void btnViewHistory() {
+	public void btnSearchBook(ActionEvent event) throws Exception {
 		
 	}
-	public void btnSearchBook() {
+	public void btnReturnBook(ActionEvent event) throws Exception {
 		
 	}
-	public void btnReturnBook() {
+	
+	public void btnExtendBorrow(ActionEvent event) throws Exception {
 		
+		FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
+		//BorrowWindowController borrowWindowController = loader.getController();		
+		//borrowWindowController.loadBorrow(UM.b);
+	
+		
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
+		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setScene(scene);		
+		primaryStage.show();
 	}
 		
 	
@@ -125,5 +159,6 @@ public  class MainMenuController   {
 		System.out.println("message");
 		
 	}
+	
 	
 }

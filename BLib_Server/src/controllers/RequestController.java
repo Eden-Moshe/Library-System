@@ -1,101 +1,104 @@
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.Calendar;
-//import java.util.Date;
-//
-//import common.Book;
-//import common.Borrow;
-//import common.Subscriber;
-//import server.DBController;
-//
-//public class RequestController {
-//	private static final RequestController instance = new RequestController();
-//	private DBController db;
-//	
-//	private BorrowController borrowController;
-//	//can be fully implemented when ReservationController is made
-//	private ReservationController reservationController; // Assumes this controller exists
-//	
-//	private RequestController()
-//	{
-//		db=DBController.getInstance();
-//		
-//	}
-//	
-//	public static RequestController getInstance() {
-//		return instance;
-//	}
-//
-//    // Constructor to initialize dependencies (like BorrowController and ReservationController)
-//    public RequestController(BorrowController borrowController, ReservationController reservationController) {
-//        this.borrowController = borrowController;
-//        this.reservationController = reservationController;
-//    }
-//
-//    public String requestExtension(Borrow borrow, Book b) {
-//        Date returnDate = borrow.getReturnDate();
-//        Date currentDate = new Date();
-//
-//        // Check if the extension request is being made one week or less before the return date
-//        if (isEligibleForExtension(returnDate, currentDate)) {
-//            // Check if a reservation exists for the book in the database
-//            if (isBookReservedInDatabase(b.getBookName())) {
-//                return "Extension request denied. The book is reserved.";
-//            } else {
-//                // Approve the extension, and update the borrow's return date
-//                extendBorrow(borrow);
-//                // Send notification to the librarian
-//                sendLibrarianNotification(borrow);
-//                return "Extension granted. The book is due for return on " + borrow.getReturnDate().toString() + ".";
-//            }
-//        } else {
-//            return "Extension request denied. The request is only valid one week before the return date.";
-//        }
-//    }
-//
-//    // Helper method to check if the book is reserved (exists in the borrow table)
-//    private boolean isBookReservedInDatabase(String bookName) {
-//        String sql = "SELECT COUNT(*) FROM borrow WHERE book_name = ? AND return_date > CURRENT_DATE";
-//        
-//        try (PreparedStatement stmt = db.getConnection().prepareStatement(sql)) {
-//            stmt.setString(1, bookName);
-//            
-//            try (ResultSet rs = stmt.executeQuery()) {
-//                if (rs.next()) {
-//                    int count = rs.getInt(1);
-//                    return count > 0; // If count > 0, the book is currently reserved
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return false; // No active borrow record, the book is not reserved
-//    }
-//
-//    // Helper method to check if the extension request is within the allowed timeframe
-//    private boolean isEligibleForExtension(Date returnDate, Date currentDate) {
-//        long timeDiff = returnDate.getTime() - currentDate.getTime();
-//        long daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-//        return daysDiff <= 7; // Less than or equal to 7 days before the return date
-//    }
-//
-//    // Helper method to extend the borrow period by some predefined days (e.g., 7 days)
-//    private void extendBorrow(Borrow borrow) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(borrow.getReturnDate());
-//        calendar.add(Calendar.DAY_OF_MONTH, 7); // Add 7 days to the return date
-//        borrow.setReturnDate(calendar.getTime());
-//        
-//        // Update the borrow record in the database (you would implement this logic in your database layer)
-//        borrowController.updateBorrowReturnDate(borrow);
-//    }
-//
-//    // Method to send a notification to the librarian about the extension
-//    private void sendLibrarianNotification(Book b, Subscriber s) {
-//        String message = "A borrow extension has been granted for the book '" + b.getBookName() + 
-//                         "' by subscriber " + s.getName() + ".";
-//        // Send notification (you would implement this logic based on your system's notification service)
-//        System.out.println("Librarian Notification: " + message);
-//    }
-//}
+package controllers;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+
+import common.Book;
+import common.Borrow;
+import common.Subscriber;
+import server.DBController;
+
+public class RequestController {
+	private static final RequestController instance = new RequestController();
+	private DBController db;
+	private static String tName="borrow";
+	private static String keyField="book_barcode";
+	private SubscriberController subscriberController;
+	
+	private RequestController()
+	{
+		db=DBController.getInstance();
+		
+	}
+	
+	public static RequestController getInstance() {
+		return instance;
+	}
+
+
+
+    // fetch Borrow from table 
+    public Borrow fetchBorrow(String sub_id, String barcode) {
+        Subscriber s = subscriberController.fetchSubscriber(sub_id);
+    	Borrow ret = null;
+        //puts into rs both dates
+        ResultSet rs = db.retrieveRow(tName, keyField, barcode); // Query the 'borrow' table
+        try {
+            if (rs.next()) {
+
+                Date borrowDate = rs.getDate("borrow_date"); // borrow_date column
+                Date returnDate = rs.getDate("return_date"); // return_date column
+
+                // Create a Borrow object using the constructor and fetched subscriber and dates
+                ret = new Borrow(s, borrowDate,returnDate);
+
+                return ret;
+            } else {
+                System.out.println("No Borrow record found with book barcode: " + barcode);
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve Borrow table data");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Helper method to check if the extension request is within the allowed timeframe
+    public boolean isEligibleForExtension(Date currentReturnDate) {
+        Date today = new Date(); // Get today's date
+        long timeDiff = Math.abs(currentReturnDate.getTime() - today.getTime());
+        long daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+        return daysDiff <= 7; // True if within 7 days, false otherwise
+    }
+
+    //method that extends borrow return date
+    public void extendBorrow(Borrow borrow, Book book, Date extendedDate) {
+        if (borrow == null) {
+            System.out.println("Borrow object is null. Cannot extend borrow.");
+            return;
+        }
+
+        if (extendedDate == null) {
+            System.out.println("Extended date is null. Cannot extend borrow.");
+            return;
+        }
+
+        Date currentReturnDate = borrow.getReturnDate();
+        if (extendedDate.before(currentReturnDate)) {
+            System.out.println("Extended date cannot be before the current return date.");
+            return;
+        }
+
+        // Update the Borrow object's return date
+        borrow.setReturnDate(extendedDate);
+
+        // Update the return_date column in the database
+        String bookBarcode = book.getBookBarcode();
+        try {
+            db.editRow("book_barcode", bookBarcode, "return_date", new java.sql.Date(extendedDate.getTime()).toString());
+            System.out.println("Return date updated successfully for book barcode: " + bookBarcode);
+        } catch (Exception e) {
+            System.out.println("Failed to update return date in the database.");
+            e.printStackTrace();
+        }
+    }
+
+    // Method to send a notification to the librarian about the extension
+    private void sendLibrarianNotification(Borrow b, Subscriber s) {
+        String message = "A borrow extension has been granted for the book '" + b.bo.getBookName() + 
+                         "' by subscriber " + s.getName() + ".";
+        // Send notification (you would implement this logic based on your system's notification service)
+        System.out.println("Librarian Notification: " + message);
+    }
+}

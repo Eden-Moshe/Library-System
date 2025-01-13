@@ -68,7 +68,7 @@ public class SubscriberFormController implements Initializable {
 		this.txtName.setText(s.getName());		
 		this.txtPhoneNum.setText(s.getPNumber()); 
 		this.txtSID.setText(s.getSID());
-		this.txtHistory.setText(s.getHistID());
+		//this.txtHistory.setText(s.getHistID());
 		
 		
 	}

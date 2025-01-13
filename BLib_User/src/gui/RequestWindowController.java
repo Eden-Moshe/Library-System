@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import client.UserManager;
+import common.Book;
 import common.RequestMessage;
+import common.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +23,7 @@ import javafx.stage.Stage;
 public class RequestWindowController {
 
     @FXML
-    private Button btnExit = null;
+    private Button btnBack = null;
 
     @FXML
     private Button btnRequestExtension = null;
@@ -33,7 +35,7 @@ public class RequestWindowController {
     private TextField txtBookBarcode;
 
     @FXML
-    private TextField txtRequestDate;
+    private TextField txtExtendedReturnDate;
 
     @FXML
     private TextField txtResponse;
@@ -41,8 +43,6 @@ public class RequestWindowController {
     @FXML
     private Button btnReset;
     
-    @FXML
-    private Button btnExtension;
 
     private String getBorrowerId() {
         return txtBorrowerId.getText();
@@ -53,7 +53,7 @@ public class RequestWindowController {
     }
 
     private Date getRequestDate() {
-        String requestDateText = txtRequestDate.getText();
+        String requestDateText = txtExtendedReturnDate.getText();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return dateFormat.parse(requestDateText); // Parse the String into a Date
@@ -71,12 +71,11 @@ public class RequestWindowController {
     private void resetFields(ActionEvent event) {
         txtBorrowerId.clear();
         txtBookBarcode.clear();
-        txtRequestDate.clear();
+        txtExtendedReturnDate.clear();
         txtResponse.clear();
     }
 
     public void sendExtensionRequest(ActionEvent event) throws SQLException, IOException {
-        FXMLLoader loader = new FXMLLoader();
         UserManager UM = UserManager.getInstance();
         String borrowerId = getBorrowerId();
         String bookBarcode = getBookBarcode();
@@ -86,34 +85,44 @@ public class RequestWindowController {
             System.out.println("All fields are required.");
             return;
         }
+        
+        
 
         // Creating a RequestMessage to send for extension
         RequestMessage requestMessage = new RequestMessage();
-        requestMessage.s.setSID(borrowerId);
-        requestMessage.b.setBarcode(bookBarcode);
-        requestMessage.borrow.setBorrowDate(requestDate);
+	    requestMessage.s = new Subscriber(borrowerId, null, null, null, null);
+	    requestMessage.b = new Book(bookBarcode, null, null, null, null, false, null);
+        requestMessage.returnDate = requestDate;
 
         UM.send(requestMessage); // Send the message to the server
 
-        txtResponse.setText("Extension request sent successfully.");
+	    // Wait for the response 
+	    // Get the message from MyInbox (set it in handleMessageFromServer)
+	    String response = UserManager.inb.getMessage();  
 
-        // Close the current window and open a new window to show the result
-        ((Node) event.getSource()).getScene().getWindow().hide();
-        Stage primaryStage = new Stage();
-        Pane root = loader.load(getClass().getResource("/gui/RequestForm.fxml").openStream());
-        RequestWindowController requestWindowController = loader.getController();
-        requestWindowController.loadResponse(UM.inb.getMessage());
+	    // Set the response text in the TextBox
+	    txtResponse.setText(response);  // Display the server's response (e.g., "Extension sent" or error message)
 
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/gui/RequestForm.css").toExternalForm());
-        primaryStage.setTitle("Request Management Tool");
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
-    public void getExitBtn(ActionEvent event) throws Exception {
-        System.out.println("Exit Request Tool");
-        System.exit(0);
+    public void getBackBtn(ActionEvent event) throws Exception {
+        try {
+            // Close the current window
+            ((Node) event.getSource()).getScene().getWindow().hide();
+
+            // Load the previous screen (Main Menu)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+            Pane root = loader.load();
+
+            // Set up the new stage
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Main Menu");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load MainMenu.fxml.");
+       }
     }
 }

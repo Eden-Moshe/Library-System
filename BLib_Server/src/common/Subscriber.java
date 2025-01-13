@@ -3,17 +3,16 @@ package common;
 import java.io.Serializable;
 
 public class Subscriber implements Serializable {
-	private String SID, histID;
-	private String name, pNumber, email, status;
 	
-	public Subscriber (String sid, String name, String histID, String pNumber, String email, String status)
+	private String SID,name, pNumber, email, status;
+	
+	public Subscriber (String sid, String name, String pNumber, String email, String status)
 	{
-		this.email=email;
 		this.SID=sid;
-		this.pNumber=pNumber;
-		this.histID=histID;
 		this.name=name;
-		this.status = "eligible";
+		this.pNumber=pNumber;
+		this.email=email;
+		this.status = status;
 		
 	}
 	 
@@ -22,18 +21,11 @@ public class Subscriber implements Serializable {
         this.SID=s;
     }
 
-    public void setHistID(String hid)
-    {
-        this.histID=hid;
-    }
 
     public String getSID() {
         return SID;
     }
 
-    public String getHistID() {
-        return histID;
-    }
 
     public String getName() {
         return name;
@@ -66,10 +58,10 @@ public class Subscriber implements Serializable {
     
     // Setter for status
     public void setStatus(String newStatus) {
-        if ("eligible".equalsIgnoreCase(newStatus) || "ineligible".equalsIgnoreCase(newStatus)) {
+        if ("active".equalsIgnoreCase(newStatus) || "frozen".equalsIgnoreCase(newStatus)) {
             this.status = newStatus;
         } else {
-            throw new IllegalArgumentException("Invalid status. Only 'eligible' or 'ineligible' are allowed.");
+            throw new IllegalArgumentException("Invalid status. Only 'active' or 'frozen' are allowed.");
         }
     }
     
@@ -77,11 +69,9 @@ public class Subscriber implements Serializable {
     
     @Override
     public String toString() {
-        
-        
+
         return "subscriber_id" +" = " + SID +
         ", subscriber_name ='" + name + 
-        "', history_id=" + histID +
         ", subscriber_phone_number='" + pNumber +  
         "', subscriber_email='" + email +'\'' ;
     }
