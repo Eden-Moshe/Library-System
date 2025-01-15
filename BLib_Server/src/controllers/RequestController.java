@@ -76,6 +76,7 @@ public class RequestController {
 
     //method that extends borrow return date
     public String extendBorrow(Borrow borrow, Book book, Date extendedDate) {
+    	String librarian_id = "-1";
         if (borrow == null) {
             return("Borrow object is null. Cannot extend borrow.");
             
@@ -121,14 +122,24 @@ public class RequestController {
             e.printStackTrace();
             return "Error: Failed to edit return_date";
         }
-
+        
+        //retrieve id of librarian from book table
+        ResultSet rs1 = db.retrieveRow(tName, keyField, book.getBookBarcode()); // Query the 'borrow' table
+        try {
+            if (rs1.next()) {
+                librarian_id = rs1.getString("lending_librarian"); // getting lending librarian id from borrow table
+                if (librarian_id == null || librarian_id.isEmpty()) {
+                    return "Error: Lending librarian ID is missing in the borrow record.";
+                }
+            } 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: Failed to retrieve librarian id from borrow table.";
+        }
         //insert new row to extension table
         try {
-        	
         	String fields[] = {"lending_librarian", "borrow_number", "day_of_extension", "new_return_date"};
-        	String values[] = {"1", 
-        			borrow.s.getSID(),
-                    //new java.sql.Date(currentReturnDate.getTime()).toString(),
+        	String values[] = {librarian_id, borrow.s.getSID(),
                     new java.sql.Date(System.currentTimeMillis()).toString(),
                     new java.sql.Date(extendedDate.getTime()).toString()
         	};

@@ -54,17 +54,16 @@ public  class MainMenuController   {
 	public void btnCreateSubscriber(ActionEvent event) throws Exception {
 
 		FXMLLoader loader = new FXMLLoader();
-		UserManager UM = UserManager.getInstance();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+		
+
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
+		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
+
 		
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setTitle("Subscriber Creation Tool");
+
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 

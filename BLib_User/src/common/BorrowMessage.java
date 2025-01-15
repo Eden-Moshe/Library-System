@@ -8,5 +8,6 @@ public class BorrowMessage implements Serializable {
 	public Subscriber s;
 	public Borrow borrow;
 	public Book b;
+	public String lib_id;
 	
 }

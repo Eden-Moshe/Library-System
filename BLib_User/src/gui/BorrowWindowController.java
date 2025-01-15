@@ -110,6 +110,7 @@ public class BorrowWindowController {
 	    String bookBarcode = getBookBarcode();
 	    Date borrowDate = getBorrowDate();
 	    Date returnDate = getReturnDate();
+	    String Librarian_id = UM.librarian.getLibrarian_id();
 
 	    if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || borrowDate == null || returnDate == null) {
 	        txtResponse.setText("All fields are required.");
@@ -133,6 +134,7 @@ public class BorrowWindowController {
 	    fetchMsg.s = new Subscriber(borrowerId, null, null, null, null);
 	    fetchMsg.b = new Book(bookBarcode, null, null, null, null, false, null);
 	    fetchMsg.borrow = new Borrow(fetchMsg.s, borrowDate,returnDate);
+	    fetchMsg.lib_id = Librarian_id;
 	    // Send the BorrowMessage
 	    UM.send(fetchMsg);
 	    

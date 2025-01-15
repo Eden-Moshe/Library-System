@@ -1,0 +1,12 @@
+diff a/BLib_Server/src/server/server.java b/BLib_Server/src/server/server.java	(rejected hunks)
+@@ -110,7 +110,9 @@
+ 					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
+ 					if (ret.next())
+ 					{
+-						return new Librarian(ret.getString("librarian_name"));
++						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
++						newLibrarian.setLibrarian_id(id);
++						return newLibrarian;
+ 						//changed here to also get librarian id cause i changed how constructor looks
+ 						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
+ 					}

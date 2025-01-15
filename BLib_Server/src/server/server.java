@@ -186,7 +186,7 @@ public class server extends AbstractServer{
 		        //check that book is available for borrowing 
 				if (borrowMessage.b.isBookAvailable())
 					//at this point both subscriber and book details are in s and b so now we create new Borrow
-					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
+					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow, borrowMessage.lib_id));
 				else 
 					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}

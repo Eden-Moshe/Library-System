@@ -29,12 +29,10 @@ public class BorrowController {
 	}
 	
 	
-	public String createBorrow(Subscriber s, Book b, Borrow borrow) {
+	public String createBorrow(Subscriber s, Book b, Borrow borrow, String lib_id) {
         //int borrowNum =-1;
 	    // Checking if account is active
 	    if (canBorrow(s)) {
-            borrow.l= new Librarian("testLib");
-            borrow.l.setLibrarian_id("1");
 	        // Defining fields and values for the insert
 	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
 	        		           "borrow_date", "return_date", "actual_returned_date"};
@@ -42,8 +40,7 @@ public class BorrowController {
 	        // Convert the borrow date and return date to appropriate format
 	        String[] values = {
 	            b.getBookBarcode(),
-	            //for now prepared librarian id
-	            borrow.l.getLibrarian_id(),
+	            lib_id,
 	            s.getSID(),
 	            new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
 	            new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
