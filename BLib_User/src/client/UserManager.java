@@ -56,6 +56,10 @@ public final class UserManager extends AbstractClient
 	udata = new BLibData();
     openConnection();
   }
+  public void setSub(Subscriber newS)
+  {
+	  s1=newS;
+  }
   public void setPass(String p)
   {
 	  myPass = p;
@@ -93,7 +97,7 @@ public final class UserManager extends AbstractClient
 
 
 	  
-		System.out.println("received message");
+		//System.out.println("received message");
 
 	  awaitResponse = false;
 	  

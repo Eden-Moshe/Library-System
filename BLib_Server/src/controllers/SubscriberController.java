@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import common.*;
@@ -57,9 +58,92 @@ public class SubscriberController {
         db.editRow("subscriber",keyField, pKey, field, val);
         
 	}
-	public void addSubscriber(String name)
+	
+	//this requires a change in the SQL. the primary key can't be an auto_increment key.
+	
+	private String generateTemporaryPassword() {
+		
+		int length = 5; // Desired string length
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+
+        StringBuilder randomString = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            randomString.append(characters.charAt(index));
+        }
+        return randomString.toString();
+	}
+
+	public Subscriber addSubscriber(Subscriber newSub)
 	{
-		//needs to add subscriber to database
+		System.out.println("add subscriber");
+		String[] fields = {"user_password"};
+		String tempPassword = generateTemporaryPassword();
+		String[] values = {tempPassword};
+		
+		db.insertRow("users", fields,values);
+		String lastUserNum = Integer.toString(db.countRows("users", null, null));
+		
+		System.out.println("add subscriber post insertrow");
+		
+		newSub.setSID(lastUserNum);
+		newSub.setTempPass(tempPassword);
+		newSub.setStatus("active");
+		
+		System.out.println("add subscriber lastUserNum = " + lastUserNum);
+
+		
+		ResultSet testCreation = db.retrieveRow("users", "user_id", lastUserNum);
+		
+		System.out.println("add subscriber post retrieveRow");
+
+		try {
+			if (testCreation.next())
+			{
+				System.out.println("if (testCreation.next())");
+				if (!testCreation.getString("user_password").equals(tempPassword))
+				{
+					//the last user isn't the one we inserted. perhaps a collision happened.
+					//recursively call addSubscriber until it happens. should not happen more than once or twice.
+					System.out.println("failed to create new subscriber. likely collision. trying again");
+					//uncomment this after testing.
+					//return addSubscriber(newSub);
+				}
+				else
+				{
+					//adding subscriber to the subscriber table.
+					String [] subFields = {
+						    "subscriber_id",
+						    "subscriber_name",
+						    "subscriber_phone_number",
+						    "subscriber_email",
+						    "subscriber_status"
+						};
+					String [] subValues = { 
+							  newSub.getSID(),
+							    newSub.getName(),
+							    newSub.getPNumber(),
+							    newSub.getEmail(),
+							    newSub.getStatus()
+							};
+					db.insertRow(tName, subFields, subValues);
+					System.out.println("addsubscriber before returning value newSub = "+newSub.toString());
+					return newSub;
+				}
+			}
+			System.out.println("testCreationfailed");
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		return null;
 		
 		
 		

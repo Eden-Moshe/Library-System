@@ -3,9 +3,13 @@ package common;
 import java.io.Serializable;
 
 public class Subscriber implements Serializable {
-	private String SID, histID;
-	private String name, pNumber, email, status, newPass;
+
+	private String SID, name, pNumber, email, status, newPass;
 	
+	public Subscriber()
+	{
+		
+	}
 	public Subscriber (String sid, String name, String pNumber, String email, String status)
 	{
 		this.email=email;
@@ -21,17 +25,10 @@ public class Subscriber implements Serializable {
         this.SID=s;
     }
 
-    public void setHistID(String hid)
-    {
-        this.histID=hid;
-    }
+
 
     public String getSID() {
         return SID;
-    }
-
-    public String getHistID() {
-        return histID;
     }
 
     public String getName() {
@@ -66,11 +63,7 @@ public class Subscriber implements Serializable {
     
     // Setter for status
     public void setStatus(String newStatus) {
-        if ("eligible".equalsIgnoreCase(newStatus) || "ineligible".equalsIgnoreCase(newStatus)) {
-            this.status = newStatus;
-        } else {
-            throw new IllegalArgumentException("Invalid status. Only 'eligible' or 'ineligible' are allowed.");
-        }
+        status=newStatus;
     }
     
     public void setTempPass(String pass) {
@@ -86,8 +79,7 @@ public class Subscriber implements Serializable {
         
         
         return "subscriber_id" +" = " + SID +
-        ", subscriber_name ='" + name + 
-        "', history_id=" + histID +
+        ", subscriber_name ='" + name +
         ", subscriber_phone_number='" + pNumber +  
         "', subscriber_email='" + email +'\'' ;
     }

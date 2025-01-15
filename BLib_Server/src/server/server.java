@@ -52,20 +52,15 @@ public class server extends AbstractServer{
 	
 	private Object userLogin (ConnectionToClient client ,String id, String pass)
 	{
-		System.out.println("userlogin the fuck");
 		ResultSet auth = db.retrieveRow("users","user_id", id);
 		try {
 			if (auth.next())
 			{
-				System.out.println("auth.next the fuck");
 
 				if (!auth.getString("user_password").equals(pass))
 					return null;
-				System.out.println("auth.next pass is fine the fuck");
 				if (auth.getString("user_role").equals("Librarian")) {
-					System.out.println("Librarian the fuck");
 					connectedLibrarians.add(client);
-					System.out.println("Librarian connected the fuck");
 					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
 					if (ret.next())
 					{
@@ -108,17 +103,12 @@ public class server extends AbstractServer{
 			if (msg instanceof LoginMessage)
 			{
 				lm = ((LoginMessage) msg);
-				System.out.println("login the fuck " +  lm.id + " pass " + lm.password);
 				Object newUser = userLogin(client,lm.id,lm.password);
-				System.out.println("newuser the fuck");
 				if (newUser == null) {
 					client.sendToClient("wrong user id or password");
-					System.out.println("wrong user id the fuck");
 				
 				}
-				System.out.println("newuser the fuck " +  newUser.toString());
 				client.sendToClient(newUser);
-				System.out.println("newuser the fuck 2" +  newUser.toString());
 
 				
 //				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
@@ -132,8 +122,16 @@ public class server extends AbstractServer{
 //					
 //				}
 			}
-			if (msg instanceof LibrarianMessage)
+			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
 			{
+				System.out.println("if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))");
+				LibrarianMessage LM = (LibrarianMessage) msg;
+				if (LM.funcRequest.contains("Create Subscriber"))
+				{
+					System.out.println("if (LM.funcRequest.contains(Create Subscriber))");
+					client.sendToClient(subscriberController.addSubscriber(LM.sub));
+					
+				}
 				
 			}
 			if (msg instanceof SubMessage)

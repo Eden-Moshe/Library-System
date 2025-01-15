@@ -54,110 +54,7 @@ public class DBController {
 		
 		return true;
 	}
-//	private void logError(String error, Throwable t)
-//	{
-//		  //File errorLog = new File("DBController Error Log.txt");
-//		File errorLog = new File(System.getProperty("user.home") + File.separator + "DBController_Error_Log.txt");
-//
-//		  try {
-//			errorLog.createNewFile();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		  Date currentDate = new Date(); // Get the current date
-//		  String toLog = currentDate.toString() + "\n" + error + "\n" + t.getMessage() + "\n";
-//		  //writing to file
-//		  try {
-//			FileOutputStream fos = new FileOutputStream(errorLog, true);
-//			BufferedOutputStream bos = new BufferedOutputStream(fos);
-//			
-//			//byte [] mba  = toLog.getBytes();
-//			
-//			//bos receives toLog bytes from concatted  String
-//			//bos.write(mba, 0 , mba.length);
-//			bos.write(toLog.getBytes());
-//			//shutting down streams
-//			bos.flush();
-//			fos.close();
-//			bos.close();
-//	}catch (Exception e) {//(FileNotFoundException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//	  
-//		  
-//		  System.out.println("logError will now print the logged error's stacktrace:\n");
-//		  t.printStackTrace();
-//		  
-//		  
-//	}
-	
-	
-	
-//	
-//	private void initializeFields() {
-//	    try {
-//	        DatabaseMetaData metaData = con.getMetaData();
-//	        ResultSet tables = metaData.getTables(null, "blib", "%", new String[]{"TABLE"});
-//	        while (tables.next()) {
-//	            String tableName = tables.getString("TABLE_NAME");
-//	            //TO-REMOVE
-//	            //System.out.println("Found table: " + tableName);
-//	            
-//	            // Fetch a single row from the table
-//	            String query = "SELECT * FROM " + tableName + " LIMIT 1";
-//	            try (PreparedStatement stmt = con.prepareStatement(query);
-//	                 ResultSet rs = stmt.executeQuery()) {
-//
-//	                // Process metadata for the result set
-//	                ResultSetMetaData rsMetaData = rs.getMetaData();
-//	                int columnCount = rsMetaData.getColumnCount();
-//
-//	                for (int i = 1; i <= columnCount; i++) {
-//	                    String columnName = rsMetaData.getColumnName(i);
-//
-//	                    // Check column type dynamically if the table has data
-////	                    if (rs.next()) {
-////	                        Object value = rs.getObject(i);
-////	                        System.out.println(tableName + "\tinitializing fields, values: " + value.getClass());
-////	                        if (value instanceof Integer) {
-////	                            intFields.add(columnName);
-////	                        }
-////	                        if (value instanceof Date) {
-////	                            dateFields.add(columnName);
-////	                        }
-////	                        if (value instanceof Boolean) {
-////	                            dateFields.add(columnName);
-////	                        }
-////	                    }
-//	                    
-//	                    if (rs.next()) {
-//	                        for (int j = 1; j <= columnCount; j++) {
-//	                            Object value = rs.getObject(j);
-//	                            System.out.println("Processing column " + columnName + " with value type " + value.getClass());
-//	                            if (value instanceof Integer) {
-//	                                intFields.add(columnName);
-//	                            } else if (value instanceof Date) {
-//	                                dateFields.add(columnName);
-//	                            } else if (value instanceof Boolean) {
-//	                                boolFields.add(columnName);
-//	                            }
-//	                        }
-//	                    }
-//	                    
-//	                    
-//	                }
-//	            } catch (SQLException e) {
-//	            	//TO-FIX BUG: it's fetching a lot of useless tables and doesn't find them in blib
-//	                //System.out.println("Error querying table " + tableName + ": " + e.getMessage());
-//	            }
-//	        }
-//	    } catch (SQLException e) {
-//	        System.out.println("Error intializing int fields " + e.getMessage());
-//	    }
-//	}
-//	
+
 
 	
 	
@@ -215,18 +112,28 @@ public class DBController {
 
 	    StringBuilder query = new StringBuilder("SELECT * FROM ");
 	    query.append(tablename);
-	    query.append(" WHERE ");
-	    for (int i = 0; i < fields.length; i++) {
+	    
+	    int fieldLen=0,valuesLen=0;
+	    
+	    if (fields!=null)
+	    {
+	    	query.append(" WHERE ");
+	    	fieldLen=fields.length;
+	    }
+	    if (values!=null)
+	    	valuesLen=values.length;
+	    
+	    for (int i = 0; i < fieldLen; i++) {
 	        query.append(fields[i]);
 	        query.append(" LIKE ?");
-	        if (i < fields.length - 1) {
+	        if (i < fieldLen - 1) {
 	            query.append(" AND ");
 	        }
 	    }
 	    
 	    try {
 	        PreparedStatement stmt = con.prepareStatement(query.toString());
-	        for (int i = 0; i < values.length; i++) {
+	        for (int i = 0; i < valuesLen; i++) {
 	            //stmt.setString(i + 1, "%" + values[i] + "%");
 	            setStmt(stmt,i+1,fields[i],"%" + values[i] + "%");
 	        }
@@ -256,9 +163,6 @@ public class DBController {
 		//Date s = new Date();
 		//s.parse(value);
 	
-		System.out.println(intFields);
-		System.out.println(dateFields);
-		System.out.println(boolFields);
 		
 		if (intFields.contains(field))
 			stmt.setInt(index, Integer.parseInt(value));
@@ -384,6 +288,51 @@ public class DBController {
 	}
 
 
+	
+	//function counts the amount of rows that satisfy the conditions of the fields=values. 
+	//fields can be null to retrieve the table size
+	public int countRows(String tableName, String[] fields, String[] values) {
+        String newID;
+        boolean keyExists;
+        int rows=-1;
+        
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM ");
+	    query.append(tableName);
+        
+        if (fields!=null)
+        {
+        	
+        	query.append(" WHERE ");
+        	
+        	for (int i = 0; i < fields.length; i++) {
+    	        query.append(fields[i]);
+    	        query.append(" LIKE ?");
+    	        if (i < fields.length - 1) {
+    	            query.append(" AND ");
+    	        }
+    	    }
+        	
+        }
+        
+        	
+     
+        
+        PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			ResultSet rs = stmt.executeQuery();
+	        rs.next(); // Move to the first and only result
+	        rows = rs.getInt(1); 
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+
+        return rows;
+    
+	}
 
 
 	public void closeConnection() {
