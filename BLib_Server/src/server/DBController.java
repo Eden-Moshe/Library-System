@@ -32,7 +32,10 @@ public class DBController {
 		connectToDB();
 		initializeFields();
 	}
-	
+	public Connection getConnection() {
+	    return con;
+	}
+
 	private boolean connectToDB() {
 		
 		try {

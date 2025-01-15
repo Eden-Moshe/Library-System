@@ -3,14 +3,16 @@ package server;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import common.*;
 
-import controllers.BookController;
-import controllers.BorrowController;
-import controllers.RequestController;
-import controllers.SubscriberController;
+import controllers.*;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -24,6 +26,8 @@ public class server extends AbstractServer{
 		private BorrowController borrowController;
 		private BookController bookController;
 		private RequestController requestController;
+		private SearchController searchController;
+
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
@@ -48,7 +52,47 @@ public class server extends AbstractServer{
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
   		requestController = RequestController.getInstance();
+  		searchController = SearchController.getInstance();
+
 	  }
+
+	  
+	  
+	  //test this
+	  public class DailyTaskRunner {
+
+		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
+		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+		        Runnable dailyTask = () -> {
+		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
+		            task.run();
+		        };
+
+		        long initialDelay = calculateInitialDelay(hour, minute);
+		        long period = 24 * 60 * 60; // 24 hours in seconds
+
+		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
+		    }
+
+		    private static long calculateInitialDelay(int hour, int minute) {
+		        LocalTime now = LocalTime.now();
+		        LocalTime targetTime = LocalTime.of(hour, minute);
+
+		        if (now.isAfter(targetTime)) {
+		            targetTime = targetTime.plusHours(24); // Schedule for the next day
+		        }
+
+		        return Duration.between(now, targetTime).getSeconds();
+		    }
+
+		    public static void main(String[] args) {
+		        scheduleDailyTask(() -> {
+		            System.out.println("Running the scheduled daily task!");
+		            // Your function logic here
+		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
+		    }
+		}
 
 	
 	
@@ -66,7 +110,9 @@ public class server extends AbstractServer{
 					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
 					if (ret.next())
 					{
-						return new Librarian(ret.getString("librarian_name"));
+						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
+						newLibrarian.setLibrarian_id(id);
+						return newLibrarian;
 						//changed here to also get librarian id cause i changed how constructor looks
 						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
 					}
@@ -101,6 +147,8 @@ public class server extends AbstractServer{
 		BorrowMessage borrowMessage;
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
+		SearchMessage searchMessage;
+
 		
 		try {
 		
@@ -227,6 +275,15 @@ public class server extends AbstractServer{
 				
 				//need to add implementation if book already has an order
 				
+			}
+			// Check if the received message is an instance of SearchMessage
+			if (msg instanceof SearchMessage) {
+			    // Cast the message to SearchMessage type
+			    searchMessage = (SearchMessage) msg;
+
+			    // Perform the search using the SearchController with parameters from the message
+			    // and send the result back to the client
+			    client.sendToClient(searchController.performSearch(searchMessage.bookName, searchMessage.bookGenre, searchMessage.bookDescription));
 			}
 		
 		
