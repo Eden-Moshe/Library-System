@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import client.MyInbox;
 import client.UserManager;
 import common.Book;
 import common.Borrow;
@@ -139,7 +138,7 @@ public class BorrowWindowController {
 	    
 	    // Wait for the response 
 	    // Get the message from MyInbox (set it in handleMessageFromServer)
-	    String response = UserManager.inb.getMessage();  
+	    String response = UM.inb.getMessage();  
 
 	    // Set the response text in the TextBox
 	    txtResponse.setText(response);  // Display the server's response (e.g., "Borrow created" or error message)

@@ -24,7 +24,6 @@ public class SubscriberController {
 		db=DBController.getInstance();
 	}
 	
-<<<<<<< HEAD
 	public Subscriber fetchSubscriber(String pKey) {
 	    Subscriber ret = null;
 	    ResultSet rs = db.retrieveRow(tName, keyField, pKey);

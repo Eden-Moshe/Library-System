@@ -1,8 +1,6 @@
 package common;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 public class Borrow implements Serializable{
@@ -10,17 +8,26 @@ public class Borrow implements Serializable{
 	public Book bo;
     private Date borrowDate;
     private Date returnDate;
-    //add librarian id
-    //private Librarian librarian_id
+    private int borrow_num;
+	public Librarian l;
+    
 
 
-
-    // Constructor that initializes borrowDate and calculates returnDate
+	// Constructor that initializes borrowDate and calculates returnDate
     public Borrow(Subscriber s, Date borrowDate, Date returnDate) {
         this.s = s;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
     }
+    
+    public int getBorrow_num() {
+		return borrow_num;
+	}
+
+
+	public void setBorrow_num(int borrow_num) {
+		this.borrow_num = borrow_num;
+	}
     
 
     public Date getBorrowDate() {

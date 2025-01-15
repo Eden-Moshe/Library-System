@@ -10,7 +10,6 @@ import common.*;
 import controllers.BookController;
 import controllers.BorrowController;
 import controllers.RequestController;
-//import controllers.RequestController;
 import controllers.SubscriberController;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
@@ -24,14 +23,12 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
-<<<<<<< HEAD
 		private RequestController requestController;
-=======
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
-		//private RequestController requestController;
->>>>>>> origin/main
+
+
 	  /**
 	   * The default port to listen on.
 	   */
@@ -75,6 +72,8 @@ public class server extends AbstractServer{
 					if (ret.next())
 					{
 						return new Librarian(ret.getString("librarian_name"));
+						//changed here to also get librarian id cause i changed how constructor looks
+						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
 					}
 					
 				}
@@ -164,16 +163,32 @@ public class server extends AbstractServer{
 			if (msg instanceof BorrowMessage) 
 			{
 			    borrowMessage = (BorrowMessage) msg;
-			    //fetching into s all subscriber info
-				borrowMessage.s = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
-				//fetching into b all book info
-				borrowMessage.b = bookController.fetchBook(borrowMessage.b.getBookBarcode());
-				//after fetching book info check if book exists in library
-				//if so, then create new borrow
-				if (borrowController.bookExists(borrowMessage.b))
-				    client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
-				//case where book does not exist in library
-			    else client.sendToClient("Book is not available for borrowing.");
+			    
+			    //fetch subscriber and check if its even in table send message accordingly  
+			    Subscriber sub = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
+		        if (sub == null) {
+		            client.sendToClient("No subscriber found with that ID.");
+		            return; // Stop further processing
+		        }
+		        
+			    //fetch book and check if its even in table send message accordingly 
+		        Book bo = bookController.fetchBook(borrowMessage.b.getBookBarcode());
+		        if (bo == null) {
+		            client.sendToClient("No book found with that barcode.");
+		            return; // Stop further processing
+		        }
+
+		        //assign sub to s instance in BorrowMessage which is Subscriber
+			    borrowMessage.s = sub;
+		        //assign bo to b instance in BorrowMessage which is Book
+				borrowMessage.b = bo;
+				
+		        //check that book is available for borrowing 
+				if (borrowMessage.b.isBookAvailable())
+					//at this point both subscriber and book details are in s and b so now we create new Borrow
+					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
+				else 
+					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}
 			
 			
@@ -189,18 +204,28 @@ public class server extends AbstractServer{
 			if (msg instanceof RequestMessage) 
 			{
 				reqMessage = ((RequestMessage)msg);
+				
+			    // Use a StringBuilder to capture error messages
+			    StringBuilder errorMessage = new StringBuilder();
+			    //fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
+			    Borrow borrow = requestController.fetchBorrow(reqMessage.s.getSID(), reqMessage.b.getBookBarcode(), errorMessage);
+
+			    if (borrow == null) {
+			        client.sendToClient(errorMessage.toString()); // Send the error message to the client
+			        return; // Stop further processing
+			    }
 				//fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
-				reqMessage.borrow = requestController.fetchBorrow(reqMessage.s.getSID(),reqMessage.b.getBookBarcode());
+				reqMessage.borrow = borrow;
+
 				//fetching into b all book info
 				reqMessage.b = bookController.fetchBook(reqMessage.b.getBookBarcode());
 				//checking if original return date is not more than a week away
 				if (requestController.isEligibleForExtension(reqMessage.borrow.getReturnDate())) {
 					//update return date in database
-					requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate);
-					client.sendToClient("Request approved, date of return was updated accordingly.");
+					client.sendToClient(requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
 				}
 				
-				else client.sendToClient("return date is more than a week away, request is denied.");
+				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
 				
 				//need to add implementation if book already has an order
 				

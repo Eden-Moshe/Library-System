@@ -4,24 +4,13 @@
 
 package client;
 
-<<<<<<< HEAD
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import common.BLibData;
 import common.Borrow;
-import common.BorrowMessage;
+import common.Librarian;
 import common.Subscriber;
 import ocsf.client.AbstractClient;
-=======
-import ocsf.client.*;
-import client.*;
-import common.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
->>>>>>> origin/main
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -49,12 +38,8 @@ public final class UserManager extends AbstractClient
   	public BLibData udata;
   	public MyInbox inb=new MyInbox();
   	private String myPass;
-<<<<<<< HEAD
-  	
-  	//private final BlockingQueue<Object> responseQueue = new LinkedBlockingQueue<>();
-=======
   	public Librarian librarian;
->>>>>>> origin/main
+
 
 
   //Constructors ****************************************************
@@ -108,31 +93,11 @@ public final class UserManager extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
 	  
-//	    synchronized (responseQueue) {
-//	        responseQueue.add(msg); // Add the response to the queue for sendAndWaitForResponse
-//	        responseQueue.notifyAll(); // Notify any thread waiting for a response
-//	    }
-
-	  
 		System.out.println("received message");
 
 	  awaitResponse = false;
 	  
-<<<<<<< HEAD
-	  if (msg instanceof Subscriber)
-	  {
-		  s1=(Subscriber) msg;
-		  System.out.println(s1);
-	  }
-	  
-	  if (msg instanceof String) {
-	        UserManager.inb.setMessage(msg);  
-		}
-	  
-	  
-	  else
-		  inb.setMessage(msg);
-=======
+
 	  if (msg instanceof Librarian)
 		  librarian = (Librarian) msg;
 	  if (msg == null)
@@ -140,7 +105,6 @@ public final class UserManager extends AbstractClient
 	  inb.setMessage(msg);
 	  
 	  
->>>>>>> origin/main
 
 	 
   }
@@ -159,6 +123,35 @@ public final class UserManager extends AbstractClient
    * @param message The message from the UI.    
    */
   
+//  public void send(Object message)  
+//  {
+//	    try {
+//	        System.out.println("Preparing to send message: " + message);
+//	        awaitResponse = true;
+//	        sendToServer(message);
+//	        System.out.println("Message sent successfully.");
+//
+//	        while (awaitResponse) {
+//	            try {
+//	                Thread.sleep(100);
+//	            } catch (InterruptedException e) {
+//	                System.err.println("Thread interrupted while waiting for response: " + e.getMessage());
+//	                e.printStackTrace();
+//	            }
+//	        }
+//	    } catch (IOException e) {
+//	        System.err.println("IOException encountered: " + e.getMessage());
+//	        e.printStackTrace();
+//	        System.out.println("Could not send message to server: Terminating client." + e);
+//	        quit();
+//	    }
+//    
+//  }
+  
+  
+  
+  
+//original send
   public void send(Object message)  
   {
     try
@@ -182,36 +175,7 @@ public final class UserManager extends AbstractClient
       System.out.println("Could not send message to server: Terminating client."+ e);
       quit();
     }
-    
   }
-  
-  
-  
-  
-
-//  /**
-//   * Sends a message to the server and waits for a response.
-//   *
-//   * @param message The message to send.
-//   * @return The response from the server.
-//   * @throws IOException If there's an issue communicating with the server.
-//   */
-//  public Object sendAndWaitForResponse(Object message) throws IOException {
-//	  send(message);
-//	  return inb.getObj();
-//	  
-//	  
-//      awaitResponse = true;
-//      sendToServer(message);
-//
-//      try {
-//          // Wait for a response from the server
-//          return responseQueue.take();
-//      } catch (InterruptedException e) {
-//          Thread.currentThread().interrupt();
-//          throw new IOException("Interrupted while waiting for server response", e);
-//      }
-//  }
   
   
   

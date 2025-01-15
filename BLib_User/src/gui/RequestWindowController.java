@@ -98,7 +98,7 @@ public class RequestWindowController {
 
 	    // Wait for the response 
 	    // Get the message from MyInbox (set it in handleMessageFromServer)
-	    String response = UserManager.inb.getMessage();  
+	    String response = UM.inb.getMessage();  
 
 	    // Set the response text in the TextBox
 	    txtResponse.setText(response);  // Display the server's response (e.g., "Extension sent" or error message)

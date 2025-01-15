@@ -1,32 +1,17 @@
 package server;
 
-<<<<<<< HEAD
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-=======
->>>>>>> origin/main
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-<<<<<<< HEAD
-import java.util.Set;
-=======
-
-import java.util.Set;
-
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
->>>>>>> origin/main
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class DBController {
 	private static final DBController instance = new DBController();
@@ -66,111 +51,6 @@ public class DBController {
 		
 		return true;
 	}
-//	private void logError(String error, Throwable t)
-//	{
-//		  //File errorLog = new File("DBController Error Log.txt");
-//		File errorLog = new File(System.getProperty("user.home") + File.separator + "DBController_Error_Log.txt");
-//
-//		  try {
-//			errorLog.createNewFile();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		  Date currentDate = new Date(); // Get the current date
-//		  String toLog = currentDate.toString() + "\n" + error + "\n" + t.getMessage() + "\n";
-//		  //writing to file
-//		  try {
-//			FileOutputStream fos = new FileOutputStream(errorLog, true);
-//			BufferedOutputStream bos = new BufferedOutputStream(fos);
-//			
-//			//byte [] mba  = toLog.getBytes();
-//			
-//			//bos receives toLog bytes from concatted  String
-//			//bos.write(mba, 0 , mba.length);
-//			bos.write(toLog.getBytes());
-//			//shutting down streams
-//			bos.flush();
-//			fos.close();
-//			bos.close();
-//	}catch (Exception e) {//(FileNotFoundException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//	  
-//		  
-//		  System.out.println("logError will now print the logged error's stacktrace:\n");
-//		  t.printStackTrace();
-//		  
-//		  
-//	}
-	
-	
-	
-//	
-//	private void initializeFields() {
-//	    try {
-//	        DatabaseMetaData metaData = con.getMetaData();
-//	        ResultSet tables = metaData.getTables(null, "blib", "%", new String[]{"TABLE"});
-//	        while (tables.next()) {
-//	            String tableName = tables.getString("TABLE_NAME");
-//	            //TO-REMOVE
-//	            //System.out.println("Found table: " + tableName);
-//	            
-//	            // Fetch a single row from the table
-//	            String query = "SELECT * FROM " + tableName + " LIMIT 1";
-//	            try (PreparedStatement stmt = con.prepareStatement(query);
-//	                 ResultSet rs = stmt.executeQuery()) {
-//
-//	                // Process metadata for the result set
-//	                ResultSetMetaData rsMetaData = rs.getMetaData();
-//	                int columnCount = rsMetaData.getColumnCount();
-//
-//	                for (int i = 1; i <= columnCount; i++) {
-//	                    String columnName = rsMetaData.getColumnName(i);
-//
-//	                    // Check column type dynamically if the table has data
-////	                    if (rs.next()) {
-////	                        Object value = rs.getObject(i);
-////	                        System.out.println(tableName + "\tinitializing fields, values: " + value.getClass());
-////	                        if (value instanceof Integer) {
-////	                            intFields.add(columnName);
-////	                        }
-////	                        if (value instanceof Date) {
-////	                            dateFields.add(columnName);
-////	                        }
-////	                        if (value instanceof Boolean) {
-////	                            dateFields.add(columnName);
-////	                        }
-////	                    }
-//	                    
-//	                    if (rs.next()) {
-//	                        for (int j = 1; j <= columnCount; j++) {
-//	                            Object value = rs.getObject(j);
-//	                            System.out.println("Processing column " + columnName + " with value type " + value.getClass());
-//	                            if (value instanceof Integer) {
-//	                                intFields.add(columnName);
-//	                            } else if (value instanceof Date) {
-//	                                dateFields.add(columnName);
-//	                            } else if (value instanceof Boolean) {
-//	                                boolFields.add(columnName);
-//	                            }
-//	                        }
-//	                    }
-//	                    
-//	                    
-//	                }
-//	            } catch (SQLException e) {
-//	            	//TO-FIX BUG: it's fetching a lot of useless tables and doesn't find them in blib
-//	                //System.out.println("Error querying table " + tableName + ": " + e.getMessage());
-//	            }
-//	        }
-//	    } catch (SQLException e) {
-//	        System.out.println("Error intializing int fields " + e.getMessage());
-//	    }
-//	}
-//	
-
 	
 	
 	private void initializeFields() {
@@ -264,9 +144,6 @@ public class DBController {
 
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
-		//LocalDate s = new LocalDate(index, index, index);
-		//Date s = new Date();
-		//s.parse(value);
 	
 		System.out.println(intFields);
 		System.out.println(dateFields);
@@ -274,17 +151,22 @@ public class DBController {
 		
 		if (intFields.contains(field))
 			stmt.setInt(index, Integer.parseInt(value));
-		else if (dateFields.contains(field))
-		{
-			Date d=null;
-			try {
-				d = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(value);
-			} catch (ParseException e) {
-				System.out.println("error converting string to date");
-				e.printStackTrace();
-			}
-			stmt.setDate(index, (java.sql.Date) d);
-		}
+	    // Handling date fields
+	    else if (dateFields.contains(field)) {
+	        if (value == null || value.equals("null")) {
+	            // If the value is null or "null" (as a string), set the value to SQL NULL
+	            stmt.setNull(index, java.sql.Types.DATE);
+	        } else {
+	            try {
+	                // Convert the string to java.sql.Date (ensure it's in yyyy-MM-dd format)
+	                java.sql.Date sqlDate = java.sql.Date.valueOf(value); // Direct conversion
+	                stmt.setDate(index, sqlDate);
+	            } catch (IllegalArgumentException e) {
+	                // Handle invalid date format
+	                throw new SQLException("Invalid date format for field: " + field + " with value: " + value);
+	            }
+	        }
+	    }
 		else if (boolFields.contains(field))
 			stmt.setBoolean(index, value.contains("true"));//if value = "true" will set true.
 		else
@@ -314,10 +196,7 @@ public class DBController {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
-		
-		
+			
 	}
 		
 	public void editRow(String tableName, String keyName, String keyVal, String col, String data) {
@@ -350,7 +229,6 @@ public class DBController {
 	public void insertRow(String table, String[] fields, String[] vals) {
 		int rows;
 		PreparedStatement stmt = null;
-		//INSERT INTO subscriber (subscriber_id, subscriber_name, detailed_subscription_history, subscriber_phone_number, subscriber_email) VALUES  (5, 'nofar', 5, 2253150559,'eSemailS@fake.com')
 		StringBuilder query = new StringBuilder ("INSERT INTO ");
 		query.append(table);
 		//query.append(" ");
@@ -365,14 +243,6 @@ public class DBController {
 			query.append(")");
 			
 		}
-		
-//		query.append(" VALUES (");
-//		for (int i = 0; i < Vals.length-1; i++) {
-//			query.append(Vals[i]);
-//			query.append(", ");
-//		}
-//		query.append(Vals[Vals.length-1]);
-//		query.append(")");
 		
 		
 		query.append(" VALUES (");
