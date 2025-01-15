@@ -1,20 +1,17 @@
 package server;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
 
-import java.util.Set;
-
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class DBController {
 	private static final DBController instance = new DBController();
@@ -54,8 +51,7 @@ public class DBController {
 		
 		return true;
 	}
-
-
+//
 	
 	
 	private void initializeFields() {
@@ -159,24 +155,26 @@ public class DBController {
 
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
-		//LocalDate s = new LocalDate(index, index, index);
-		//Date s = new Date();
-		//s.parse(value);
 	
 		
 		if (intFields.contains(field))
 			stmt.setInt(index, Integer.parseInt(value));
-		else if (dateFields.contains(field))
-		{
-			Date d=null;
-			try {
-				d = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(value);
-			} catch (ParseException e) {
-				System.out.println("error converting string to date");
-				e.printStackTrace();
-			}
-			stmt.setDate(index, (java.sql.Date) d);
-		}
+	    // Handling date fields
+	    else if (dateFields.contains(field)) {
+	        if (value == null || value.equals("null")) {
+	            // If the value is null or "null" (as a string), set the value to SQL NULL
+	            stmt.setNull(index, java.sql.Types.DATE);
+	        } else {
+	            try {
+	                // Convert the string to java.sql.Date (ensure it's in yyyy-MM-dd format)
+	                java.sql.Date sqlDate = java.sql.Date.valueOf(value); // Direct conversion
+	                stmt.setDate(index, sqlDate);
+	            } catch (IllegalArgumentException e) {
+	                // Handle invalid date format
+	                throw new SQLException("Invalid date format for field: " + field + " with value: " + value);
+	            }
+	        }
+	    }
 		else if (boolFields.contains(field))
 			stmt.setBoolean(index, value.contains("true"));//if value = "true" will set true.
 		else
@@ -206,10 +204,7 @@ public class DBController {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
-		
-		
+			
 	}
 		
 	public void editRow(String tableName, String keyName, String keyVal, String col, String data) {
@@ -242,7 +237,6 @@ public class DBController {
 	public void insertRow(String table, String[] fields, String[] vals) {
 		int rows;
 		PreparedStatement stmt = null;
-		//INSERT INTO subscriber (subscriber_id, subscriber_name, detailed_subscription_history, subscriber_phone_number, subscriber_email) VALUES  (5, 'nofar', 5, 2253150559,'eSemailS@fake.com')
 		StringBuilder query = new StringBuilder ("INSERT INTO ");
 		query.append(table);
 		//query.append(" ");
@@ -257,14 +251,6 @@ public class DBController {
 			query.append(")");
 			
 		}
-		
-//		query.append(" VALUES (");
-//		for (int i = 0; i < Vals.length-1; i++) {
-//			query.append(Vals[i]);
-//			query.append(", ");
-//		}
-//		query.append(Vals[Vals.length-1]);
-//		query.append(")");
 		
 		
 		query.append(" VALUES (");

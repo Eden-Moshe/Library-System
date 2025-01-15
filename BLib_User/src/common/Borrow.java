@@ -1,32 +1,34 @@
 package common;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Borrow {
-	private Subscriber s;
+public class Borrow implements Serializable{
+	public Subscriber s;
+	public Book bo;
     private Date borrowDate;
     private Date returnDate;
+    private int borrow_num;
+	public Librarian l;
+    
 
 
-
-    // Constructor that initializes borrowDate and calculates returnDate
-    public Borrow(Subscriber s, Date borrowDate) {
+	// Constructor that initializes borrowDate and calculates returnDate
+    public Borrow(Subscriber s, Date borrowDate, Date returnDate) {
         this.s = s;
         this.borrowDate = borrowDate;
-        this.returnDate = calculateReturnDate(borrowDate); // Automatically set returnDate
+        this.returnDate = returnDate;
     }
     
-    // Method to calculate return date 14 days from borrow date
-    private Date calculateReturnDate(Date borrowDate) {
-        LocalDate localBorrowDate = borrowDate.toInstant()
-                                              .atZone(ZoneId.systemDefault())
-                                              .toLocalDate();
-        LocalDate localReturnDate = localBorrowDate.plusDays(14);
-        return Date.from(localReturnDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
+    public int getBorrow_num() {
+		return borrow_num;
+	}
 
+
+	public void setBorrow_num(int borrow_num) {
+		this.borrow_num = borrow_num;
+	}
+    
 
     public Date getBorrowDate() {
         return borrowDate;
@@ -34,7 +36,6 @@ public class Borrow {
 
     public void setBorrowDate(Date borrowDate) {
         this.borrowDate = borrowDate;
-        this.returnDate = calculateReturnDate(borrowDate); // Update returnDate if borrowDate changes
     }
 
     public Date getReturnDate() {
@@ -46,11 +47,4 @@ public class Borrow {
     }
 
 
-//    @Override
-//    public String toString() {
-//        return "Borrow [borrowerId=" + borrowerId + ", borrowerName=" + borrowerName +
-//                ", borrowDate=" + borrowDate + ", returnDate=" + returnDate +
-//                ", borrowerStatus=" + borrowerStatus + ", borrowerPhoneNumber=" + borrowerPhoneNumber +
-//                ", borrowerEmail=" + borrowerEmail + ", bookName=" + bookName + "]";
-//    }
 }

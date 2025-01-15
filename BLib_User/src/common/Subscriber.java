@@ -12,12 +12,12 @@ public class Subscriber implements Serializable {
 	}
 	public Subscriber (String sid, String name, String pNumber, String email, String status)
 	{
-		this.email=email;
 		this.SID=sid;
-		this.pNumber=pNumber;
 		this.name=name;
+		this.pNumber=pNumber;
+		this.email=email;
 		this.status = status;
-		
+		this.pNumber=pNumber;
 		
 	}
 	public void setSID(String s) 
@@ -30,7 +30,6 @@ public class Subscriber implements Serializable {
     public String getSID() {
         return SID;
     }
-
     public String getName() {
         return name;
     }
@@ -76,8 +75,7 @@ public class Subscriber implements Serializable {
     
     @Override
     public String toString() {
-        
-        
+
         return "subscriber_id" +" = " + SID +
         ", subscriber_name ='" + name +
         ", subscriber_phone_number='" + pNumber +  

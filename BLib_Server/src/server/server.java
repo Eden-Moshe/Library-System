@@ -9,7 +9,7 @@ import common.*;
 
 import controllers.BookController;
 import controllers.BorrowController;
-//import controllers.RequestController;
+import controllers.RequestController;
 import controllers.SubscriberController;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
@@ -23,10 +23,12 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
+		private RequestController requestController;
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
-		//private RequestController requestController;
+
+
 	  /**
 	   * The default port to listen on.
 	   */
@@ -45,7 +47,7 @@ public class server extends AbstractServer{
   		subscriberController = SubscriberController.getInstance();
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
-  		//requestController = RequestController.getInstance();
+  		requestController = RequestController.getInstance();
 	  }
 
 	
@@ -65,6 +67,8 @@ public class server extends AbstractServer{
 					if (ret.next())
 					{
 						return new Librarian(ret.getString("librarian_name"));
+						//changed here to also get librarian id cause i changed how constructor looks
+						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
 					}
 					
 				}
@@ -156,10 +160,35 @@ public class server extends AbstractServer{
 			
 			if (msg instanceof BorrowMessage) 
 			{
-				borrowMessage = ((BorrowMessage)msg);
-				client.sendToClient(borrowController.createBorrow(borrowMessage.s,borrowMessage.b,borrowMessage.borrow));
+			    borrowMessage = (BorrowMessage) msg;
+			    
+			    //fetch subscriber and check if its even in table send message accordingly  
+			    Subscriber sub = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
+		        if (sub == null) {
+		            client.sendToClient("No subscriber found with that ID.");
+		            return; // Stop further processing
+		        }
+		        
+			    //fetch book and check if its even in table send message accordingly 
+		        Book bo = bookController.fetchBook(borrowMessage.b.getBookBarcode());
+		        if (bo == null) {
+		            client.sendToClient("No book found with that barcode.");
+		            return; // Stop further processing
+		        }
+
+		        //assign sub to s instance in BorrowMessage which is Subscriber
+			    borrowMessage.s = sub;
+		        //assign bo to b instance in BorrowMessage which is Book
+				borrowMessage.b = bo;
 				
+		        //check that book is available for borrowing 
+				if (borrowMessage.b.isBookAvailable())
+					//at this point both subscriber and book details are in s and b so now we create new Borrow
+					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
+				else 
+					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}
+			
 			
 			if (msg instanceof BookMessage) 
 			{
@@ -173,8 +202,30 @@ public class server extends AbstractServer{
 			if (msg instanceof RequestMessage) 
 			{
 				reqMessage = ((RequestMessage)msg);
-				//this is a fetch info request
-				//client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
+				
+			    // Use a StringBuilder to capture error messages
+			    StringBuilder errorMessage = new StringBuilder();
+			    //fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
+			    Borrow borrow = requestController.fetchBorrow(reqMessage.s.getSID(), reqMessage.b.getBookBarcode(), errorMessage);
+
+			    if (borrow == null) {
+			        client.sendToClient(errorMessage.toString()); // Send the error message to the client
+			        return; // Stop further processing
+			    }
+				//fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
+				reqMessage.borrow = borrow;
+
+				//fetching into b all book info
+				reqMessage.b = bookController.fetchBook(reqMessage.b.getBookBarcode());
+				//checking if original return date is not more than a week away
+				if (requestController.isEligibleForExtension(reqMessage.borrow.getReturnDate())) {
+					//update return date in database
+					client.sendToClient(requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
+				}
+				
+				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
+				
+				//need to add implementation if book already has an order
 				
 			}
 		
@@ -314,7 +365,6 @@ public class server extends AbstractServer{
 	    System.out.println
 	      ("Server has stopped listening for connections.");
 	  }
-	  
 	  
 
 

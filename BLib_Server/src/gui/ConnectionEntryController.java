@@ -3,14 +3,8 @@ package gui;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import server.ServerUI;
 
 public class ConnectionEntryController {
 
@@ -24,6 +18,11 @@ public class ConnectionEntryController {
 
     @FXML
     private Label hostLabel;
+    
+    @FXML
+    private void exitApplication() {
+    	Platform.exit();
+    }
 
     public void loadConnection(String CIP, String hName, String Status) throws Exception {
 //        // Set the client IP dynamically (replace with your logic to fetch IP)
@@ -84,9 +83,14 @@ public class ConnectionEntryController {
         return "localhost"; // Replace with actual logic
     }
 
-    @FXML
-    private void exitApplication() {
-        Platform.exit();
-    }
 }
+
+
+
+
+
+
+
+
+
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" spacing="10" alignment="CENTER" prefWidth="400" prefHeight="400" fx:controller="gui.RequestWindowController">
+    <Label text="Book Barcode:"/>
+    <TextField fx:id="txtBookBarcode" promptText="Enter book barcode"/>
+
+    <Label text="Borrower ID:"/>
+    <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID"/>
+
+    <Label text="Extended Return Date:"/>
+    <TextField fx:id="txtExtendedReturnDate" promptText="Enter new return date (YYYY-MM-DD)"/>
+
+    <Button text="Request Extension" fx:id="btnRequestExtension" onAction="#sendExtensionRequest"/>
+    <Button text="Reset" fx:id="btnReset" onAction="#resetFields"/>
+    <Button text="Back" fx:id="btnBack" onAction="#getBackBtn"/>
+    
+    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"/>
+</VBox>
