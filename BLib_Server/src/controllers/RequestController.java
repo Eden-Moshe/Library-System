@@ -1,10 +1,7 @@
 package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-
 import common.Book;
 import common.Borrow;
 import common.Subscriber;
@@ -77,6 +74,7 @@ public class RequestController {
     //method that extends borrow return date
     public String extendBorrow(Borrow borrow, Book book, Date extendedDate) {
     	String librarian_id = "-1";
+    	int borrow_num_pk = -1;
         if (borrow == null) {
             return("Borrow object is null. Cannot extend borrow.");
             
@@ -128,8 +126,9 @@ public class RequestController {
         try {
             if (rs1.next()) {
                 librarian_id = rs1.getString("lending_librarian"); // getting lending librarian id from borrow table
-                if (librarian_id == null || librarian_id.isEmpty()) {
-                    return "Error: Lending librarian ID is missing in the borrow record.";
+                borrow_num_pk = rs1.getInt("borrow_number");
+                if (librarian_id == null || librarian_id.isEmpty() || borrow_num_pk == -1) {
+                    return "Error: Lending librarian ID or borrow_number is missing in the borrow record.";
                 }
             } 
         } catch (SQLException e) {
@@ -139,7 +138,7 @@ public class RequestController {
         //insert new row to extension table
         try {
         	String fields[] = {"lending_librarian", "borrow_number", "day_of_extension", "new_return_date"};
-        	String values[] = {librarian_id, borrow.s.getSID(),
+        	String values[] = {librarian_id, String.valueOf(borrow_num_pk),
                     new java.sql.Date(System.currentTimeMillis()).toString(),
                     new java.sql.Date(extendedDate.getTime()).toString()
         	};

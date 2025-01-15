@@ -3,9 +3,13 @@ package common;
 import java.io.Serializable;
 
 public class Subscriber implements Serializable {
+
+	private String SID, name, pNumber, email, status, newPass;
 	
-	private String SID,name, pNumber, email, status, newPass;
-	
+	public Subscriber()
+	{
+		
+	}
 	public Subscriber (String sid, String name, String pNumber, String email, String status)
 	{
 		this.SID=sid;
@@ -22,11 +26,10 @@ public class Subscriber implements Serializable {
     }
 
 
+
     public String getSID() {
         return SID;
     }
-
-
     public String getName() {
         return name;
     }
@@ -59,11 +62,7 @@ public class Subscriber implements Serializable {
     
     // Setter for status
     public void setStatus(String newStatus) {
-        if ("active".equalsIgnoreCase(newStatus) || "frozen".equalsIgnoreCase(newStatus)) {
-            this.status = newStatus;
-        } else {
-            throw new IllegalArgumentException("Invalid status. Only 'active' or 'frozen' are allowed.");
-        }
+        status=newStatus;
     }
     
     public void setTempPass(String pass) {
@@ -78,7 +77,7 @@ public class Subscriber implements Serializable {
     public String toString() {
 
         return "subscriber_id" +" = " + SID +
-        ", subscriber_name ='" + name + 
+        ", subscriber_name ='" + name +
         ", subscriber_phone_number='" + pNumber +  
         "', subscriber_email='" + email +'\'' ;
     }

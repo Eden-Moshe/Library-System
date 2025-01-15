@@ -6,11 +6,13 @@ package client;
 
 import java.io.IOException;
 
-import common.BLibData;
-import common.Borrow;
-import common.Librarian;
-import common.Subscriber;
-import ocsf.client.AbstractClient;
+
+import ocsf.client.*;
+import client.*;
+import common.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.io.*;
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -59,6 +61,10 @@ public final class UserManager extends AbstractClient
 	udata = new BLibData();
     openConnection();
   }
+  public void setSub(Subscriber newS)
+  {
+	  s1=newS;
+  }
   public void setPass(String p)
   {
 	  myPass = p;
@@ -93,7 +99,7 @@ public final class UserManager extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
 	  
-		System.out.println("received message");
+		//System.out.println("received message");
 
 	  awaitResponse = false;
 	  
@@ -123,31 +129,7 @@ public final class UserManager extends AbstractClient
    * @param message The message from the UI.    
    */
   
-//  public void send(Object message)  
-//  {
-//	    try {
-//	        System.out.println("Preparing to send message: " + message);
-//	        awaitResponse = true;
-//	        sendToServer(message);
-//	        System.out.println("Message sent successfully.");
-//
-//	        while (awaitResponse) {
-//	            try {
-//	                Thread.sleep(100);
-//	            } catch (InterruptedException e) {
-//	                System.err.println("Thread interrupted while waiting for response: " + e.getMessage());
-//	                e.printStackTrace();
-//	            }
-//	        }
-//	    } catch (IOException e) {
-//	        System.err.println("IOException encountered: " + e.getMessage());
-//	        e.printStackTrace();
-//	        System.out.println("Could not send message to server: Terminating client." + e);
-//	        quit();
-//	    }
-//    
-//  }
-  
+
   
   
   

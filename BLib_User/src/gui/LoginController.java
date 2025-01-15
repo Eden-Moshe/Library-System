@@ -62,11 +62,14 @@ public  class LoginController   {
 		
 		System.out.println("pre sub instance");
 		//login and show subscriber menu
-		if (UM.inb.getObj() instanceof Subscriber)
+		Object fromServer = UM.inb.getObj();
+		if (fromServer instanceof Subscriber)
 		{
 			System.out.println("sub instance");
-			UM.s1=(Subscriber) UM.inb.getObj();
-			
+			UM.s1=(Subscriber) fromServer;
+			//UM.setSub((Subscriber)UM.inb.getObj());
+			//System.out.println("sub is" + UM.s1);
+			System.out.println("sub is" + UM.s1);
 			
 			//start main menu process
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window

@@ -3,14 +3,16 @@ package server;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import common.*;
 
-import controllers.BookController;
-import controllers.BorrowController;
-import controllers.RequestController;
-import controllers.SubscriberController;
+import controllers.*;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -24,6 +26,8 @@ public class server extends AbstractServer{
 		private BorrowController borrowController;
 		private BookController bookController;
 		private RequestController requestController;
+		private SearchController searchController;
+
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
@@ -48,32 +52,68 @@ public class server extends AbstractServer{
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
   		requestController = RequestController.getInstance();
+  		searchController = SearchController.getInstance();
+
 	  }
+
+	  
+	  
+	  //test this
+	  public class DailyTaskRunner {
+
+		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
+		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+		        Runnable dailyTask = () -> {
+		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
+		            task.run();
+		        };
+
+		        long initialDelay = calculateInitialDelay(hour, minute);
+		        long period = 24 * 60 * 60; // 24 hours in seconds
+
+		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
+		    }
+
+		    private static long calculateInitialDelay(int hour, int minute) {
+		        LocalTime now = LocalTime.now();
+		        LocalTime targetTime = LocalTime.of(hour, minute);
+
+		        if (now.isAfter(targetTime)) {
+		            targetTime = targetTime.plusHours(24); // Schedule for the next day
+		        }
+
+		        return Duration.between(now, targetTime).getSeconds();
+		    }
+
+		    public static void main(String[] args) {
+		        scheduleDailyTask(() -> {
+		            System.out.println("Running the scheduled daily task!");
+		            // Your function logic here
+		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
+		    }
+		}
 
 	
 	
 	private Object userLogin (ConnectionToClient client ,String id, String pass)
 	{
-		System.out.println("userlogin the fuck");
 		ResultSet auth = db.retrieveRow("users","user_id", id);
 		try {
 			if (auth.next())
 			{
-				System.out.println("auth.next the fuck");
 
 				if (!auth.getString("user_password").equals(pass))
 					return null;
-				System.out.println("auth.next pass is fine the fuck");
 				if (auth.getString("user_role").equals("Librarian")) {
-					System.out.println("Librarian the fuck");
 					connectedLibrarians.add(client);
-					System.out.println("Librarian connected the fuck");
 					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
 					if (ret.next())
 					{
-						return new Librarian(ret.getString("librarian_name"));
-						//changed here to also get librarian id cause i changed how constructor looks
-						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
+						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
+						newLibrarian.setLibrarian_id(id);
+						return newLibrarian;
+
 					}
 					
 				}
@@ -106,23 +146,20 @@ public class server extends AbstractServer{
 		BorrowMessage borrowMessage;
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
+		SearchMessage searchMessage;
+
 		
 		try {
 		
 			if (msg instanceof LoginMessage)
 			{
 				lm = ((LoginMessage) msg);
-				System.out.println("login the fuck " +  lm.id + " pass " + lm.password);
 				Object newUser = userLogin(client,lm.id,lm.password);
-				System.out.println("newuser the fuck");
 				if (newUser == null) {
 					client.sendToClient("wrong user id or password");
-					System.out.println("wrong user id the fuck");
 				
 				}
-				System.out.println("newuser the fuck " +  newUser.toString());
 				client.sendToClient(newUser);
-				System.out.println("newuser the fuck 2" +  newUser.toString());
 
 				
 //				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
@@ -136,8 +173,16 @@ public class server extends AbstractServer{
 //					
 //				}
 			}
-			if (msg instanceof LibrarianMessage)
+			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
 			{
+				System.out.println("if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))");
+				LibrarianMessage LM = (LibrarianMessage) msg;
+				if (LM.funcRequest.contains("Create Subscriber"))
+				{
+					System.out.println("if (LM.funcRequest.contains(Create Subscriber))");
+					client.sendToClient(subscriberController.addSubscriber(LM.sub));
+					
+				}
 				
 			}
 			if (msg instanceof SubMessage)
@@ -229,6 +274,15 @@ public class server extends AbstractServer{
 				
 				//need to add implementation if book already has an order
 				
+			}
+			// Check if the received message is an instance of SearchMessage
+			if (msg instanceof SearchMessage) {
+			    // Cast the message to SearchMessage type
+			    searchMessage = (SearchMessage) msg;
+
+			    // Perform the search using the SearchController with parameters from the message
+			    // and send the result back to the client
+			    client.sendToClient(searchController.performSearch(searchMessage.bookName, searchMessage.bookGenre, searchMessage.bookDescription));
 			}
 		
 		

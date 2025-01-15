@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.IOException;
+
 import client.UserManager;
 import common.Subscriber;
 import javafx.event.ActionEvent;
@@ -54,7 +56,6 @@ public  class MainMenuController   {
 	public void btnCreateSubscriber(ActionEvent event) throws Exception {
 
 		FXMLLoader loader = new FXMLLoader();
-		
 
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -76,9 +77,18 @@ public  class MainMenuController   {
 	public void btnLendBook() {
 		
 	}
-	public void btnSearchBook(ActionEvent event) throws Exception {
-		
+	public void btnSearchBook(ActionEvent event) throws IOException {
+	    // load the new screen
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
+	    Parent root = loader.load();
+	    Stage stage = new Stage();
+	    stage.setTitle("Search for Books");
+	    stage.setScene(new Scene(root));
+	    stage.show();
+
+	    ((Node) event.getSource()).getScene().getWindow().hide();
 	}
+
 	public void btnReturnBook(ActionEvent event) throws Exception {
 		
 		

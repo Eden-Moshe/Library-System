@@ -60,10 +60,11 @@ public class CreateSubscriberFormController implements Initializable {
 	@FXML
 	private Button saveButton;
 	
-
 	
+	private boolean saveClicked=false;
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
+		saveClicked=false;
 		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 		SubscriberUI.primaryStage.show();
 	}
@@ -90,7 +91,7 @@ public class CreateSubscriberFormController implements Initializable {
 	
 	public void save(ActionEvent event) throws Exception {
 		
-		
+		System.out.println("savebutton in createform");
 		UserManager UM = UserManager.getInstance();
 		//String pass = UM.getPass();
 		String name, phoneNum, email;
@@ -100,8 +101,10 @@ public class CreateSubscriberFormController implements Initializable {
 		email = txtEmail.getText();
 		
 		//prevent double-clicking save, no new user can be created until the window is closed and opened again. 
-		if (txtSID.getText( )!= null)
+		if (saveClicked)
 		{
+			
+			System.out.println("doubleclick prevention text in createform SID.getText = "+txtSID.getText( )+"|STOP");
 			//warn user that no new user can be created. or replace button with non-clickable button
 			return;
 			
@@ -113,44 +116,58 @@ public class CreateSubscriberFormController implements Initializable {
         }
        
 		
+		System.out.println("createform post null and notnull-doubleclick-prevention");
+
 		
+		Subscriber newSub = new Subscriber();
+		newSub.setEmail(email);
+		newSub.setName(name);
+		newSub.setPNumber(phoneNum);
 		
 		//sending a request to create a new subscriber to the server
 		LibrarianMessage LM = new LibrarianMessage();
 		LM.funcRequest = "Create Subscriber";
+		LM.sub=newSub;
 		UM.send(LM);
-		Subscriber newSub = (Subscriber) UM.inb.getObj();
+		//Subscriber newSub = (Subscriber) UM.inb.getObj();
 		
+		newSub = (Subscriber) UM.inb.getObj();
+		
+		System.out.println("createform post send");
 		
 		//displaying subscriber id and their temporary password
 		this.txtSID.setText(newSub.getSID());
 		this.txtPassword.setText(newSub.getTemporaryPassword());
 		
+		System.out.println("createform post set text");
 		
-		//setting the user's details in their account
-		SubMessage sm=new SubMessage();
-        sm.editBool=true;
-        sm.pKey=newSub.getSID();
-        sm.password=newSub.getTemporaryPassword();
-        
-        //setting email
-        sm.fieldCol="user_email";
-        sm.fieldVal=email;
-        
-        UM.send(sm);
-        
-        //setting phone number
-        sm.fieldCol="user_phone_number";
-        sm.fieldVal=phoneNum;
-        
-        UM.send(sm);
-        
-        //setting their name.
-        sm.fieldCol="user_name";
-        sm.fieldVal=name;
-        
-        UM.send(sm);
-
+		saveClicked=true;
+		
+		
+//		//setting the user's details in their account
+//		SubMessage sm=new SubMessage();
+//        sm.editBool=true;
+//        sm.pKey=newSub.getSID();
+//        sm.password=newSub.getTemporaryPassword();
+//        
+//        //setting email
+//        sm.fieldCol="user_email";
+//        sm.fieldVal=email;
+//        
+//        UM.send(sm);
+//        
+//        //setting phone number
+//        sm.fieldCol="user_phone_number";
+//        sm.fieldVal=phoneNum;
+//        
+//        UM.send(sm);
+//        
+//        //setting their name.
+//        sm.fieldCol="user_name";
+//        sm.fieldVal=name;
+//        
+//        UM.send(sm);
+		
 		
 	}
 	

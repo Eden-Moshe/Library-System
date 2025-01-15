@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +30,10 @@ public class DBController {
 		connectToDB();
 		initializeFields();
 	}
-	
+	public Connection getConnection() {
+	    return con;
+	}
+
 	private boolean connectToDB() {
 		
 		try {
@@ -51,6 +52,7 @@ public class DBController {
 		
 		return true;
 	}
+//
 	
 	
 	private void initializeFields() {
@@ -107,18 +109,28 @@ public class DBController {
 
 	    StringBuilder query = new StringBuilder("SELECT * FROM ");
 	    query.append(tablename);
-	    query.append(" WHERE ");
-	    for (int i = 0; i < fields.length; i++) {
+	    
+	    int fieldLen=0,valuesLen=0;
+	    
+	    if (fields!=null)
+	    {
+	    	query.append(" WHERE ");
+	    	fieldLen=fields.length;
+	    }
+	    if (values!=null)
+	    	valuesLen=values.length;
+	    
+	    for (int i = 0; i < fieldLen; i++) {
 	        query.append(fields[i]);
 	        query.append(" LIKE ?");
-	        if (i < fields.length - 1) {
+	        if (i < fieldLen - 1) {
 	            query.append(" AND ");
 	        }
 	    }
 	    
 	    try {
 	        PreparedStatement stmt = con.prepareStatement(query.toString());
-	        for (int i = 0; i < values.length; i++) {
+	        for (int i = 0; i < valuesLen; i++) {
 	            //stmt.setString(i + 1, "%" + values[i] + "%");
 	            setStmt(stmt,i+1,fields[i],"%" + values[i] + "%");
 	        }
@@ -145,9 +157,6 @@ public class DBController {
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
 	
-		System.out.println(intFields);
-		System.out.println(dateFields);
-		System.out.println(boolFields);
 		
 		if (intFields.contains(field))
 			stmt.setInt(index, Integer.parseInt(value));
@@ -266,6 +275,51 @@ public class DBController {
 	}
 
 
+	
+	//function counts the amount of rows that satisfy the conditions of the fields=values. 
+	//fields can be null to retrieve the table size
+	public int countRows(String tableName, String[] fields, String[] values) {
+        String newID;
+        boolean keyExists;
+        int rows=-1;
+        
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM ");
+	    query.append(tableName);
+        
+        if (fields!=null)
+        {
+        	
+        	query.append(" WHERE ");
+        	
+        	for (int i = 0; i < fields.length; i++) {
+    	        query.append(fields[i]);
+    	        query.append(" LIKE ?");
+    	        if (i < fields.length - 1) {
+    	            query.append(" AND ");
+    	        }
+    	    }
+        	
+        }
+        
+        	
+     
+        
+        PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			ResultSet rs = stmt.executeQuery();
+	        rs.next(); // Move to the first and only result
+	        rows = rs.getInt(1); 
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+
+        return rows;
+    
+	}
 
 
 	public void closeConnection() {

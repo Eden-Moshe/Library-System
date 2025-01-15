@@ -110,7 +110,9 @@ public class BorrowWindowController {
 	    String bookBarcode = getBookBarcode();
 	    Date borrowDate = getBorrowDate();
 	    Date returnDate = getReturnDate();
+
 	    String Librarian_id = UM.librarian.getLibrarian_id();
+
 
 	    if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || borrowDate == null || returnDate == null) {
 	        txtResponse.setText("All fields are required.");
