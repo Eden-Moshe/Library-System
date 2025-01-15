@@ -4,15 +4,13 @@
 
 package client;
 
-import java.io.IOException;
-
-
 import ocsf.client.*;
 import client.*;
-import common.*;
+import common.BLibData;
+import common.Subscriber;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.io.*;
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -36,12 +34,9 @@ public final class UserManager extends AbstractClient
 	private static UserManager instance=null;
 	public static boolean awaitResponse = false;
 	public Subscriber  s1;
-	public Borrow b;
   	public BLibData udata;
-  	public MyInbox inb=new MyInbox();
+  	public static MyInbox inb=new MyInbox();
   	private String myPass;
-  	public Librarian librarian;
-
 
 
   //Constructors ****************************************************
@@ -61,19 +56,11 @@ public final class UserManager extends AbstractClient
 	udata = new BLibData();
     openConnection();
   }
-  public void setSub(Subscriber newS)
-  {
-	  s1=newS;
-  }
   public void setPass(String p)
   {
 	  myPass = p;
   }
   
-  public String getPass()
-  {
-	  return myPass;
-  }
   
   public static UserManager getInstance(String host, int port) throws IOException {
 	    if (instance == null) {
@@ -99,16 +86,20 @@ public final class UserManager extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
 	  
-		//System.out.println("received message");
 
+
+	  
+	  
 	  awaitResponse = false;
 	  
+	  if (msg instanceof Subscriber)
+	  {
+		  s1=(Subscriber) msg;
+		  System.out.println(s1);
+	  }
 
-	  if (msg instanceof Librarian)
-		  librarian = (Librarian) msg;
-	  if (msg == null)
-		  inb.setMessage("received null");
-	  inb.setMessage(msg);
+	  else
+		  inb.setMessage(msg);
 	  
 	  
 
@@ -129,11 +120,6 @@ public final class UserManager extends AbstractClient
    * @param message The message from the UI.    
    */
   
-
-  
-  
-  
-//original send
   public void send(Object message)  
   {
     try
@@ -157,10 +143,8 @@ public final class UserManager extends AbstractClient
       System.out.println("Could not send message to server: Terminating client."+ e);
       quit();
     }
+    
   }
-  
-  
-  
   
 //  public void handleSavingStudentInfo(Student newStudent , Student oldStudent) {
 //	  //SaveStudentInfo ssi = new SaveStudentInfo(newStudent , oldStudent) ;

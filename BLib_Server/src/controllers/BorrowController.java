@@ -1,13 +1,10 @@
 package controllers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
 import common.Book;
 import common.Borrow;
-import common.Librarian;
 import common.Subscriber;
 import server.DBController;
 
@@ -15,8 +12,7 @@ public class BorrowController {
 	private static final BorrowController instance = new BorrowController();
 	private DBController db;
 	private static String tName="borrow";
-	private static String keyField="book_barcode";
-	
+	private static String keyField="borrower_id";
 	
 	public static BorrowController getInstance() {
 		return instance;
@@ -30,49 +26,43 @@ public class BorrowController {
 	
 	
 	public String createBorrow(Subscriber s, Book b, Borrow borrow) {
-        //int borrowNum =-1;
-	    // Checking if account is active
+	    // Checking if account is eligible
 	    if (canBorrow(s)) {
-            borrow.l= new Librarian("testLib");
-            borrow.l.setLibrarian_id("1");
 	        // Defining fields and values for the insert
-	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
-	        		           "borrow_date", "return_date", "actual_returned_date"};
+	        String[] fields = {
+	            "borrower_id", "borrower_name", "borrow_date", "return_date",
+	            "borrower_status", "borrower_phone_number", "borrower_email", "book_name"
+	        };
 	        
 	        // Convert the borrow date and return date to appropriate format
 	        String[] values = {
-	            b.getBookBarcode(),
-	            //for now prepared librarian id
-	            borrow.l.getLibrarian_id(),
 	            s.getSID(),
+	            s.getName(),
 	            new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
 	            new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
-	            null,
+	            s.getStatus(),
+	            s.getPNumber(),
+	            s.getEmail(),
+	            b.getBookName()
 	        };
 
 	        // Call insertRow method with the table, fields, and values
 	        db.insertRow("borrow", fields, values);
-	        //changing book availability
 
-	        //editing book's availability status in book table
-	        //change from "book_barcode" to "barcode"
-	        db.editRow("book","barcode",b.getBookBarcode(),"book_available","false");
-	        
-	        //changing books' availability in class instance
-	        b.setBookAvailable(false);
-	        return "Borrow request sent successfully."; 
+	        // Assuming insertRow handles success or failure internally, 
+	        // you could return true or false based on the outcome of the insert operation.
+	        return "Borrow created"; // Or handle failure case if insertRow signals an error
 	    } else {
-	        return "Account status is frozen. Cannot create borrow.";
+	        return "Account status is frozen. Cannot create borrow record.";
+
 	    }
 	}
 	
     
-    // Method to check if subscriber status is active
+    // Method to check if borrowing is allowed
     public boolean canBorrow(Subscriber s) {
-        return "active".equalsIgnoreCase(s.getStatus());
+        return "eligible".equalsIgnoreCase(s.getStatus());
     }
-    
-
     
     
     
@@ -132,6 +122,39 @@ public class BorrowController {
         System.out.println("System message for subscriber " + subscriberId + ": " + message);
     }
     
+    
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	
+//    public boolean isEligible() {
+//    	
+//        return "eligible".equals(this.borrowerStatus);
+//    }
+//
+//    // Check if the borrower's loan is overdue
+//    public boolean isOverdue() {
+//        Date today = new Date();
+//        return today.after(this.returnDate);
+//    }
 	
 
 	

@@ -1,15 +1,17 @@
 package server;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
-import common.*;
-
+import common.BookMessage;
+import common.BorrowMessage;
+import common.LoginMessage;
+import common.RequestMessage;
+import common.SubMessage;
+import common.SearchMessage;
 import controllers.BookController;
 import controllers.BorrowController;
-import controllers.RequestController;
+import controllers.SearchController;
+//import controllers.RequestController;
 import controllers.SubscriberController;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
@@ -23,12 +25,8 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
-		private RequestController requestController;
-		
-		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
-		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
-
-
+		private SearchController searchController;
+		//private RequestController requestController;
 	  /**
 	   * The default port to listen on.
 	   */
@@ -47,46 +45,12 @@ public class server extends AbstractServer{
   		subscriberController = SubscriberController.getInstance();
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
-  		requestController = RequestController.getInstance();
+  		searchController = SearchController.getInstance();
+  		//requestController = RequestController.getInstance();
 	  }
 
-	
-	
-	private Object userLogin (ConnectionToClient client ,String id, String pass)
-	{
-		ResultSet auth = db.retrieveRow("users","user_id", id);
-		try {
-			if (auth.next())
-			{
-
-				if (!auth.getString("user_password").equals(pass))
-					return null;
-				if (auth.getString("user_role").equals("Librarian")) {
-					connectedLibrarians.add(client);
-					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
-					if (ret.next())
-					{
-						return new Librarian(ret.getString("librarian_name"));
-						//changed here to also get librarian id cause i changed how constructor looks
-						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
-					}
-					
-				}
-				else {
-					
-					connectedSubscribers.add(client);
-					return subscriberController.fetchSubscriber(id);
-				}
-			}
-		} catch (SQLException e) {
-			System.out.println("userLogin failed");
-			e.printStackTrace();
-		}
-		
-		return null;
-		
-	}
 	@Override
+	  
 	  /**
 	   * This method handles any messages received from the client.
 	   *
@@ -95,49 +59,27 @@ public class server extends AbstractServer{
 	 * @throws IOException 
 	   */
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
-	{
+  {
 		SubMessage sm;
 		LoginMessage lm;
 		BorrowMessage borrowMessage;
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
-		
+		SearchMessage searchMessage;
 		try {
 		
 			if (msg instanceof LoginMessage)
 			{
 				lm = ((LoginMessage) msg);
-				Object newUser = userLogin(client,lm.id,lm.password);
-				if (newUser == null) {
+				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
 					client.sendToClient("wrong user id or password");
-				
+					return;//exiting the function to prevent it from completing DB operations on unverified user.
 				}
-				client.sendToClient(newUser);
-
-				
-//				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
-//					client.sendToClient("wrong user id or password");
-//					return;//exiting the function to prevent it from completing DB operations on unverified user.
-//				}
-//				else
-//				{
-//					connectedSubscribers.add(client);
-//					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
-//					
-//				}
+				else
+					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
 			}
-			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
-			{
-				System.out.println("if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))");
-				LibrarianMessage LM = (LibrarianMessage) msg;
-				if (LM.funcRequest.contains("Create Subscriber"))
-				{
-					System.out.println("if (LM.funcRequest.contains(Create Subscriber))");
-					client.sendToClient(subscriberController.addSubscriber(LM.sub));
-					
-				}
-				
-			}
+			
+			
 			if (msg instanceof SubMessage)
 			{
 				sm = ((SubMessage) msg);
@@ -160,35 +102,10 @@ public class server extends AbstractServer{
 			
 			if (msg instanceof BorrowMessage) 
 			{
-			    borrowMessage = (BorrowMessage) msg;
-			    
-			    //fetch subscriber and check if its even in table send message accordingly  
-			    Subscriber sub = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
-		        if (sub == null) {
-		            client.sendToClient("No subscriber found with that ID.");
-		            return; // Stop further processing
-		        }
-		        
-			    //fetch book and check if its even in table send message accordingly 
-		        Book bo = bookController.fetchBook(borrowMessage.b.getBookBarcode());
-		        if (bo == null) {
-		            client.sendToClient("No book found with that barcode.");
-		            return; // Stop further processing
-		        }
-
-		        //assign sub to s instance in BorrowMessage which is Subscriber
-			    borrowMessage.s = sub;
-		        //assign bo to b instance in BorrowMessage which is Book
-				borrowMessage.b = bo;
+				borrowMessage = ((BorrowMessage)msg);
+				client.sendToClient(borrowController.createBorrow(borrowMessage.s,borrowMessage.b,borrowMessage.borrow));
 				
-		        //check that book is available for borrowing 
-				if (borrowMessage.b.isBookAvailable())
-					//at this point both subscriber and book details are in s and b so now we create new Borrow
-					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
-				else 
-					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}
-			
 			
 			if (msg instanceof BookMessage) 
 			{
@@ -202,36 +119,20 @@ public class server extends AbstractServer{
 			if (msg instanceof RequestMessage) 
 			{
 				reqMessage = ((RequestMessage)msg);
-				
-			    // Use a StringBuilder to capture error messages
-			    StringBuilder errorMessage = new StringBuilder();
-			    //fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
-			    Borrow borrow = requestController.fetchBorrow(reqMessage.s.getSID(), reqMessage.b.getBookBarcode(), errorMessage);
-
-			    if (borrow == null) {
-			        client.sendToClient(errorMessage.toString()); // Send the error message to the client
-			        return; // Stop further processing
-			    }
-				//fetching Borrow from table with book barcode and creating new Borrow instance with subscriber id and dates
-				reqMessage.borrow = borrow;
-
-				//fetching into b all book info
-				reqMessage.b = bookController.fetchBook(reqMessage.b.getBookBarcode());
-				//checking if original return date is not more than a week away
-				if (requestController.isEligibleForExtension(reqMessage.borrow.getReturnDate())) {
-					//update return date in database
-					client.sendToClient(requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
-				}
-				
-				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
-				
-				//need to add implementation if book already has an order
+				//this is a fetch info request
+				//client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
 				
 			}
-		
-		
-		
-		
+
+			// Check if the received message is an instance of SearchMessage
+			if (msg instanceof SearchMessage) {
+			    // Cast the message to SearchMessage type
+			    searchMessage = (SearchMessage) msg;
+
+			    // Perform the search using the SearchController with parameters from the message
+			    // and send the result back to the client
+			    client.sendToClient(searchController.performSearch(searchMessage.bookName, searchMessage.bookGenre, searchMessage.bookDescription));
+			}
 		
 		}catch (IOException e) {
 			e.printStackTrace();
@@ -336,9 +237,6 @@ public class server extends AbstractServer{
 	  synchronized protected void clientDisconnected(
 	    ConnectionToClient client) {
 		  
-		  connectedSubscribers.remove(client);
-		  connectedLibrarians.remove(client);
-		  
 		  conEntry.removeConnection();
 
 	  }
@@ -365,6 +263,7 @@ public class server extends AbstractServer{
 	    System.out.println
 	      ("Server has stopped listening for connections.");
 	  }
+	  
 	  
 
 

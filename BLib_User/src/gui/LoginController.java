@@ -1,13 +1,18 @@
 package gui;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import client.UserManager;
-import common.LoginMessage;
-import common.Subscriber;
+import client.SubscriberUI;
+import common.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -55,21 +60,9 @@ public  class LoginController   {
 		UM.setPass(pass);
 		UM.send(lm);
 		
-		System.out.println("pre null instance");
-		//received null. something went wrong. temp code
-		if (UM.inb.getMessage().contains("null"))
-			return;
 		
-		System.out.println("pre sub instance");
-		//login and show subscriber menu
-		Object fromServer = UM.inb.getObj();
-		if (fromServer instanceof Subscriber)
+		if (UM.s1.getSID()!=null)
 		{
-			System.out.println("sub instance");
-			UM.s1=(Subscriber) fromServer;
-			//UM.setSub((Subscriber)UM.inb.getObj());
-			//System.out.println("sub is" + UM.s1);
-			System.out.println("sub is" + UM.s1);
 			
 			//start main menu process
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -86,35 +79,25 @@ public  class LoginController   {
 			
 			
 		}
-		else {
-		if (UM.librarian != null)
+		else
 		{
-			
-			
-			//start main menu process
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
-			//SubscriberFormController subscriberFormController = loader.getController();		
-			//subscriberFormController.loadSubscriber(UM.s1);
-			
-			Scene scene = new Scene(root);			
-			primaryStage.setTitle("Main Menu");
-
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-			
-			
-			}
-		}
-		//else
-		//{
 			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
-		//}
+		}
 		
 	}
 
-	
+	public void btnSearchBook(ActionEvent event) throws IOException {
+	    // load the new screem
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
+	    Parent root = loader.load();
+	    Stage stage = new Stage();
+	    stage.setTitle("Search for Books");
+	    stage.setScene(new Scene(root));
+	    stage.show();
+
+	    ((Node) event.getSource()).getScene().getWindow().hide();
+	}
+
 	
 	public void start(Stage primaryStage) throws Exception {	
 
