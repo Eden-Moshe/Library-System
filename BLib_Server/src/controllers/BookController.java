@@ -23,7 +23,7 @@ public class BookController {
 		
 	}
 	
-	
+	//the methods used retrieveRow in DBController to fetch row details into Book instance
 	public Book fetchBook(String pKey) {
 	    Book ret = null;
 	    ResultSet rs = db.retrieveRow(tName, keyField, pKey);

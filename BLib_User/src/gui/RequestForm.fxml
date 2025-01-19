@@ -2,20 +2,56 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" spacing="10" alignment="CENTER" prefWidth="400" prefHeight="300" fx:controller="gui.RequestWindowController">
-    <Label text="Book Barcode:"/>
-    <TextField fx:id="txtBookBarcode" promptText="Enter book barcode"/>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="gui.RequestWindowController"
+      spacing="20" alignment="CENTER" prefWidth="500" prefHeight="400"
+      style="-fx-background-color: #d8f3dc; -fx-padding: 25;">
 
-    <Label text="Borrower ID:"/>
-    <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID"/>
+    <!-- Back Button (Small Arrow at Top Left) -->
+    <HBox alignment="TOP_LEFT">
+        <Button text="←" fx:id="btnBack" onAction="#getBackBtn"
+                style="-fx-font-size: 24px; -fx-background-color: transparent; -fx-text-fill: black; -fx-border-width: 0;"/>
+    </HBox>
 
-    <Label text="Request Date:"/>
-    <TextField fx:id="txtRequestDate" promptText="Enter request date (YYYY-MM-DD)"/>
+    <!-- Title with Text-Based Icon (Book Emoji) -->
+    <HBox alignment="CENTER" spacing="8">
+        <Label text="📚" style="-fx-font-size: 24px;"/>
+        <Label text="Request Book Extension" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    </HBox>
 
-    <Button text="Request Extension" fx:id="btnRequestExtension" onAction="#sendExtensionRequest"/>
-    <Button text="Exit" fx:id="btnExit" onAction="#getExitBtn"/>
-    <Button text="Reset" fx:id="btnReset" onAction="#resetFields"/>
-    
-    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"/>
+    <!-- GridPane for Better Form Alignment -->
+    <GridPane hgap="12" vgap="15" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints halignment="RIGHT" minWidth="120"/> <!-- Ensures equal width columns -->
+        </columnConstraints>
+
+        <Label text="📖 Book Barcode:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtBookBarcode" promptText="Enter book barcode" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                   style="-fx-border-color: #689f38; -fx-border-radius: 5; -fx-padding: 7;"/>
+
+        <Label text="🆔 Borrower ID:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                   style="-fx-border-color: #689f38; -fx-border-radius: 5; -fx-padding: 7;" GridPane.columnSpan="1"/>
+
+        <Label text="📅 Request Date:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="datePickerRequestDate" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                    style="-fx-border-color: #689f38; -fx-border-radius: 5; -fx-padding: 7;"/>
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox spacing="12" alignment="CENTER">
+        <Button text="Request Extension" fx:id="btnRequestExtension" onAction="#sendExtensionRequest"
+                style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: black; -fx-border-color: #689f38; -fx-border-width: 2px; -fx-border-radius: 5; -fx-padding: 10;"/>
+        <Button text="Reset" fx:id="btnReset" onAction="#resetFields"
+                style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: black; -fx-border-color: #689f38; -fx-border-width: 2px; -fx-border-radius: 5; -fx-padding: 10;"/>
+    </HBox>
+
+    <!-- Response Box -->
+    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"
+               style="-fx-background-color: #f0f0f0; -fx-border-color: #bbb; -fx-border-radius: 5; -fx-padding: 7;"/>
 </VBox>

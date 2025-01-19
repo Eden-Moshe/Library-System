@@ -2,8 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import client.UserManager;
@@ -17,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -38,10 +38,10 @@ public class BorrowWindowController {
     private TextField txtBookBarcode;
 
     @FXML
-    private TextField txtBorrowDate;
+    private DatePicker dpBorrowDate;
 
     @FXML
-    private TextField txtReturnDate;
+    private DatePicker dpReturnDate;
     
     
     @FXML
@@ -49,71 +49,66 @@ public class BorrowWindowController {
     
     @FXML
     private Button btnReset;
-
+    
+    
+    //get borrower id from text inserted
     private String getBorrowerId() {
         return txtBorrowerId.getText();
     }
-
+    //get book barcode from text inserted
     private String getBookBarcode() {
         return txtBookBarcode.getText();
     }
 
     
-    
-
-    
+ // Get borrow date from DatePicker
     private Date getBorrowDate() {
-        String borrowDateText = txtBorrowDate.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the format that matches your input
-        try {
-            return dateFormat.parse(borrowDateText); // Parse the String into a Date
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null; // Return null if parsing fails
+        LocalDate borrowDateLocal = dpBorrowDate.getValue(); // Get the selected date from DatePicker
+        if (borrowDateLocal != null) {
+            return java.sql.Date.valueOf(borrowDateLocal); // Convert LocalDate to Date
         }
+        return null; // Return null if no date is selected
     }
-    
 
-
+    // Get return date from DatePicker
     private Date getReturnDate() {
-        String returnDateText = txtReturnDate.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the format that matches your input
-        try {
-            return dateFormat.parse(returnDateText); // Parse the String into a Date
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null; // Return null if parsing fails
+        LocalDate returnDateLocal = dpReturnDate.getValue(); // Get the selected date from DatePicker
+        if (returnDateLocal != null) {
+            return java.sql.Date.valueOf(returnDateLocal); // Convert LocalDate to Date
         }
+        return null; // Return null if no date is selected
     }
     
-    
+    //display text returned from server
 	public void setTextRespose(String msg) {
 		this.txtResponse.setText(msg);
 		
 	}
 	
 
-	
+	//resets all fields when pressing 'reset'
 	@FXML
 	private void resetFields(ActionEvent event) {
 	    txtBorrowerId.clear();
 	    txtBookBarcode.clear();
-	    txtBorrowDate.clear();
-	    txtReturnDate.clear();
+	    dpBorrowDate.setValue(null);  // Reset the DatePicker
+	    dpReturnDate.setValue(null);  // Reset the DatePicker
 	    txtResponse.clear();
 	}
 	
-	
+	//method that sends borrow message to server with user inputs
 	public void sendBorrowRequest(ActionEvent event) throws SQLException, IOException {
 	    UserManager UM = UserManager.getInstance();
+	    //set Strings and date from user input
 	    String borrowerId = getBorrowerId();
 	    String bookBarcode = getBookBarcode();
 	    Date borrowDate = getBorrowDate();
 	    Date returnDate = getReturnDate();
-
+	    
+	    //getting librarian id from UserManager instance of librarian
 	    String Librarian_id = UM.librarian.getLibrarian_id();
 
-
+	    //check no field is left empty
 	    if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || borrowDate == null || returnDate == null) {
 	        txtResponse.setText("All fields are required.");
 	        return;
@@ -137,11 +132,12 @@ public class BorrowWindowController {
 	    fetchMsg.b = new Book(bookBarcode, null, null, null, null, false, null);
 	    fetchMsg.borrow = new Borrow(fetchMsg.s, borrowDate,returnDate);
 	    fetchMsg.lib_id = Librarian_id;
+	    
 	    // Send the BorrowMessage
 	    UM.send(fetchMsg);
 	    
 	    // Wait for the response 
-	    // Get the message from MyInbox (set it in handleMessageFromServer)
+	    // Get the message from MyInbox 
 	    String response = UM.inb.getMessage();  
 
 	    // Set the response text in the TextBox
@@ -149,7 +145,8 @@ public class BorrowWindowController {
 	    
 	    
 	}
-
+	
+	//method returns to previous page when pressing 'Back' button
     public void getBackBtn(ActionEvent event) throws Exception {
         try {
             // Close the current window

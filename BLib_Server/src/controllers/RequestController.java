@@ -32,7 +32,7 @@ public class RequestController {
             System.out.println("Invalid input: sub_id or barcode is null");
             return null;
         }
-
+        //fetch subscriber into s
         Subscriber s = subscriberController.fetchSubscriber(sub_id);
         if (s == null) {
             errorMessage.append("Error: Subscriber not found for ID: " + sub_id);
@@ -86,7 +86,6 @@ public class RequestController {
         //check order_book table and see if book already has an existing order
         //if so deny request
         //else continue to set up the request
-        // Check the order_book table
 
         ResultSet rs = db.retrieveRow("order_book", "book_name",book.getBookName());
         try {
@@ -102,7 +101,7 @@ public class RequestController {
         }
 
         Date currentReturnDate = borrow.getReturnDate();
-
+        // check that new return date occurs after original return date
         if (extendedDate.before(currentReturnDate)) {
         	return ("Error: The return date can only be extended, not shortened. " +
                     "Current return date: " + currentReturnDate + ", " +
@@ -111,7 +110,7 @@ public class RequestController {
         
         String bookBarcode = book.getBookBarcode();
         
-        //edit specific row in borrow table
+        //edit specific row in borrow table with new return date
         try {
             java.sql.Date sqlDate = new java.sql.Date(extendedDate.getTime());
             db.editRow("borrow","book_barcode", bookBarcode, "return_date", sqlDate.toString());

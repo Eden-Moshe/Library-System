@@ -109,7 +109,7 @@ public  class MainMenuController   {
 		
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setTitle("Borrow Extension Managment Tool");
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 	}

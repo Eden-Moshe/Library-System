@@ -25,9 +25,8 @@ public class BorrowController {
 		
 	}
 	
-	
+	//methods created a new row in borrow table with proper values
 	public String createBorrow(Subscriber s, Book b, Borrow borrow, String lib_id) {
-        //int borrowNum =-1;
 	    // Checking if account is active
 	    if (canBorrow(s)) {
 	        // Defining fields and values for the insert
@@ -46,10 +45,8 @@ public class BorrowController {
 
 	        // Call insertRow method with the table, fields, and values
 	        db.insertRow("borrow", fields, values);
-	        //changing book availability
 
 	        //editing book's availability status in book table
-	        //change from "book_barcode" to "barcode"
 	        db.editRow("book","barcode",b.getBookBarcode(),"book_available","false");
 	        
 	        //changing books' availability in class instance

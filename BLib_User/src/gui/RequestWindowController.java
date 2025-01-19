@@ -2,8 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import client.UserManager;
@@ -16,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -35,7 +35,7 @@ public class RequestWindowController {
     private TextField txtBookBarcode;
 
     @FXML
-    private TextField txtExtendedReturnDate;
+    private DatePicker datePickerRequestDate;
 
     @FXML
     private TextField txtResponse;
@@ -43,44 +43,45 @@ public class RequestWindowController {
     @FXML
     private Button btnReset;
     
-
+    //get borrower id from text inserted
     private String getBorrowerId() {
         return txtBorrowerId.getText();
     }
-
+    //get book barcode from text inserted
     private String getBookBarcode() {
         return txtBookBarcode.getText();
     }
 
+    // Method to get the request date from the DatePicker
     private Date getRequestDate() {
-        String requestDateText = txtExtendedReturnDate.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return dateFormat.parse(requestDateText); // Parse the String into a Date
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null; // Return null if parsing fails
+        LocalDate localDate = datePickerRequestDate.getValue();
+        if (localDate == null) {
+            return null;
         }
+        return java.sql.Date.valueOf(localDate);  // Convert LocalDate to java.sql.Date
     }
 
     public void loadResponse(String msg) {
         this.txtResponse.setText(msg);
     }
-
+    
+	//resets all fields when pressing 'reset'
     @FXML
     private void resetFields(ActionEvent event) {
         txtBorrowerId.clear();
         txtBookBarcode.clear();
-        txtExtendedReturnDate.clear();
+        datePickerRequestDate.setValue(null);  // Reset the DatePicker
         txtResponse.clear();
     }
-
+    
+	//method that sends extension request message to server with user inputs
     public void sendExtensionRequest(ActionEvent event) throws SQLException, IOException {
         UserManager UM = UserManager.getInstance();
         String borrowerId = getBorrowerId();
         String bookBarcode = getBookBarcode();
         Date requestDate = getRequestDate();
-
+        
+	    //check no field is left empty
         if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || requestDate == null) {
             System.out.println("All fields are required.");
             return;
@@ -88,23 +89,28 @@ public class RequestWindowController {
         
         
 
-        // Creating a RequestMessage to send for extension
+        // Creating a RequestMessage to send for extension with:
+	    // 1. Subscriber id
+	    // 2. Book's barcode
+	    // 3. new return date
         RequestMessage requestMessage = new RequestMessage();
 	    requestMessage.s = new Subscriber(borrowerId, null, null, null, null);
 	    requestMessage.b = new Book(bookBarcode, null, null, null, null, false, null);
         requestMessage.returnDate = requestDate;
-
-        UM.send(requestMessage); // Send the message to the server
+        
+        // Send the message to the server
+        UM.send(requestMessage); 
 
 	    // Wait for the response 
-	    // Get the message from MyInbox (set it in handleMessageFromServer)
+	    // Get the message from MyInbox
 	    String response = UM.inb.getMessage();  
 
 	    // Set the response text in the TextBox
-	    txtResponse.setText(response);  // Display the server's response (e.g., "Extension sent" or error message)
+	    txtResponse.setText(response);
 
     }
-
+    
+	//method returns to previous page when pressing 'Back' button
     public void getBackBtn(ActionEvent event) throws Exception {
         try {
             // Close the current window
