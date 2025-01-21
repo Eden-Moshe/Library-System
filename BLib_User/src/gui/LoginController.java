@@ -1,6 +1,6 @@
 package gui;
 
-import client.UserManager;
+import client.*;
 import common.LoginMessage;
 import common.Subscriber;
 import javafx.event.ActionEvent;
@@ -16,7 +16,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class LoginController   {
+public  class LoginController extends BaseController   {
+	
+	
 	
 	@FXML
 	private Button btnLogin = null;
@@ -28,7 +30,6 @@ public  class LoginController   {
     @FXML
     private PasswordField passwordtxt;
 
-    @FXML
 
 	private String getID() {
 		return idtxt.getText();
@@ -36,7 +37,6 @@ public  class LoginController   {
 	private String getPass() {
 		return passwordtxt.getText();
 	}
-
 	
 	public void btnLogin(ActionEvent event) throws Exception {
 
@@ -71,18 +71,23 @@ public  class LoginController   {
 			//System.out.println("sub is" + UM.s1);
 			System.out.println("sub is" + UM.s1);
 			
-			//start main menu process
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
-			//SubscriberFormController subscriberFormController = loader.getController();		
-			//subscriberFormController.loadSubscriber(UM.s1);
 			
-			Scene scene = new Scene(root);			
-			primaryStage.setTitle("Main Menu");
-
-			primaryStage.setScene(scene);		
-			primaryStage.show();
+			MainController mainController = SubscriberUI.mainController;
+	        mainController.switchView("/gui/SubscriberMenuNew.fxml");
+			
+			
+//			//start main menu process
+//			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+//			Stage primaryStage = new Stage();
+//			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
+//			//SubscriberFormController subscriberFormController = loader.getController();		
+//			//subscriberFormController.loadSubscriber(UM.s1);
+//			
+//			Scene scene = new Scene(root);			
+//			primaryStage.setTitle("Main Menu");
+//
+//			primaryStage.setScene(scene);		
+//			primaryStage.show();
 			
 			
 		}

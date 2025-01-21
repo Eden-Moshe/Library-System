@@ -4,6 +4,8 @@ public class MyInbox {
 	private String immediate_message="no new message";
 	private Object objMsg;
 	private Object arr[];
+	
+	
 	public void setMessage(Object msg)
 	{
 		if (msg instanceof String)
@@ -12,6 +14,9 @@ public class MyInbox {
 			objMsg=msg;
 		
 	}
+	
+	
+	//one time use
 	public Object getObj()
 	{
 		Object temp=objMsg;

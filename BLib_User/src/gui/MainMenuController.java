@@ -2,8 +2,9 @@ package gui;
 
 import java.io.IOException;
 
-import client.UserManager;
-import common.Subscriber;
+import client.*;
+import common.*;
+import static common.GenericMessage.Action.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +17,12 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class MainMenuController   {
+public  class MainMenuController extends BaseController  {
 	private SubscriberFormController sfc;
 	private BorrowWindowController bwc;
+	private UserManager UM;
 	private static int itemIndex = 3;
+	
 	
 	@FXML
 	private Button btnLogin = null;
@@ -31,12 +34,11 @@ public  class MainMenuController   {
 	private TextField lblID;
 	private TextField lblPassword;
 
-
-
+	
 	public void btnLendBook(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
 		
-		UserManager UM = UserManager.getInstance();
+		UM = UserManager.getInstance();
 		
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
 		Stage primaryStage = new Stage();
@@ -73,8 +75,32 @@ public  class MainMenuController   {
 
 	}
 	
+	
+	
+	
 	public void btnViewHistory(ActionEvent event) throws Exception {
-
+		
+		GenericMessage msg = new GenericMessage();
+		
+		if (UM.librarian == null)
+		{
+			//enter user id window
+		}
+		else
+		{
+			//get the subscriber that's using this client 
+			msg.sub = UM.s1;
+			
+			msg.action=get_Borrow_History;
+			
+			
+			SubscriberUI.mainController.switchView("/gui/BorrowHistoryWindow.fxml");
+		
+			
+		}
+		
+		
+		
 
 	}
 	public void btnLendBook() {
@@ -101,7 +127,6 @@ public  class MainMenuController   {
 		
 		FXMLLoader loader = new FXMLLoader();
 		
-		UserManager UM = UserManager.getInstance();
 		
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
 		Stage primaryStage = new Stage();
@@ -123,7 +148,6 @@ public  class MainMenuController   {
 		
 		FXMLLoader loader = new FXMLLoader();
 		
-		UserManager UM = UserManager.getInstance();
 		
 		
 		if (UM.s1.getSID()!=null)
@@ -158,6 +182,8 @@ public  class MainMenuController   {
 	
 	
 	public void start(Stage primaryStage) throws Exception {	
+
+		UM = UserManager.getInstance();
 
 		Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 				

@@ -2,6 +2,9 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
@@ -24,7 +27,38 @@ public class SubscriberController {
 	{
 		db=DBController.getInstance();
 	}
+	public ArrayList<AccountStatus> getAccountStatus(Subscriber sub)
+	{
+		ArrayList<AccountStatus> ret = new ArrayList<>();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		AccountStatus as;
+		ResultSet rs = db.retrieveRow("user_status_registry", "user_id", sub.getSID());
+		try {
+			while (rs.next())
+			{
+				as = new AccountStatus ();
+				as.end_date = dateFormat.parse(rs.getString("status_end_date"));
+				as.set_date = dateFormat.parse(rs.getString("status_set_date"));
+				as.is_current = rs.getBoolean("is_current");
+				
+				ret.add(as);
+				
+				
+			}
+			
+			return ret;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
+		
+		
+		return null;
+		
+		
+	}
 	public Subscriber fetchSubscriber(String pKey) {
 	    Subscriber ret = null;
 	    ResultSet rs = db.retrieveRow(tName, keyField, pKey);

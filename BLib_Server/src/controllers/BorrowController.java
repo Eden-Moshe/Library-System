@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,6 +15,7 @@ import server.DBController;
 
 public class BorrowController {
 	private static final BorrowController instance = new BorrowController();
+	private static BookController bookController = BookController.getInstance();
 	private DBController db;
 	private static String tName="borrow";
 	private static String keyField="book_barcode";
@@ -27,14 +30,56 @@ public class BorrowController {
 		db=DBController.getInstance();
 		
 	}
+	public ArrayList<Borrow> borrowList(Subscriber sub)
+	{
+		Borrow bor;
+		String tempStr;
+		Date borrowDate;
+		Date returnDate;
+		ArrayList<Borrow> ret = new ArrayList<>();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+	    
+		ResultSet rs = db.retrieveRow(tName, "borrower_id", sub.getSID());
+		try {
+			while (rs.next())
+			{
+				//getting dates from the borrow row
+				tempStr = rs.getString("borrow_date");
+				borrowDate = dateFormat.parse(tempStr);
+				
+				tempStr = rs.getString("return_date");
+				returnDate = dateFormat.parse(tempStr);
+				
+				//creating borrow instance
+				bor = new Borrow(sub, borrowDate, returnDate);
+				
+				//setting the book in borrow instance
+				bor.bo = bookController.fetchBook(rs.getString("book_barcode"));
+				
+				
+				//adding the borrow instance to the ArrayList
+				ret.add(bor);
+				
+			
+			}
+			return ret;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+
+	}
 	
 	
 	public String createBorrow(Subscriber s, Book b, Borrow borrow) {
         //int borrowNum =-1;
 	    // Checking if account is active
 	    if (canBorrow(s)) {
-            borrow.l= new Librarian("testLib");
-            borrow.l.setLibrarian_id("1");
+//            borrow.l= new Librarian("testLib");
+//            borrow.l.setLibrarian_id("1");
 	        // Defining fields and values for the insert
 	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
 	        		           "borrow_date", "return_date", "actual_returned_date"};

@@ -16,6 +16,8 @@ import controllers.*;
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
+import static common.GenericMessage.Action.*;
+
 
 //BLib server-side
 public class server extends AbstractServer{
@@ -149,9 +151,25 @@ public class server extends AbstractServer{
 		RequestMessage reqMessage;
 		SearchMessage searchMessage;
 
+		GenericMessage genericMsg;
 		
 		try {
 		
+			if (msg instanceof GenericMessage)
+			{
+				genericMsg =  (GenericMessage)msg;
+				
+				if (genericMsg.action == get_Borrow_History)
+				{
+					client.sendToClient(borrowController.borrowList(genericMsg.sub));
+				}
+				
+				if (genericMsg.action == get_Account_Status)
+				{
+					client.sendToClient(subscriberController.getAccountStatus(genericMsg.sub));
+				}
+				
+			}
 			if (msg instanceof LoginMessage)
 			{
 				lm = ((LoginMessage) msg);

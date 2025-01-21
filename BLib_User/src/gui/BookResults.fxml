@@ -15,9 +15,9 @@
             <columns>
                 <TableColumn fx:id="colBookName" prefWidth="150" text="Book Name" />
                 <TableColumn fx:id="colBookGenre" prefWidth="100" text="Genre" />
-                <TableColumn fx:id="colBookDesc" prefWidth="300" text="Description" /> <!-- Increased width -->
+                <TableColumn fx:id="colBookDesc" prefWidth="300" text="Location" /> <!-- Increased width -->
                 <TableColumn fx:id="colBookExists" prefWidth="80" text="Available" />
-                <TableColumn fx:id="colPlaceOnShelf" prefWidth="100" text="Location" />
+                <TableColumn fx:id="colPlaceOnShelf" prefWidth="100" text="Description" />
                 <TableColumn fx:id="colReturnDate" prefWidth="150" text="Return Date" />
             </columns>
             <columnResizePolicy>

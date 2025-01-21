@@ -1,7 +1,10 @@
 package client;
 
+import java.io.IOException;
+
 import common.*;
 import gui.LoginController;
+import gui.MainController;
 import gui.MainMenuController;
 import gui.SubscriberEntryController;
 import javafx.application.Application;
@@ -12,6 +15,7 @@ public class SubscriberUI extends Application {
 	public static Stage primaryStage ;
 	private static String host="localhost";
 	private static int port=5555;
+	public static MainController mainController;
 	public static void main(String args[] ) throws Exception
 	   { 
 		
@@ -43,13 +47,19 @@ public class SubscriberUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		
-		UM = UM.getInstance(host,port);
-		SubscriberUI.primaryStage = primaryStage;				  		
-		//SubscriberEntryController aFrame = new SubscriberEntryController(); // create SubscriberEntry
-		LoginController LC = new LoginController();
+		try {
+			UM = UM.getInstance(host,port);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+
+		mainController = new MainController();
+		mainController.start(primaryStage);
 		
 		
-		LC.start(primaryStage);
+		
 		
 		
 	}

@@ -10,6 +10,7 @@ import client.UserManager;
 import common.Book;
 import common.Borrow;
 import common.BorrowMessage;
+import common.Librarian;
 import common.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -138,6 +139,7 @@ public class BorrowWindowController {
 	    fetchMsg.s = new Subscriber(borrowerId, null, null, null, null);
 	    fetchMsg.b = new Book(bookBarcode, null, null, null, null, false, null);
 	    fetchMsg.borrow = new Borrow(fetchMsg.s, borrowDate,returnDate);
+	    fetchMsg.borrow.l = UM.librarian;
 	    // Send the BorrowMessage
 	    UM.send(fetchMsg);
 	    

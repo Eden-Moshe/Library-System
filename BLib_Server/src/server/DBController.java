@@ -46,7 +46,7 @@ public class DBController {
 		}
 		
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=IST","root","Aa123456");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=Asia/Jerusalem","root","Aa123456");
 		} catch (SQLException e) {
 			System.out.print("cannot connect to the DB : " + e.getMessage());
 			return false;
