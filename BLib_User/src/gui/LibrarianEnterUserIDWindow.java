@@ -1,9 +1,10 @@
 package gui;
 
-import java.awt.Button;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField; 
 import java.io.IOException;
 
+import client.SubscriberUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,22 +27,22 @@ public class LibrarianEnterUserIDWindow extends BaseController{
     private TextField txtResponse;
     
     @FXML
-    private TextField txtUserID;
+    private TextField userIdField;
     
     //get borrower id from text inserted
     private String getUserId() {
-        return txtUserID.getText();
+        return userIdField.getText();
     }
     
     // Resets all fields when pressing 'reset'
     @FXML
     private void resetFields(ActionEvent event) {
-        txtUserID.clear();
+    	userIdField.clear();
     }
     
     //display text returned from server
 	public void setTextRespose(String msg) {
-		this.txtUserID.setText(msg);	
+		this.userIdField.setText(msg);	
 	}
 
     @FXML
@@ -54,50 +55,19 @@ public class LibrarianEnterUserIDWindow extends BaseController{
 	        return;
 	    }
 	    
+	    
 	   //implement check if that ID exists, if so send it to next page
 	    
 	    //go to Reader's card:
-        try {
-            // Close the current window
-            ((Node) event.getSource()).getScene().getWindow().hide();
+    	SubscriberUI.mainController.switchView("/gui/ViewUserInfo.fxml");
 
-            // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
-            Pane root = loader.load();
-
-            // Set up the new stage
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Reader's Card");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load ViewUserInfo.fxml.");
-       }
+ 
     }
     
     
 
     @FXML
     private void getBackBtn(ActionEvent event) {
-        try {
-            // Close the current window
-            ((Node) event.getSource()).getScene().getWindow().hide();
-
-            // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LibrarianMainMenu.fxml"));
-            Pane root = loader.load();
-
-            // Set up the new stage
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Librarian Main Menu");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load LibrarianMainMenu.fxml.");
-       }
+    	SubscriberUI.mainController.goBack();
     }
 }

@@ -32,7 +32,7 @@
        <Button fx:id="btnExtendBorrow" layoutX="147.0" layoutY="303.0" onAction="#btnExtendBorrow" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Borrow Extension" />
    
        <!-- ORDER BOOK BUTTON -->
-       <Button fx:id="btnReturnBook" layoutX="147.0" layoutY="363.0" onAction="#btnReturnBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Order Book" />
+       <Button fx:id="btnOrderBook" layoutX="147.0" layoutY="363.0" onAction="#btnOrderBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Order Book" />
          <Button fx:id="handleBack" layoutX="26.0" layoutY="14.0" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
       <Button fx:id="btnReturnBook1" layoutX="147.0" layoutY="421.0" onAction="#btnReturnBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Account Status History" />
    </children>

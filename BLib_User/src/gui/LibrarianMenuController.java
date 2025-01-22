@@ -135,37 +135,11 @@ public  class LibrarianMenuController extends BaseController  {
 	public void btnUserInfo(ActionEvent event) throws Exception {
 
 		
-		FXMLLoader loader = new FXMLLoader();
 		
-		
-		
-		if (UM.s1.getSID()!=null)
-		{
-			//start main menu process
-			
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource("/gui/SubscriberForm.fxml").openStream());
-			SubscriberFormController subscriberFormController = loader.getController();		
-			subscriberFormController.loadSubscriber(UM.s1);
-			
-			
-				
-			
-			Scene scene = new Scene(root);			
-			scene.getStylesheets().add(getClass().getResource("/gui/SubscriberForm.css").toExternalForm());
-			primaryStage.setTitle("Subscriber Managment Tool");
+		SubscriberUI.mainController.switchView("/gui/LibrarianEnterUserID.fxml");
 
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-			
-			
-		}
-		else
-		{
-			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
-		}
 		
+
 	}
 	
 	public void ViewMessageInbox(ActionEvent event) throws Exception {

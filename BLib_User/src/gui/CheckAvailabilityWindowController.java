@@ -21,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-public class CheckAvailabilityWindowController {
+public class CheckAvailabilityWindowController extends BaseController {
 	@FXML
 	private Button btnOrderBook= null;
 	@FXML

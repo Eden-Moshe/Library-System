@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.Date;
 
-public class OrderWindowController {
+public class OrderWindowController extends BaseController {
     @FXML
     private Button btnBack;
     

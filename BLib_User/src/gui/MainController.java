@@ -58,7 +58,14 @@ public class MainController extends Application {
            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
            Pane view = loader.load();
            
-           BaseController controller = loader.getController();
+           BaseController controller = null;
+           try {
+        	   controller = loader.getController();
+           }catch (Exception e)
+           {
+        	   System.out.println("!!!!!!!!!!!!!!class is not baseController!!!!!!!!!!!!!!!!!!");
+        	   //e.printStackTrace();
+           }
            if (controller != null) {
            	System.out.println("controller is not null");
            	controller.onLoad();

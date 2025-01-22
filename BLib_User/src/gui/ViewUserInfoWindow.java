@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Button;
 import java.io.IOException;
 
 import client.SubscriberUI;
@@ -10,12 +9,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import static common.GenericMessage.Action.*;
 
 
-public class ViewUserInfoWindow {
+public class ViewUserInfoWindow extends BaseController {
 
     
     @FXML
@@ -34,7 +34,7 @@ public class ViewUserInfoWindow {
     @FXML
     private Button btnViewBorrowHistory;
 	
-    
+    //TODO: load user info
     
     @FXML
     private void checkBookStatus(ActionEvent event) {
@@ -46,32 +46,7 @@ public class ViewUserInfoWindow {
     	//goes to Extend Borrow Page
     	
     	SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
-//    	
-//        try {
-//            // Close the current window
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//
-//            // Load the next screen (Extend Borrow)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ExtendBorrowForm.fxml"));
-//            Pane root = loader.load();
-//            //alerting the next page Librarian entered
-//            RequestWindowController requestWindowController = new RequestWindowController();
-//            requestWindowController.setUserRole("Librarian");  // Set the user role
-//            
-//            //implement the same from Subscriber Main Menu
-//            //RequestWindowController requestWindowController = new RequestWindowController();
-//            //requestWindowController.setUserRole("Reader");  // Set the user role
-//
-//            // Set up the new stage
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(root);
-//            stage.setTitle("Extend Borrow");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Failed to load ExtendBorrowForm.fxml.");
-//       }
+
     }
 
     
@@ -82,25 +57,9 @@ public class ViewUserInfoWindow {
 
     	
     	
-//        try {
-//            // Close the current window
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//
-//            // Load the next screen (Account Status History)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/AccountStatusHistory.fxml"));
-//            Pane root = loader.load();
-//
-//            // Set up the new stage
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(root);
-//            stage.setTitle("Account Status History");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Failed to load AccountStatusHistory.fxml.");
-//       }
+
     }
+    
     
     @FXML
     private void viewBorrowHistory(ActionEvent event) {
@@ -113,26 +72,7 @@ public class ViewUserInfoWindow {
     	SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
     	
     	
-    	
-//        try {
-//            // Close the current window
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//
-//            // Load the next screen (Borrow History)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BorrowHistory.fxml"));
-//            Pane root = loader.load();
-//
-//            // Set up the new stage
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(root);
-//            stage.setTitle("Borrow History");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Failed to load BorrowHistory.fxml.");
-//       }
-//        
+
         
         
     }
@@ -147,24 +87,6 @@ public class ViewUserInfoWindow {
 
     	
     	
-    	
-//        try {
-//            // Close the current window
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//
-//            // Load the previous screen (Librarian Enters User ID)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LibrarianEnterUserID.fxml"));
-//            Pane root = loader.load();
-//
-//            // Set up the new stage
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(root);
-//            stage.setTitle("Librarian Enter User ID");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Failed to load LibrarianEnterUserID.fxml.");
-//       }
+
     }
 }
