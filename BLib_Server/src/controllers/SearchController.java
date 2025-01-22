@@ -31,7 +31,10 @@ public class SearchController {
      * @return A list of books matching the search criteria.
      */
     public List<Book> performSearch(String bookName, String bookGenre, String bookDescription) {
+<<<<<<< HEAD
+=======
     	
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
         Connection con = db.getConnection();
         
         // Constructing the SQL query based on which fields are selected
@@ -84,6 +87,8 @@ public class SearchController {
             // Executing the query
             ResultSet result = stmt.executeQuery();
             
+<<<<<<< HEAD
+=======
             
             
             
@@ -125,6 +130,7 @@ public class SearchController {
             
             
             
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
             // Creating Book objects from the results and adding them to the list
             while (result.next()) {
                 Book book = new Book(
