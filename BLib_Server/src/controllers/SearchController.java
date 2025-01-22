@@ -31,6 +31,10 @@ public class SearchController {
      * @return A list of books matching the search criteria.
      */
     public List<Book> performSearch(String bookName, String bookGenre, String bookDescription) {
+<<<<<<< HEAD
+=======
+    	
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
         Connection con = db.getConnection();
         
         // Constructing the SQL query based on which fields are selected
@@ -83,6 +87,50 @@ public class SearchController {
             // Executing the query
             ResultSet result = stmt.executeQuery();
             
+<<<<<<< HEAD
+=======
+            
+            
+            
+            
+            /// me fucking around trying to convert the function to use DBController. 
+//            
+//        	List<Book> bookList = new ArrayList<>();
+//        	try {
+//        	
+//        	String []fields = { "book_description"};
+//        	String []values = {bookDescription};
+//        	//ResultSet result = db.retrieveRowsWithConditions(bookDescription, fields, values)
+//        	ResultSet result = db.retrieveRowsWithConditions(tName, fields, values);
+//                // Creating Book objects from the results and adding them to the list
+//                while (result.next()) {
+//                    Book book = new Book(
+//                        result.getString("book_name"),          // Book Name
+//                        result.getString("book_genre"),         // Book Genre
+//                        result.getString("barcode"),            // Barcode
+//                        result.getString("shelf_location"),     // Shelf Location
+//                        result.getString("book_description"),   // Book Description
+//                        result.getBoolean("book_available"),    // Book Availability
+//                        result.getDate("return_date")   // Closest Return Date
+//                    );
+//                    
+//                    // Adding the book to the list
+//                    bookList.add(book);
+//                }
+//        	
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//            
+//            
+//            
+            
+            
+            
+            
+            
+            
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
             // Creating Book objects from the results and adding them to the list
             while (result.next()) {
                 Book book = new Book(

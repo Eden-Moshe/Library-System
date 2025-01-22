@@ -122,9 +122,23 @@ public class BorrowWindowController {
 		borrowWindowController.loadBorrow(UM.inb.getMessage());
 
 	
+<<<<<<< HEAD
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
 		primaryStage.setTitle("Borrow Managment Tool");
+=======
+	public void sendBorrowRequest(ActionEvent event) throws SQLException, IOException {
+	    UserManager UM = UserManager.getInstance();
+	    String borrowerId = getBorrowerId();
+	    String bookBarcode = getBookBarcode();
+	    Date borrowDate = getBorrowDate();
+	    Date returnDate = getReturnDate();
+	    
+	    
+	    String Librarian_id = UM.librarian.getLibrarian_id();
+	    
+	    
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

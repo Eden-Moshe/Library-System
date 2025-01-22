@@ -24,7 +24,10 @@ public class DBController {
 	private DBController() {
 		connectToDB();
 	}
-	
+	public Connection getConnection() {
+	    return con;
+	}
+
 	private boolean connectToDB() {
 		
 		try {

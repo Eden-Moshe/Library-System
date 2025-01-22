@@ -1,8 +1,12 @@
 package gui;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+=======
+import java.io.IOException;
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 
 import client.UserManager;
 import client.SubscriberUI;
@@ -35,6 +39,7 @@ public  class MainMenuController   {
 	private TextField lblPassword;
 
 
+<<<<<<< HEAD
 	public void btnLendBook() {
 		
 	}
@@ -51,6 +56,71 @@ public  class MainMenuController   {
 	    stage.show();
 
 	    ((Node) event.getSource()).getScene().getWindow().hide();
+=======
+
+	public void btnLendBook(ActionEvent event) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
+		//BorrowWindowController borrowWindowController = loader.getController();		
+		//borrowWindowController.loadBorrow(UM.b);
+	
+		
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
+		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+	}
+		
+
+	public void btnCreateSubscriber(ActionEvent event) throws Exception {
+
+		FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
+
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
+
+		
+		Scene scene = new Scene(root);			
+		primaryStage.setTitle("Subscriber Creation Tool");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+
+	}
+	
+	public void btnViewHistory(ActionEvent event) throws Exception {
+
+
+	}
+	public void btnLendBook() {
+		
+	}
+	public void btnSearchBook(ActionEvent event) throws IOException {
+	    // load the new screen
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
+	    Parent root = loader.load();
+	    Stage stage = new Stage();
+	    stage.setTitle("Search for Books");
+	    stage.setScene(new Scene(root));
+	    stage.show();
+
+	    ((Node) event.getSource()).getScene().getWindow().hide();
+	}
+
+	public void btnReturnBook(ActionEvent event) throws Exception {
+		
+		
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 	}
 
 	public void btnReturnBook() {

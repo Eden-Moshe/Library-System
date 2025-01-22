@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+<<<<<<< HEAD
 
 import common.BookMessage;
 import common.BorrowMessage;
@@ -13,6 +14,20 @@ import controllers.BorrowController;
 import controllers.SearchController;
 //import controllers.RequestController;
 import controllers.SubscriberController;
+=======
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import common.*;
+
+import controllers.*;
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -25,8 +40,19 @@ public class server extends AbstractServer{
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
+<<<<<<< HEAD
 		private SearchController searchController;
 		//private RequestController requestController;
+=======
+		private RequestController requestController;
+		private SearchController searchController;
+
+		
+		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
+		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
+
+
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 	  /**
 	   * The default port to listen on.
 	   */
@@ -45,10 +71,94 @@ public class server extends AbstractServer{
   		subscriberController = SubscriberController.getInstance();
   		borrowController = BorrowController.getInstance();
   		bookController = BookController.getInstance();
+<<<<<<< HEAD
   		searchController = SearchController.getInstance();
   		//requestController = RequestController.getInstance();
 	  }
 
+=======
+  		requestController = RequestController.getInstance();
+  		searchController = SearchController.getInstance();
+
+	  }
+
+	  
+	  
+	  //test this
+	  public class DailyTaskRunner {
+
+		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
+		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+		        Runnable dailyTask = () -> {
+		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
+		            task.run();
+		        };
+
+		        long initialDelay = calculateInitialDelay(hour, minute);
+		        long period = 24 * 60 * 60; // 24 hours in seconds
+
+		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
+		    }
+
+		    private static long calculateInitialDelay(int hour, int minute) {
+		        LocalTime now = LocalTime.now();
+		        LocalTime targetTime = LocalTime.of(hour, minute);
+
+		        if (now.isAfter(targetTime)) {
+		            targetTime = targetTime.plusHours(24); // Schedule for the next day
+		        }
+
+		        return Duration.between(now, targetTime).getSeconds();
+		    }
+
+		    public static void main(String[] args) {
+		        scheduleDailyTask(() -> {
+		            System.out.println("Running the scheduled daily task!");
+		            // Your function logic here
+		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
+		    }
+		}
+
+	
+	
+	private Object userLogin (ConnectionToClient client ,String id, String pass)
+	{
+		ResultSet auth = db.retrieveRow("users","user_id", id);
+		try {
+			if (auth.next())
+			{
+
+				if (!auth.getString("user_password").equals(pass))
+					return null;
+				if (auth.getString("user_role").equals("Librarian")) {
+					connectedLibrarians.add(client);
+					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
+					if (ret.next())
+					{
+						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
+						newLibrarian.setLibrarian_id(id);
+						return newLibrarian;
+						//changed here to also get librarian id cause i changed how constructor looks
+						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
+					}
+					
+				}
+				else {
+					
+					connectedSubscribers.add(client);
+					return subscriberController.fetchSubscriber(id);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("userLogin failed");
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 	@Override
 	  
 	  /**
@@ -66,6 +176,11 @@ public class server extends AbstractServer{
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
 		SearchMessage searchMessage;
+<<<<<<< HEAD
+=======
+
+		
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 		try {
 		
 			if (msg instanceof LoginMessage)
@@ -123,7 +238,10 @@ public class server extends AbstractServer{
 				//client.sendToClient(requestController.requestExtension(reqMessage.borrow,reqMessage.b));
 				
 			}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 			// Check if the received message is an instance of SearchMessage
 			if (msg instanceof SearchMessage) {
 			    // Cast the message to SearchMessage type
@@ -133,6 +251,13 @@ public class server extends AbstractServer{
 			    // and send the result back to the client
 			    client.sendToClient(searchController.performSearch(searchMessage.bookName, searchMessage.bookGenre, searchMessage.bookDescription));
 			}
+<<<<<<< HEAD
+=======
+		
+		
+		
+		
+>>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 		
 		}catch (IOException e) {
 			e.printStackTrace();
