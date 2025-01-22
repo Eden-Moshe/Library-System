@@ -17,10 +17,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class MainMenuController extends BaseController  {
+public  class LibrarianMenuController extends BaseController  {
 	private SubscriberFormController sfc;
 	private BorrowWindowController bwc;
-	private UserManager UM;
 	private static int itemIndex = 3;
 	
 	
@@ -77,6 +76,24 @@ public  class MainMenuController extends BaseController  {
 	
 	
 	
+	public void btnInbox(ActionEvent event) throws Exception {
+	
+	GenericMessage msg = new GenericMessage();
+	
+	msg.action = get_Librarian_Messages;
+	
+	msg.librarian = UM.librarian;
+	System.out.println("librarian id = " + UM.librarian.getLibrarian_id());
+	 System.out.println("librarian id = " + msg.librarian.getLibrarian_id());
+
+	UM.send(msg);
+	
+	SubscriberUI.mainController.switchView("/gui/LibrarianInbox.fxml");
+	
+	
+	
+
+	}
 	
 	public void btnViewHistory(ActionEvent event) throws Exception {
 		

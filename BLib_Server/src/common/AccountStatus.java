@@ -1,8 +1,9 @@
 package common;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AccountStatus {
+public class AccountStatus implements Serializable {
 
 	public Subscriber sub;
 	public String sub_id;//can use either sub or sub_id

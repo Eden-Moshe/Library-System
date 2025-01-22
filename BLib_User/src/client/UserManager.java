@@ -104,8 +104,10 @@ public final class UserManager extends AbstractClient
 	  awaitResponse = false;
 	  
 
-	  if (msg instanceof Librarian)
+	  if (msg instanceof Librarian) {
 		  librarian = (Librarian) msg;
+		  System.out.println("librarian id = " + librarian.getLibrarian_id());
+	  }
 	  if (msg == null)
 		  inb.setMessage("received null");
 	  inb.setMessage(msg);

@@ -72,8 +72,7 @@ public  class LoginController extends BaseController   {
 			System.out.println("sub is" + UM.s1);
 			
 			
-			MainController mainController = SubscriberUI.mainController;
-	        mainController.switchView("/gui/SubscriberMenuNew.fxml");
+	        SubscriberUI.mainController.switchView("/gui/SubscriberMenuNew.fxml");
 			
 			
 //			//start main menu process
@@ -96,18 +95,22 @@ public  class LoginController extends BaseController   {
 		{
 			
 			
-			//start main menu process
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
-			//SubscriberFormController subscriberFormController = loader.getController();		
-			//subscriberFormController.loadSubscriber(UM.s1);
-			
-			Scene scene = new Scene(root);			
-			primaryStage.setTitle("Main Menu");
+	        SubscriberUI.mainController.switchView("/gui/LibrarianMenuNew.fxml");
 
-			primaryStage.setScene(scene);		
-			primaryStage.show();
+			
+			
+//			//start main menu process
+//			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+//			Stage primaryStage = new Stage();
+//			Pane root = loader.load(getClass().getResource("/gui/MainMenu.fxml").openStream());
+//			//SubscriberFormController subscriberFormController = loader.getController();		
+//			//subscriberFormController.loadSubscriber(UM.s1);
+//			
+//			Scene scene = new Scene(root);			
+//			primaryStage.setTitle("Main Menu");
+//
+//			primaryStage.setScene(scene);		
+//			primaryStage.show();
 			
 			
 			}

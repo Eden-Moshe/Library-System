@@ -71,7 +71,6 @@ public class DBController {
 
 
 	    // Table: user_status_registry
-	    intFields.add("user_id");
 	    dateFields.add("status_set_date");
 	    dateFields.add("status_end_date");
 	    boolFields.add("status_is_current");
@@ -84,20 +83,22 @@ public class DBController {
 	    // Table: borrow
 	    intFields.add("borrow_number");
 	    intFields.add("lending_librarian");
-	    intFields.add("subscriber_id");
 	    dateFields.add("borrow_date");
-	    dateFields.add("return_date");
 	    dateFields.add("actual_returned_date");
 
 	    // Table: extensions
-	    intFields.add("lending_librarian");
-	    intFields.add("borrow_number");
 	    dateFields.add("day_of_extension");
 	    dateFields.add("new_return_date");
 
 	    // Table: order_book
 	    dateFields.add("nearest_book_return");
 	    intFields.add("subscriber_id");
+	    
+	    
+	    // Table : librarian_messages
+	    boolFields.add("is_new");
+	    
+	    
 
 	    // Print the categorized fields for verification
 	    System.out.println("Integer Fields: " + intFields);

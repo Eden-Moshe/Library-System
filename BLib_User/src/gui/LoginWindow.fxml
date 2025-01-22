@@ -12,7 +12,7 @@
    <children>
       <ImageView fitHeight="1024.0" fitWidth="1440.0" layoutX="239.0" layoutY="-127.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../Software%20Methods/project%20UI/BLIb%20icon%20clean.png" />
+            <Image url="@../../imageResources/BLIb%20icon%20clean.png" />
          </image>
       </ImageView>
       <Button id="btnLogin" fx:id="btnLogin" layoutX="641.0" layoutY="829.0" mnemonicParsing="false" onAction="#btnLogin" prefHeight="51.0" prefWidth="225.0" text="Login" />

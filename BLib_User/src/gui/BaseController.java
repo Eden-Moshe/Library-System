@@ -1,8 +1,10 @@
 package gui;
 
 import client.*;
-
+import static common.GenericMessage.Action.*;
 public class BaseController {
+
+	protected UserManager UM = UserManager.getInstance();
 
 	protected MainController main;
 

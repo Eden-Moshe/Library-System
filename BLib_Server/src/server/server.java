@@ -29,7 +29,7 @@ public class server extends AbstractServer{
 		private BookController bookController;
 		private RequestController requestController;
 		private SearchController searchController;
-
+		private LibrarianController librarianController;
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
@@ -55,7 +55,7 @@ public class server extends AbstractServer{
   		bookController = BookController.getInstance();
   		requestController = RequestController.getInstance();
   		searchController = SearchController.getInstance();
-
+  		librarianController = LibrarianController.getInstance();
 	  }
 
 	  
@@ -161,12 +161,31 @@ public class server extends AbstractServer{
 				
 				if (genericMsg.action == get_Borrow_History)
 				{
-					client.sendToClient(borrowController.borrowList(genericMsg.sub));
+					client.sendToClient(borrowController.borrowList(genericMsg.subscriber));
 				}
 				
 				if (genericMsg.action == get_Account_Status)
 				{
-					client.sendToClient(subscriberController.getAccountStatus(genericMsg.sub));
+					client.sendToClient(subscriberController.getAccountStatus(genericMsg.subscriber));
+				}
+				if (genericMsg.action == get_Librarian_Messages)
+				{
+					String id = genericMsg.librarian.getLibrarian_id();
+					ArrayList<InboxMessage> im = null;
+					try {
+						  im = librarianController.retrieveMessages(id);
+						  System.out.println("Fuck");
+						  client.sendToClient(im);
+						} catch (Exception e) {
+						  e.printStackTrace(); // This will show you if there's an exception
+						  System.out.println("Fuck2");
+							client.sendToClient(im);
+						}
+					
+				}
+				if (genericMsg.action == set_Librarian_Messages_Read)
+				{
+					client.sendToClient(librarianController.markRead((ArrayList<InboxMessage>)genericMsg.Obj));
 				}
 				
 			}

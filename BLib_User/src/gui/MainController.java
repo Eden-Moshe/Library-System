@@ -7,6 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -19,7 +23,7 @@ public class MainController extends Application {
     private StackPane root;
 
     
-    
+    private Deque<String> windowHistory = new ArrayDeque<>();
     
     
    	@Override
@@ -33,8 +37,14 @@ public class MainController extends Application {
            Pane homeView = loadView("/gui/LoginWindow.fxml");
            root.getChildren().add(homeView);
 
+           windowHistory.push("/gui/LoginWindow.fxml");
+
+     
            
            Scene scene = new Scene(root, 1440, 1024);
+           // Load the CSS file
+//           String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
+//           scene.getStylesheets().add(cssFile);
            primaryStage.setScene(scene);
            primaryStage.setTitle("BLib Library System");
            primaryStage.show();
@@ -51,6 +61,7 @@ public class MainController extends Application {
            BaseController controller = loader.getController();
            if (controller != null) {
            	System.out.println("controller is not null");
+           	controller.onLoad();
            	controller.setMainApp(this);
            }
            return view;
@@ -58,6 +69,8 @@ public class MainController extends Application {
 
        // Method to switch views
        public void switchView(String fxml) {
+           windowHistory.push(fxml);
+
            try {
 //               Pane view = loadView(fxml);
 //               root.getChildren().setAll(view); // Replace the current view
@@ -76,7 +89,7 @@ public class MainController extends Application {
 
                 // Create a slide-in animation
                 TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
-                slideIn.setFromX(root.getWidth());
+                slideIn.setFromX(-root.getWidth());
                 slideIn.setToX(0);
 
                 // Play both animations together
@@ -87,6 +100,40 @@ public class MainController extends Application {
            } catch (Exception e) {
                e.printStackTrace();
            }
+       }
+       
+       public void goBack() {
+    	   
+    	  
+    	String fxml = windowHistory.pop();
+    	System.out.println(fxml);
+    	try {
+   	    Pane newView = loadView(fxml);
+
+           // Set initial position and opacity
+           newView.setTranslateX(root.getWidth());
+           newView.setOpacity(0);
+           root.getChildren().setAll(newView);
+
+           // Create a fade-in animation
+           FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newView);
+           fadeIn.setFromValue(0);
+           fadeIn.setToValue(1);
+
+           // Create a slide-in animation
+           TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
+           slideIn.setFromX(root.getWidth());
+           slideIn.setToX(0);
+
+           // Play both animations together
+           ParallelTransition transition = new ParallelTransition(fadeIn, slideIn);
+           transition.play();
+   	   
+   	   
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+    	   
        }
        
     
