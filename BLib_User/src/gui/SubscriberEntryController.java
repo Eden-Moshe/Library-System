@@ -1,18 +1,13 @@
 package gui;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import client.UserManager;
-import client.SubscriberUI;
-import common.*;
+import common.SubMessage;
+import common.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -153,17 +148,6 @@ public  class SubscriberEntryController   {
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Academic Tool");
 		System.exit(0);
-	}
-	public void btnSearchBook(ActionEvent event) throws IOException {
-	    // load the new screem
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
-	    Parent root = loader.load();
-	    Stage stage = new Stage();
-	    stage.setTitle("Search for Books");
-	    stage.setScene(new Scene(root));
-	    stage.show();
-
-	    ((Node) event.getSource()).getScene().getWindow().hide();
 	}
 	
 	public void loadSubscriber(Subscriber s1) {

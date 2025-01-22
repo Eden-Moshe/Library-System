@@ -79,10 +79,7 @@ public class SearchBookController {
         String bookName = getBookName();
         String bookSubject = getBookSubject();
         String description = getDescription();
-<<<<<<< HEAD
-=======
         UserManager UM = UserManager.getInstance();
->>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
 
         // Create a new search message with the entered values
         SearchMessage searchMessage = new SearchMessage();
@@ -94,11 +91,7 @@ public class SearchBookController {
         UserManager userManager = UserManager.getInstance();
         userManager.send(searchMessage);
 
-<<<<<<< HEAD
-        MyInbox inbox = UserManager.inb;
-=======
         MyInbox inbox = UM.inb;
->>>>>>> d8cdc31a9b2b8b40d883f95101f676bc7acbc2b7
         Object response = inbox.getObj(); // Get the response from the server
 
         // Check if the response is an ArrayList of Book objects

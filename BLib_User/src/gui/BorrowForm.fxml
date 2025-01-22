@@ -17,7 +17,7 @@
     <TextField fx:id="txtReturnDate" promptText="Enter return date (YYYY-MM-DD)"/>
 
     <Button text="Borrow" fx:id="btnBorrow" onAction="#sendBorrowRequest"/>
-    <Button text="Exit" fx:id="btnExit" onAction="#getExitBtn"/>
+    <Button text="Back" fx:id="btnBack" onAction="#getBackBtn"/>
     <Button text="Reset" fx:id="btnReset" onAction="#resetFields"/>
     
     <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"/>

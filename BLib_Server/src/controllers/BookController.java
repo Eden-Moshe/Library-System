@@ -31,13 +31,13 @@ public class BookController {
 	        if (rs.next()) {
 	            // Populate the Book details
 	            ret = new Book (						            
-	            		rs.getString("book_name"),                // book_name column
-			            rs.getString("book_genre"),               // book_subject column
-		                rs.getString("barcode"),                  // barcode column
+	            		rs.getString("barcode"),               	  // barcode column
+			            rs.getString("book_name"),                // book_name column
+		                rs.getString("book_genre"),               // book_genre column
+		                rs.getString("book_description"),	      // book description column
 		                rs.getString("shelf_location"),  		  // place_on_shelf column
-		                rs.getString("book_description"),	      // book description
 		                rs.getBoolean("book_available"),          // book_exists column (boolean)
-		                rs.getDate("return_date")         // return_date column (Date)
+		                rs.getDate("return_date")                 // return_date column (Date)
 	            );
 	            System.out.println(ret);
 	            return ret;
