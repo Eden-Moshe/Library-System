@@ -19,9 +19,6 @@ import javafx.stage.Stage;
 
 public  class MainMenuController extends BaseController  {
 	private SubscriberFormController sfc;
-	private BorrowWindowController bwc;
-	private UserManager UM;
-	private static int itemIndex = 3;
 	
 	
 	@FXML
@@ -32,26 +29,20 @@ public  class MainMenuController extends BaseController  {
 	
 	@FXML
 	private TextField lblID;
-	private TextField lblPassword;
 
-	
+	public void goBack(ActionEvent event)
+	{
+		SubscriberUI.mainController.goBack();
+
+		
+	}
 	public void btnLendBook(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
+	//	FXMLLoader loader = new FXMLLoader();
 		
-		UM = UserManager.getInstance();
 		
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
+		SubscriberUI.mainController.switchView("/gui/BorrowForm.fxml");
 		
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+
 	}
 		
 
@@ -79,19 +70,23 @@ public  class MainMenuController extends BaseController  {
 		
 		GenericMessage msg = new GenericMessage();
 		
-		if (UM.librarian == null)
+		if (UM.librarian != null)
 		{
 			//enter user id window
+			System.out.println("viewHistory librarian");
 		}
 		else
 		{
+			
+			System.out.println("viewHistory else");
 			//get the subscriber that's using this client 
 			msg.subscriber = UM.s1;
 			
 			msg.action=get_Borrow_History;
 			
+			UM.send(msg);
 			
-			SubscriberUI.mainController.switchView("/gui/BorrowHistoryWindow.fxml");
+			SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
 		
 			
 		}
@@ -104,15 +99,9 @@ public  class MainMenuController extends BaseController  {
 		
 	}
 	public void btnSearchBook(ActionEvent event) throws IOException {
-	    // load the new screen
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
-	    Parent root = loader.load();
-	    Stage stage = new Stage();
-	    stage.setTitle("Search for Books");
-	    stage.setScene(new Scene(root));
-	    stage.show();
-
-	    ((Node) event.getSource()).getScene().getWindow().hide();
+		
+		SubscriberUI.mainController.switchView("/gui/SearchBook.fxml");
+		
 	}
 
 	public void btnReturnBook(ActionEvent event) throws Exception {

@@ -38,9 +38,9 @@ public final class UserManager extends AbstractClient
 	public Subscriber  s1;
 	public Borrow b;
   	public BLibData udata;
-  	public MyInbox inb=new MyInbox();
+  	public MyInbox inb;
   	private String myPass;
-  	public Librarian librarian;
+  	public Librarian librarian=null;;
 
 
 
@@ -59,7 +59,15 @@ public final class UserManager extends AbstractClient
   {
     super(host, port); //Call the superclass constructor
 	udata = new BLibData();
+	inb=new MyInbox();
     openConnection();
+  }
+  public void logOut()
+  {
+	  librarian=null;
+	  myPass=null;
+	  s1=null;
+	  inb=new MyInbox();
   }
   public void setSub(Subscriber newS)
   {

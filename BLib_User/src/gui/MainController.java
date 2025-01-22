@@ -70,6 +70,7 @@ public class MainController extends Application {
        // Method to switch views
        public void switchView(String fxml) {
            windowHistory.push(fxml);
+           System.out.println("switchView : " + fxml);
 
            try {
 //               Pane view = loadView(fxml);
@@ -104,9 +105,9 @@ public class MainController extends Application {
        
        public void goBack() {
     	   
-    	  
-    	String fxml = windowHistory.pop();
-    	System.out.println(fxml);
+    	windowHistory.pop();
+    	String fxml = windowHistory.getFirst();
+    	System.out.println("goBack: " + fxml);
     	try {
    	    Pane newView = loadView(fxml);
 

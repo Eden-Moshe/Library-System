@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +37,7 @@ public class BorrowController {
 		ArrayList<Borrow> ret = new ArrayList<>();
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 	    
-		ResultSet rs = db.retrieveRow(tName, "borrower_id", sub.getSID());
+		ResultSet rs = db.retrieveRow(tName, "subscriber_id", sub.getSID());
 		try {
 			while (rs.next())
 			{

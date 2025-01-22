@@ -23,7 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import common.*;
 
-public class SubscriberFormController implements Initializable {
+public class SubscriberFormController extends BaseController implements Initializable {
 	private Subscriber s;
 	
 	@FXML

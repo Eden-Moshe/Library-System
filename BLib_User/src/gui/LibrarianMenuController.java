@@ -35,22 +35,8 @@ public  class LibrarianMenuController extends BaseController  {
 
 	
 	public void btnLendBook(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		
-		UM = UserManager.getInstance();
-		
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/BorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
-		
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/BorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+
+		SubscriberUI.mainController.switchView("/gui/BorrowForm.fxml");
 	}
 		
 
@@ -97,30 +83,16 @@ public  class LibrarianMenuController extends BaseController  {
 	
 	public void btnViewHistory(ActionEvent event) throws Exception {
 		
-		GenericMessage msg = new GenericMessage();
-		
-		if (UM.librarian == null)
-		{
-			//enter user id window
-		}
-		else
-		{
-			//get the subscriber that's using this client 
-			msg.subscriber = UM.s1;
-			
-			msg.action=get_Borrow_History;
-			
-			
-			SubscriberUI.mainController.switchView("/gui/BorrowHistoryWindow.fxml");
-		
-			
-		}
-		
+	
 		
 		
 
 	}
 	public void btnLendBook() {
+		
+		UM = UserManager.getInstance();
+		
+		SubscriberUI.mainController.switchView("/gui/BorrowForm.fxml");
 		
 	}
 	public void btnSearchBook(ActionEvent event) throws IOException {
@@ -194,6 +166,31 @@ public  class LibrarianMenuController extends BaseController  {
 			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
 		}
 		
+	}
+	
+	public void ViewMessageInbox(ActionEvent event) throws Exception {
+		
+		
+		GenericMessage msg = new GenericMessage();
+		
+		msg.action = get_Librarian_Messages;
+		
+		msg.librarian = UM.librarian;
+		System.out.println("librarian id = " + UM.librarian.getLibrarian_id());
+		 System.out.println("librarian id = " + msg.librarian.getLibrarian_id());
+
+		UM.send(msg);
+		
+		SubscriberUI.mainController.switchView("/gui/LibrarianInbox.fxml");
+		
+	
+	}
+	public void goBack(ActionEvent event) throws Exception {
+		
+		UM.logOut();
+		SubscriberUI.mainController.goBack();
+		
+	
 	}
 
 	

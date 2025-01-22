@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.Pane?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="gui.SearchBookController" spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
-    <!-- שדות חיפוש -->
-    <HBox spacing="10">
-        <VBox spacing="5">
-            <Label text="Book Name:"/>
-            <TextField fx:id="txtBookName"/>
-        </VBox>
-        <VBox spacing="5">
-            <Label text="Book Subject:"/>
-            <TextField fx:id="txtBookSubject"/>
-        </VBox>
-        <VBox spacing="5">
-            <Label text="Description:"/>
-            <TextField fx:id="txtDescription"/>
-        </VBox>
-        <Button text="Search" onAction="#btnSearch"/>
-        <Button text="Back" onAction="#handleBack"/>
-    </HBox>	
-</VBox>
+<Pane prefHeight="698.0" prefWidth="562.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" stylesheets="@SearchBook.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SearchBookController">
+   <children>
+       <!-- Back Button (Arrow at Top Left) -->
+       <Button fx:id="handleBack" layoutX="10.0" layoutY="10.0" onAction="#handleBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
+   
+       <!-- LOGO IMAGE -->
+       <ImageView fx:id="logo" fitHeight="273.0" fitWidth="225.0" layoutX="170.0" layoutY="51.0" preserveRatio="true">
+           <image>
+               <Image url="@/gui/images/BLIB.png" />
+           </image>
+       </ImageView>
+
+       <!-- Book Name Label and Field -->
+       <Label layoutX="131.0" layoutY="339.0" styleClass="label" text="Book Name:" />
+       <TextField fx:id="txtBookName" layoutX="131.0" layoutY="358.0" styleClass="text-field" />
+
+       <!-- Book Subject Label and Field -->
+       <Label layoutX="138.0" layoutY="403.0" styleClass="label" text="Book Subject:" />
+       <TextField fx:id="txtBookSubject" layoutX="131.0" layoutY="424.0" styleClass="text-field" />
+
+       <!-- Description Label and Field -->
+       <Label layoutX="133.0" layoutY="471.0" styleClass="label" text="Description:" />
+       <TextField fx:id="txtDescription" layoutX="131.0" layoutY="492.0" styleClass="text-field" />
+
+       <!-- Search Button -->
+       <Button fx:id="btnSearch" layoutX="181.0" layoutY="560.0" onAction="#btnSearch" styleClass="search-button" text="Search 🔍" />
+   </children>
+</Pane>

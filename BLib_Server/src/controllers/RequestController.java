@@ -149,9 +149,16 @@ public class RequestController {
             e.printStackTrace();
             return "Error: Failed to log the extension in the extensions table for book barcode: " + bookBarcode;
         }
+        
+        String msg = String.format("User ID: %s extended return date of book %s from %s to %s",
+                borrow.s.getSID(), book.getBookBarcode(), borrow.getReturnDate().toString(), extendedDate.toString());
+        String fields[] = {"librarian_id", "sender", "message"};
+    	String values[] = {librarian_id, "server", msg};
+    	
+    	db.insertRow("librarian_message", fields, values);
+        
 	    //implement message sent to librarian inbox in this format:
-        //String msg = String.format("User ID: %s extended return date of book %s from %s to %s",
-        //borrow.s.getSID(), book.getBookBarcode(), borrow.getReturnDate().toString(), extendedDate.toString());
+        
         //UM.librarian.send(msg);
         
         // Update the Borrow object's return date

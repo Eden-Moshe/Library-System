@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class BookResultsController implements Initializable {
+public class BookResultsController extends BaseController implements Initializable {
     @FXML
     private TableView<Book> tblResults;
 

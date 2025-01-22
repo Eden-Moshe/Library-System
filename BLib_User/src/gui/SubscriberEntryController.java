@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class SubscriberEntryController   {
+public  class SubscriberEntryController  extends BaseController {
 	private SubscriberFormController sfc;	
 	private static int itemIndex = 3;
 	

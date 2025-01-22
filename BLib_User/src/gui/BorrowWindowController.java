@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 
+import client.SubscriberUI;
 import client.UserManager;
 import common.Book;
 import common.Borrow;
@@ -22,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class BorrowWindowController {
+public class BorrowWindowController extends BaseController{
 
     UserManager UM = UserManager.getInstance();
     
@@ -153,24 +154,26 @@ public class BorrowWindowController {
 	//method returns to previous page when pressing 'Back' button
     public void getBackBtn(ActionEvent event) throws Exception {
     	//goes back to Readers card where librarian pressed "Extend Borrow"
-        try {
-            // Close the current window
-            ((Node) event.getSource()).getScene().getWindow().hide();
-
-            // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
-            Pane root = loader.load();
-
-            // Set up the new stage
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Reader's Card");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load ViewUserInfo.fxml.");
-       }
+    	SubscriberUI.mainController.goBack();
+    	
+//        try {
+//            // Close the current window
+//            ((Node) event.getSource()).getScene().getWindow().hide();
+//
+//            // Load the previous screen (Main Menu)
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
+//            Pane root = loader.load();
+//
+//            // Set up the new stage
+//            Stage stage = new Stage();
+//            Scene scene = new Scene(root);
+//            stage.setTitle("Reader's Card");
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("Failed to load ViewUserInfo.fxml.");
+//       }
     }
 }
 

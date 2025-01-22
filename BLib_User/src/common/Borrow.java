@@ -20,6 +20,12 @@ public class Borrow implements Serializable{
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
     }
+    
+    public String getBookName()
+    {
+    	return bo.getBookName();
+    }
+    
     //getter for borrow number
     public int getBorrow_num() {
 		return borrow_num;
