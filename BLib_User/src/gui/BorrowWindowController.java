@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class BorrowWindowController {
 
 	
-	private Borrow b;
+	//private Borrow b;
     @FXML
     private Button btnBack = null;
 

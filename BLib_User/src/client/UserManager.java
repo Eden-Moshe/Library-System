@@ -75,6 +75,17 @@ public final class UserManager extends AbstractClient
 	  return myPass;
   }
   
+  /**
+   * Gets the ID of the current subscriber
+   * @return The subscriber's ID, or -1 if no subscriber is logged in
+   */
+  public String getCurrentSubscriberId() {
+      if (s1 != null) {
+          return s1.getSID();
+      }
+      return "null";
+  }
+  
   public static UserManager getInstance(String host, int port) throws IOException {
 	    if (instance == null) {
 	        instance = new UserManager(host, port);

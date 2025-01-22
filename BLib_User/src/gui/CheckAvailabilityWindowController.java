@@ -1,0 +1,118 @@
+package gui;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import client.UserManager;
+import common.Book;
+import common.CheckAvailabilityMessage;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+public class CheckAvailabilityWindowController {
+	@FXML
+	private Button btnOrderBook= null;
+	@FXML
+	private Button btnBack= null;
+	@FXML
+    private TextField bookName;
+	
+	private String getbookName() {
+		return bookName.getText();
+	}
+	
+	
+	public void btnCheckAvailability(ActionEvent event) throws Exception {
+        String bookName = getbookName();
+        UserManager UM = UserManager.getInstance();
+        
+        String subscriberId = UM.getCurrentSubscriberId();
+        if (bookName == null || bookName.trim().isEmpty()) {
+            showAlert("Error", "Please enter a book name.");
+            return;
+        }
+        
+        // Create message to send to server via UserManager
+        CheckAvailabilityMessage message = new CheckAvailabilityMessage();
+        message.bookName = bookName;
+        
+        // Send to UserManager and wait for response
+        UM.send(message);
+        Object response = UM.inb.getObj();
+        
+        handleAvailabilityResponse(response, event);
+    }
+	
+	private void handleAvailabilityResponse(Object response, ActionEvent event) {
+        if (response instanceof Boolean) {
+            boolean isAvailable = (Boolean) response;
+            if (isAvailable) {
+                openOrderWindow(event);
+            } else {
+                showAlert("Not Available", "This book is not available for ordering at this time.");
+            }
+        } else {
+            showAlert("Error", "Unexpected response from server");
+        }
+    }
+	
+	private void openOrderWindow(ActionEvent event) {
+	    try {
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/OrderWindow.fxml"));
+	        Parent root = loader.load();
+	        OrderWindowController controller = loader.getController();
+	        controller.setBookName(getbookName()); // Crucial line: Set the book name
+	        Stage stage = new Stage();
+	        stage.setScene(new Scene(root));
+	        stage.setTitle("Place Order");
+	        stage.show();
+
+	        ((Node) event.getSource()).getScene().getWindow().hide();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        showAlert("Error", "Could not open order window");
+	    }
+	}
+	
+	public void getBackBtn(ActionEvent event) throws Exception {
+        try {
+            // Close the current window
+            ((Node) event.getSource()).getScene().getWindow().hide();
+
+            // Load the previous screen (Main Menu)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+            Pane root = loader.load();
+
+            // Set up the new stage
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Main Menu");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load MainMenu.fxml.");
+       }
+    }
+	
+	//alert massage to present to user. 
+	private void showAlert(String title, String content) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+}

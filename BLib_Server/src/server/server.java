@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -27,8 +28,8 @@ public class server extends AbstractServer{
 		private BookController bookController;
 		private RequestController requestController;
 		private SearchController searchController;
-
-		
+		private CheckAvailabilityMessage checkAvailabilityMessage;
+		private OrderController orderController;
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
 
@@ -53,7 +54,7 @@ public class server extends AbstractServer{
   		bookController = BookController.getInstance();
   		requestController = RequestController.getInstance();
   		searchController = SearchController.getInstance();
-
+  		orderController=OrderController.getInstance();
 	  }
 
 	  
@@ -143,13 +144,14 @@ public class server extends AbstractServer{
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
 	{
 		SubMessage sm;
-		LoginMessage lm;
+		LoginMessage lm = null;
 		BorrowMessage borrowMessage;
 		BookMessage bookMessage;
 		RequestMessage reqMessage;
 		SearchMessage searchMessage;
-
-		
+		CheckAvailabilityMessage checkAvailabilityMessage;
+		GetReturnDateMessage getReturnDateMessage;
+		OrderMessage orderMessage;
 		try {
 		
 			if (msg instanceof LoginMessage)
@@ -236,8 +238,38 @@ public class server extends AbstractServer{
 				else 
 					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}
+			if (msg instanceof CheckAvailabilityMessage) {
+	            CheckAvailabilityMessage checkMsg = (CheckAvailabilityMessage) msg;
+	            //OrderController.getInstance().saveUserId(lm.id);
+	            boolean isAvailable = OrderController.getInstance().canOrderBook(checkMsg.bookName);
+	            client.sendToClient(isAvailable);
+	        }
+			if (msg instanceof GetReturnDateMessage) {
+			    GetReturnDateMessage dateMsg = (GetReturnDateMessage) msg;
+			    Date returnDate = OrderController.getInstance().getNearestReturnDate(dateMsg.bookName);
+			    client.sendToClient(returnDate);
+			}
 			
-			
+			if (msg instanceof OrderMessage) {
+				orderMessage = (OrderMessage) msg;
+				//orderMessage.bookName=orderController.getbookName();
+				//orderMessage.subscriberId=Integer.parseInt(orderController.getUserId());
+				
+			    // Validate message details
+			    if (orderMessage.bookName == null || orderMessage.bookName.isEmpty()) {
+			        client.sendToClient("Book name cannot be null or empty.");
+			        return;
+			    }
+
+				/*
+				 * if (orderMsg.subscriberId == null) {
+				 * client.sendToClient("Subscriber ID cannot be null."); return; }
+				 */
+			    
+			    //OrderController.getInstance().saveUserId(lm.id);
+			    boolean success = orderController.placeBookOrder(orderMessage.bookName, orderMessage.subscriberId);
+			    client.sendToClient(success);
+			}
 			if (msg instanceof BookMessage) 
 			{
 				bookMessage = ((BookMessage)msg);

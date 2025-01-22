@@ -182,5 +182,21 @@ public  class MainMenuController   {
 		
 	}
 	
-	
+	public void btnOrderBook(ActionEvent event) throws Exception{
+        FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
+
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/CheckAvailability.fxml").openStream());
+
+		
+		Scene scene = new Scene(root);			
+		primaryStage.setTitle("Check Availability");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+	}
 }
