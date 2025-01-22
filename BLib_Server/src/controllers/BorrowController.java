@@ -1,7 +1,5 @@
 package controllers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +7,6 @@ import java.util.Date;
 
 import common.Book;
 import common.Borrow;
-import common.Librarian;
 import common.Subscriber;
 import server.DBController;
 
@@ -73,13 +70,10 @@ public class BorrowController {
 
 	}
 	
-	
-	public String createBorrow(Subscriber s, Book b, Borrow borrow) {
-        //int borrowNum =-1;
+	//methods created a new row in borrow table with proper values
+	public String createBorrow(Subscriber s, Book b, Borrow borrow, String lib_id) {
 	    // Checking if account is active
 	    if (canBorrow(s)) {
-//            borrow.l= new Librarian("testLib");
-//            borrow.l.setLibrarian_id("1");
 	        // Defining fields and values for the insert
 	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
 	        		           "borrow_date", "return_date", "actual_returned_date"};
@@ -87,8 +81,7 @@ public class BorrowController {
 	        // Convert the borrow date and return date to appropriate format
 	        String[] values = {
 	            b.getBookBarcode(),
-	            //for now prepared librarian id
-	            borrow.l.getLibrarian_id(),
+	            lib_id,
 	            s.getSID(),
 	            new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
 	            new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
@@ -97,10 +90,8 @@ public class BorrowController {
 
 	        // Call insertRow method with the table, fields, and values
 	        db.insertRow("borrow", fields, values);
-	        //changing book availability
 
 	        //editing book's availability status in book table
-	        //change from "book_barcode" to "barcode"
 	        db.editRow("book","barcode",b.getBookBarcode(),"book_available","false");
 	        
 	        //changing books' availability in class instance

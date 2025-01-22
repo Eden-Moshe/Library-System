@@ -115,8 +115,7 @@ public class server extends AbstractServer{
 						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
 						newLibrarian.setLibrarian_id(id);
 						return newLibrarian;
-						//changed here to also get librarian id cause i changed how constructor looks
-						//return new Librarian(ret.getString("librarian_name"), ret.getString("librarian_id"));
+
 					}
 					
 				}
@@ -246,7 +245,7 @@ public class server extends AbstractServer{
 			if (msg instanceof BorrowMessage) 
 			{
 			    borrowMessage = (BorrowMessage) msg;
-			    
+			    //lines 212-217 are not necessary, subscriber is already inside borrowMessage.s
 			    //fetch subscriber and check if its even in table send message accordingly  
 			    Subscriber sub = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
 		        if (sub == null) {
@@ -269,7 +268,7 @@ public class server extends AbstractServer{
 		        //check that book is available for borrowing 
 				if (borrowMessage.b.isBookAvailable())
 					//at this point both subscriber and book details are in s and b so now we create new Borrow
-					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow));
+					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow, borrowMessage.lib_id));
 				else 
 					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
 			}
@@ -310,7 +309,6 @@ public class server extends AbstractServer{
 				
 				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
 				
-				//need to add implementation if book already has an order
 				
 			}
 			// Check if the received message is an instance of SearchMessage

@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Book implements Serializable {
+	//values for each table column
 	private String barcode, bookName,bookGenre,bookDesc,shelf_location;
 	private boolean book_available;
 	private Date returnDate;
 	
-    // Constructor
+    // Constructor receiving table values
     public Book(String barcode, String bookName, String bookGenre,String bookDesc, String shelf_location, boolean book_available, Date returnDate) {
         this.barcode=  barcode;
     	this.bookName = bookName;
@@ -23,7 +24,7 @@ public class Book implements Serializable {
     public String getBookBarcode() {
         return barcode;
     }
-    
+    // Setter for barcode
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }

@@ -2,23 +2,63 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" spacing="10" alignment="CENTER" prefWidth="400" prefHeight="300" fx:controller="gui.BorrowWindowController">
-    <Label text="Book Barcode:"/>
-    <TextField fx:id="txtBookBarcode" promptText="Enter book barcode"/>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="gui.BorrowWindowController"
+      spacing="20" alignment="CENTER" prefWidth="580" prefHeight="580"
+      style="-fx-background-color: #355457; -fx-padding: 35;">
+      
 
-    <Label text="Borrower ID:"/>
-    <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID"/>
+    <!-- Back Button (Arrow at Top Left) -->
+    <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;">
+        <Button text="←" fx:id="btnBack" onAction="#getBackBtn"
+                style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;"/>
+    </HBox>
 
-    <Label text="Borrow Date:"/>
-    <TextField fx:id="txtBorrowDate" promptText="Enter borrow date (YYYY-MM-DD)"/>
+    <!-- Title with Icon (Centered at the Top) -->
+    <HBox alignment="CENTER" spacing="10" style="-fx-padding-top: 10;">
+        <Label text="📚" style="-fx-font-size: 32px; -fx-text-fill: #d9a762;"/>
+        <Label text="Borrow Book" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+    </HBox>
 
-    <Label text="Return Date:"/>
-    <TextField fx:id="txtReturnDate" promptText="Enter return date (YYYY-MM-DD)"/>
+    <!-- Form for Book Borrowing (Well-Spaced and Aligned) -->
+    <GridPane hgap="20" vgap="25" alignment="CENTER" style="-fx-pref-width: 400px;">
+        <columnConstraints>
+            <ColumnConstraints halignment="LEFT" minWidth="140"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
 
-    <Button text="Borrow" fx:id="btnBorrow" onAction="#sendBorrowRequest"/>
-    <Button text="Back" fx:id="btnBack" onAction="#getBackBtn"/>
-    <Button text="Reset" fx:id="btnReset" onAction="#resetFields"/>
-    
-    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"/>
+        <!-- Labels and Text Fields -->
+        <Label text="📖 Book Barcode:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <TextField fx:id="txtBookBarcode" promptText="Enter book barcode" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                   style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+
+        <Label text="🆔 Borrower ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                   style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+
+        <Label text="📅 Borrow Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <DatePicker fx:id="dpBorrowDate" promptText="Select borrow date" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                    style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+
+        <Label text="📅 Return Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <DatePicker fx:id="dpReturnDate" promptText="Select return date" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                    style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+    </GridPane>
+
+    <!-- Buttons Section (Modern and Refined) -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Borrow" fx:id="btnBorrow" onAction="#sendBorrowRequest"
+                style="-fx-font-size: 16px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 35; -fx-padding: 14 50; -fx-font-weight: bold;"/>
+        <Button text="Reset" fx:id="btnReset" onAction="#resetFields"
+                style="-fx-font-size: 16px; -fx-background-color: #f6c177; -fx-text-fill: black;
+                       -fx-border-width: 0; -fx-background-radius: 35; -fx-padding: 14 50; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Response Box for Result Display (Stylish and Responsive) -->
+    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"
+               style="-fx-background-color: white; -fx-border-color: transparent; -fx-border-radius: 25; 
+                      -fx-padding: 10; -fx-font-size: 14px; -fx-pref-width: 250;" />
 </VBox>

@@ -58,9 +58,6 @@ public  class MainMenuController extends BaseController  {
 	public void btnCreateSubscriber(ActionEvent event) throws Exception {
 
 		FXMLLoader loader = new FXMLLoader();
-		
-		UserManager UM = UserManager.getInstance();
-		
 
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -137,7 +134,7 @@ public  class MainMenuController extends BaseController  {
 		
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
+		primaryStage.setTitle("Borrow Extension Managment Tool");
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 	}

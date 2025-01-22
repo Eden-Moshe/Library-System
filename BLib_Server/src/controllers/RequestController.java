@@ -1,10 +1,7 @@
 package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-
 import common.Book;
 import common.Borrow;
 import common.Subscriber;
@@ -35,7 +32,7 @@ public class RequestController {
             System.out.println("Invalid input: sub_id or barcode is null");
             return null;
         }
-
+        //fetch subscriber into s
         Subscriber s = subscriberController.fetchSubscriber(sub_id);
         if (s == null) {
             errorMessage.append("Error: Subscriber not found for ID: " + sub_id);
@@ -76,6 +73,8 @@ public class RequestController {
 
     //method that extends borrow return date
     public String extendBorrow(Borrow borrow, Book book, Date extendedDate) {
+    	String librarian_id = "-1";
+    	int borrow_num_pk = -1;
         if (borrow == null) {
             return("Borrow object is null. Cannot extend borrow.");
             
@@ -87,7 +86,6 @@ public class RequestController {
         //check order_book table and see if book already has an existing order
         //if so deny request
         //else continue to set up the request
-        // Check the order_book table
 
         ResultSet rs = db.retrieveRow("order_book", "book_name",book.getBookName());
         try {
@@ -103,7 +101,7 @@ public class RequestController {
         }
 
         Date currentReturnDate = borrow.getReturnDate();
-
+        // check that new return date occurs after original return date
         if (extendedDate.before(currentReturnDate)) {
         	return ("Error: The return date can only be extended, not shortened. " +
                     "Current return date: " + currentReturnDate + ", " +
@@ -112,7 +110,7 @@ public class RequestController {
         
         String bookBarcode = book.getBookBarcode();
         
-        //edit specific row in borrow table
+        //edit specific row in borrow table with new return date
         try {
             java.sql.Date sqlDate = new java.sql.Date(extendedDate.getTime());
             db.editRow("borrow","book_barcode", bookBarcode, "return_date", sqlDate.toString());
@@ -121,14 +119,25 @@ public class RequestController {
             e.printStackTrace();
             return "Error: Failed to edit return_date";
         }
-
+        
+        //retrieve id of librarian from book table
+        ResultSet rs1 = db.retrieveRow(tName, keyField, book.getBookBarcode()); // Query the 'borrow' table
+        try {
+            if (rs1.next()) {
+                librarian_id = rs1.getString("lending_librarian"); // getting lending librarian id from borrow table
+                borrow_num_pk = rs1.getInt("borrow_number");
+                if (librarian_id == null || librarian_id.isEmpty() || borrow_num_pk == -1) {
+                    return "Error: Lending librarian ID or borrow_number is missing in the borrow record.";
+                }
+            } 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: Failed to retrieve librarian id from borrow table.";
+        }
         //insert new row to extension table
         try {
-        	
         	String fields[] = {"lending_librarian", "borrow_number", "day_of_extension", "new_return_date"};
-        	String values[] = {"1", 
-        			borrow.s.getSID(),
-                    //new java.sql.Date(currentReturnDate.getTime()).toString(),
+        	String values[] = {librarian_id, String.valueOf(borrow_num_pk),
                     new java.sql.Date(System.currentTimeMillis()).toString(),
                     new java.sql.Date(extendedDate.getTime()).toString()
         	};
@@ -140,6 +149,11 @@ public class RequestController {
             e.printStackTrace();
             return "Error: Failed to log the extension in the extensions table for book barcode: " + bookBarcode;
         }
+	    //implement message sent to librarian inbox in this format:
+        //String msg = String.format("User ID: %s extended return date of book %s from %s to %s",
+        //borrow.s.getSID(), book.getBookBarcode(), borrow.getReturnDate().toString(), extendedDate.toString());
+        //UM.librarian.send(msg);
+        
         // Update the Borrow object's return date
         borrow.setReturnDate(extendedDate);
         return ("Request approved, date of return was updated accordingly.");
