@@ -1,26 +1,29 @@
 package gui;
 
-import java.io.IOException;
-
 import client.SubscriberUI;
+import client.UserManager;
 import common.GenericMessage;
+import common.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.scene.control.TextField;
+
 import static common.GenericMessage.Action.*;
 
 
 public class ViewUserInfoWindow extends BaseController {
 
+    UserManager UM = UserManager.getInstance();
+    Subscriber sub = (Subscriber) UM.inb.getObj();
+    
+    @FXML
+    public void initialize() {
+        loadResponse();  // Call loadResponse when the controller is initialized
+    }
     
     @FXML
     private Button btnBack;
-    
     
     @FXML
     private Button btnExtendBorrow;
@@ -33,7 +36,38 @@ public class ViewUserInfoWindow extends BaseController {
     
     @FXML
     private Button btnViewBorrowHistory;
+    
+    @FXML
+    private TextField idResponse;
+    
+    @FXML
+    private TextField passResponse;
+    
+    @FXML
+    private TextField phoneResponse;
+    
+    @FXML
+    private TextField mailResponse;
+    
+    @FXML
+    private TextField statusResponse;
+    
+    
+    //method loads all info into text boxes
+    public void loadResponse() {
+        this.idResponse.setText(sub.getSID());
+        this.passResponse.setText("");
+        this.phoneResponse.setText(sub.getPNumber());
+        this.mailResponse.setText(sub.getEmail());
+        this.statusResponse.setText(sub.getStatus());
+    }
 	
+    //set all fields with fetched subscriber info
+    //id,pass,phone,mail,status
+    
+    
+    
+    
     //TODO: load user info
     
     @FXML

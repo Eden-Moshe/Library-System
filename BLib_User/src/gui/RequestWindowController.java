@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 
+import client.SubscriberUI;
 import client.UserManager;
 import common.Book;
 import common.RequestMessage;
@@ -22,14 +23,6 @@ import javafx.stage.Stage;
 
 public class RequestWindowController extends BaseController{
 	
-	
-	//setting role of user as Librarian
-    private String userRole; // "Reader" or "Librarian"
-
-    public void setUserRole(String role) {
-        this.userRole = role;
-    }
-
     @FXML
     private Button btnBack = null;
 
@@ -76,7 +69,7 @@ public class RequestWindowController extends BaseController{
 	//resets all fields when pressing 'reset'
     @FXML
     private void resetFields(ActionEvent event) {
-        //txtBorrowerId.clear();
+        txtBorrowerId.clear();
         txtBookBarcode.clear();
         datePickerRequestDate.setValue(null);  // Reset the DatePicker
         txtResponse.clear();
@@ -125,39 +118,6 @@ public class RequestWindowController extends BaseController{
     //Reader side goes back to Subscriber Main Menu
     //Librarian goes back to Reader's Card
     public void getBackBtn(ActionEvent event) throws Exception {
-        try {
-            // Close the current window
-            ((Node) event.getSource()).getScene().getWindow().hide();
-
-            FXMLLoader loader;
-            String pageTitle;
-
-            // Check the user role and load the correct page
-            if ("Reader".equalsIgnoreCase(userRole)) {
-                // Reader should go back to Subscriber Main Menu
-                loader = new FXMLLoader(getClass().getResource("/gui/SubscriberMainMenu.fxml"));
-                pageTitle = "Subscriber Main Menu";
-            } else if ("Librarian".equalsIgnoreCase(userRole)) {
-                // Librarian should go back to ViewUserInfo
-                loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
-                pageTitle = "View User Info";
-            } else {
-                // Default behavior if the role is unrecognized
-                throw new IllegalArgumentException("Unknown user role: " + userRole);
-            }
-
-            // Load the appropriate page
-            Pane root = loader.load();
-
-            // Set up the new stage
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle(pageTitle);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load the respective page.");
-        }
+    	SubscriberUI.mainController.goBack();
     }
 }

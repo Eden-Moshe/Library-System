@@ -2,16 +2,11 @@ package gui;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField; 
-import java.io.IOException;
-
 import client.SubscriberUI;
+import client.UserManager;
+import common.SubMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 public class LibrarianEnterUserIDWindow extends BaseController{
     @FXML
@@ -23,8 +18,6 @@ public class LibrarianEnterUserIDWindow extends BaseController{
     @FXML
     private Button btnBack;
     
-    @FXML
-    private TextField txtResponse;
     
     @FXML
     private TextField userIdField;
@@ -47,20 +40,21 @@ public class LibrarianEnterUserIDWindow extends BaseController{
 
     @FXML
     private void ViewUserInfo(ActionEvent event) {
+        UserManager UM = UserManager.getInstance();
         String userID = getUserId();
         
-	    //check that field is not empty
-	    if (userID.trim().isEmpty()) {
-	        txtResponse.setText("this field must be filled.");
-	        return;
-	    }
+        //creating a subscriber message with librarian's input
+        SubMessage subMsg = new SubMessage();
+	    subMsg.pKey=userID;
+	    //alert this as a fetch message
+	    subMsg.editBool = true;
 	    
-	    
-	   //implement check if that ID exists, if so send it to next page
+	    //sending user id to server and fetching him into next page
+	    UM.send(subMsg);
 	    
 	    //go to Reader's card:
     	SubscriberUI.mainController.switchView("/gui/ViewUserInfo.fxml");
-
+    	
  
     }
     
