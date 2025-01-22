@@ -23,7 +23,8 @@ import javafx.stage.Stage;
 
 public class BorrowWindowController {
 
-	
+    UserManager UM = UserManager.getInstance();
+    
 	private Borrow b;
     @FXML
     private Button btnBack = null;
@@ -50,18 +51,22 @@ public class BorrowWindowController {
     @FXML
     private Button btnReset;
     
+    //setting user ID in proper textbox
+    String userID = UM.s1.getSID();
     
-    //get borrower id from text inserted
-    private String getBorrowerId() {
-        return txtBorrowerId.getText();
-    }
+    
+    //display User ID in Borrower ID textbox
+	public void setUserID() {
+		this.txtBorrowerId.setText(userID);	
+	}
+    
     //get book barcode from text inserted
     private String getBookBarcode() {
         return txtBookBarcode.getText();
     }
 
     
- // Get borrow date from DatePicker
+    // Get borrow date from DatePicker
     private Date getBorrowDate() {
         LocalDate borrowDateLocal = dpBorrowDate.getValue(); // Get the selected date from DatePicker
         if (borrowDateLocal != null) {
@@ -81,15 +86,13 @@ public class BorrowWindowController {
     
     //display text returned from server
 	public void setTextRespose(String msg) {
-		this.txtResponse.setText(msg);
-		
+		this.txtResponse.setText(msg);	
 	}
 	
 
 	//resets all fields when pressing 'reset'
 	@FXML
 	private void resetFields(ActionEvent event) {
-	    txtBorrowerId.clear();
 	    txtBookBarcode.clear();
 	    dpBorrowDate.setValue(null);  // Reset the DatePicker
 	    dpReturnDate.setValue(null);  // Reset the DatePicker
@@ -98,9 +101,8 @@ public class BorrowWindowController {
 	
 	//method that sends borrow message to server with user inputs
 	public void sendBorrowRequest(ActionEvent event) throws SQLException, IOException {
-	    UserManager UM = UserManager.getInstance();
 	    //set Strings and date from user input
-	    String borrowerId = getBorrowerId();
+	    String borrowerId = userID;
 	    String bookBarcode = getBookBarcode();
 	    Date borrowDate = getBorrowDate();
 	    Date returnDate = getReturnDate();
@@ -128,7 +130,8 @@ public class BorrowWindowController {
 	    // 2. Book's barcode
 	    // 3. new instance of Borrow with wanted values
 	    BorrowMessage fetchMsg = new BorrowMessage();
-	    fetchMsg.s = new Subscriber(borrowerId, null, null, null, null);
+	    fetchMsg.s=UM.s1;
+//	    fetchMsg.s = new Subscriber(borrowerId, null, null, null, null);
 	    fetchMsg.b = new Book(bookBarcode, null, null, null, null, false, null);
 	    fetchMsg.borrow = new Borrow(fetchMsg.s, borrowDate,returnDate);
 	    fetchMsg.lib_id = Librarian_id;
@@ -143,28 +146,28 @@ public class BorrowWindowController {
 	    // Set the response text in the TextBox
 	    txtResponse.setText(response);  // Display the server's response (e.g., "Borrow created" or error message)
 	    
-	    
 	}
 	
 	//method returns to previous page when pressing 'Back' button
     public void getBackBtn(ActionEvent event) throws Exception {
+    	//goes back to Readers card where librarian pressed "Extend Borrow"
         try {
             // Close the current window
             ((Node) event.getSource()).getScene().getWindow().hide();
 
             // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
             Pane root = loader.load();
 
             // Set up the new stage
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            stage.setTitle("Main Menu");
+            stage.setTitle("Reader's Card");
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load MainMenu.fxml.");
+            System.out.println("Failed to load ViewUserInfo.fxml.");
        }
     }
 }

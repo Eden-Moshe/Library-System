@@ -208,7 +208,7 @@ public class server extends AbstractServer{
 			if (msg instanceof BorrowMessage) 
 			{
 			    borrowMessage = (BorrowMessage) msg;
-			    
+			    //lines 212-217 are not necessary, subscriber is already inside borrowMessage.s
 			    //fetch subscriber and check if its even in table send message accordingly  
 			    Subscriber sub = subscriberController.fetchSubscriber(borrowMessage.s.getSID());
 		        if (sub == null) {
@@ -272,7 +272,6 @@ public class server extends AbstractServer{
 				
 				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
 				
-				//need to add implementation if book already has an order
 				
 			}
 			// Check if the received message is an instance of SearchMessage

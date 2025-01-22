@@ -149,6 +149,11 @@ public class RequestController {
             e.printStackTrace();
             return "Error: Failed to log the extension in the extensions table for book barcode: " + bookBarcode;
         }
+	    //implement message sent to librarian inbox in this format:
+        //String msg = String.format("User ID: %s extended return date of book %s from %s to %s",
+        //borrow.s.getSID(), book.getBookBarcode(), borrow.getReturnDate().toString(), extendedDate.toString());
+        //UM.librarian.send(msg);
+        
         // Update the Borrow object's return date
         borrow.setReturnDate(extendedDate);
         return ("Request approved, date of return was updated accordingly.");

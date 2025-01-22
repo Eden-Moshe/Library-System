@@ -21,6 +21,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class RequestWindowController {
+	
+	
+	//setting role of user as Librarian
+    private String userRole; // "Reader" or "Librarian"
+
+    public void setUserRole(String role) {
+        this.userRole = role;
+    }
 
     @FXML
     private Button btnBack = null;
@@ -68,7 +76,7 @@ public class RequestWindowController {
 	//resets all fields when pressing 'reset'
     @FXML
     private void resetFields(ActionEvent event) {
-        txtBorrowerId.clear();
+        //txtBorrowerId.clear();
         txtBookBarcode.clear();
         datePickerRequestDate.setValue(null);  // Reset the DatePicker
         txtResponse.clear();
@@ -77,13 +85,16 @@ public class RequestWindowController {
 	//method that sends extension request message to server with user inputs
     public void sendExtensionRequest(ActionEvent event) throws SQLException, IOException {
         UserManager UM = UserManager.getInstance();
+        //implement that user id is inserted automatically in filed ID 
+        //if (UM.s1 == null) ---> librarian entered
+        //subscriber entered
         String borrowerId = getBorrowerId();
         String bookBarcode = getBookBarcode();
         Date requestDate = getRequestDate();
         
 	    //check no field is left empty
         if (borrowerId.trim().isEmpty() || bookBarcode.trim().isEmpty() || requestDate == null) {
-            System.out.println("All fields are required.");
+        	 txtResponse.setText("All fields are required.");
             return;
         }
         
@@ -111,24 +122,42 @@ public class RequestWindowController {
     }
     
 	//method returns to previous page when pressing 'Back' button
+    //Reader side goes back to Subscriber Main Menu
+    //Librarian goes back to Reader's Card
     public void getBackBtn(ActionEvent event) throws Exception {
         try {
             // Close the current window
             ((Node) event.getSource()).getScene().getWindow().hide();
 
-            // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+            FXMLLoader loader;
+            String pageTitle;
+
+            // Check the user role and load the correct page
+            if ("Reader".equalsIgnoreCase(userRole)) {
+                // Reader should go back to Subscriber Main Menu
+                loader = new FXMLLoader(getClass().getResource("/gui/SubscriberMainMenu.fxml"));
+                pageTitle = "Subscriber Main Menu";
+            } else if ("Librarian".equalsIgnoreCase(userRole)) {
+                // Librarian should go back to ViewUserInfo
+                loader = new FXMLLoader(getClass().getResource("/gui/ViewUserInfo.fxml"));
+                pageTitle = "View User Info";
+            } else {
+                // Default behavior if the role is unrecognized
+                throw new IllegalArgumentException("Unknown user role: " + userRole);
+            }
+
+            // Load the appropriate page
             Pane root = loader.load();
 
             // Set up the new stage
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            stage.setTitle("Main Menu");
+            stage.setTitle(pageTitle);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load MainMenu.fxml.");
-       }
+            System.out.println("Failed to load the respective page.");
+        }
     }
 }
