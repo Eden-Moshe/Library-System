@@ -117,62 +117,48 @@ public  class MainMenuController extends BaseController  {
 	
 	public void btnExtendBorrow(ActionEvent event) throws Exception {
 		
-		FXMLLoader loader = new FXMLLoader();
+		
+		SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
 		
 		
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
 		
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Extension Managment Tool");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+//		FXMLLoader loader = new FXMLLoader();
+//		
+//		
+//		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+//		Stage primaryStage = new Stage();
+//		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
+//		//BorrowWindowController borrowWindowController = loader.getController();		
+//		//borrowWindowController.loadBorrow(UM.b);
+//	
+//		
+//		Scene scene = new Scene(root);			
+//		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
+//		primaryStage.setTitle("Borrow Extension Managment Tool");
+//		primaryStage.setScene(scene);		
+//		primaryStage.show();
 	}
 		
 	
 	public void btnUserInfo(ActionEvent event) throws Exception {
 
-		
-		FXMLLoader loader = new FXMLLoader();
-		
-		
-		
-		if (UM.s1.getSID()!=null)
-		{
-			//start main menu process
-			
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource("/gui/SubscriberForm.fxml").openStream());
-			SubscriberFormController subscriberFormController = loader.getController();		
-			subscriberFormController.loadSubscriber(UM.s1);
-			
-			
-				
-			
-			Scene scene = new Scene(root);			
-			scene.getStylesheets().add(getClass().getResource("/gui/SubscriberForm.css").toExternalForm());
-			primaryStage.setTitle("Subscriber Managment Tool");
-
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-			
-			
-		}
-		else
-		{
-			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
-		}
+		SubscriberUI.mainController.switchView("SubscriberInformationPersonal.fxml");
 		
 	}
 
 	
-	
+	public void viewAccountStatus (ActionEvent event)
+	{
+		
+		GenericMessage getStatus = new GenericMessage();
+		getStatus.subscriber=UM.s1;
+		getStatus.action = get_Account_Status_History;
+		
+		UM.send(getStatus);
+		
+		SubscriberUI.mainController.switchView("/gui/AccountStatusHistory.fxml");
+		
+	}
 	public void start(Stage primaryStage) throws Exception {	
 
 		UM = UserManager.getInstance();

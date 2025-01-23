@@ -83,14 +83,36 @@ public class ServerPortFrameController  {
 	}
 
 	public void start(Stage primaryStage) throws Exception {	
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/ServerPort.fxml"));
-				
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/ServerPort.css").toExternalForm());
-		primaryStage.setTitle("Client");
-		primaryStage.setScene(scene);
+//		Parent root = FXMLLoader.load(getClass().getResource("/gui/ServerPort.fxml"));
+//				
+//		Scene scene = new Scene(root);
+//		scene.getStylesheets().add(getClass().getResource("/gui/ServerPort.css").toExternalForm());
+//		primaryStage.setTitle("Client");
+//		primaryStage.setScene(scene);
+//		
+//		primaryStage.show();		
 		
-		primaryStage.show();		
+		
+		
+		FXMLLoader loader = new FXMLLoader();
+
+		
+		ServerUI.runServer("5555");
+		
+		Pane root = loader.load(getClass().getResource("Connection.fxml").openStream());
+		
+		ServerUI.conEntry = loader.getController();		
+		//conEntry.loadConnection(CIP,CCON,CSTATUS);
+		ServerUI.conEntry.loadConnection("","","");
+		Scene scene = new Scene(root);			
+		primaryStage.setTitle("Client Managment Window");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+		
+		
+		
+		
 	}
 	
 	public void getExitBtn(ActionEvent event) throws Exception {

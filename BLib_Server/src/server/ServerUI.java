@@ -23,7 +23,7 @@ public class ServerUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 	
-		ServerPortFrameController sPort = new ServerPortFrameController(); // create StudentFrame
+		ServerPortFrameController sPort = new ServerPortFrameController(); 
 		sPort.start(primaryStage);
 	}
 	

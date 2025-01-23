@@ -37,9 +37,17 @@ public class SubscriberController {
 			while (rs.next())
 			{
 				as = new AccountStatus ();
-				as.end_date = dateFormat.parse(rs.getString("status_end_date"));
+				
+				String endDateStr = rs.getString("status_end_date");
+				if (endDateStr != null) {
+				    as.end_date = dateFormat.parse(endDateStr);
+				} else {
+				    as.end_date = null; 
+				}
+				
 				as.set_date = dateFormat.parse(rs.getString("status_set_date"));
-				as.is_current = rs.getBoolean("is_current");
+				as.is_current = rs.getBoolean("status_is_current");
+				as.status = rs.getString("subscriber_status");
 				
 				ret.add(as);
 				
@@ -208,6 +216,11 @@ public class SubscriberController {
 		
 		
 		
+	}
+	
+	public void editPassword(String id, String pass)
+	{
+		db.editRow("users", "user_id", id , "user_password", pass);
 	}
 
 	

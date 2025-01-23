@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import client.SubscriberUI;
 import client.UserManager;
 import common.Book;
 import common.CheckAvailabilityMessage;
@@ -87,24 +88,29 @@ public class CheckAvailabilityWindowController extends BaseController {
 	}
 	
 	public void getBackBtn(ActionEvent event) throws Exception {
-        try {
-            // Close the current window
-            ((Node) event.getSource()).getScene().getWindow().hide();
-
-            // Load the previous screen (Main Menu)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
-            Pane root = loader.load();
-
-            // Set up the new stage
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Main Menu");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load MainMenu.fxml.");
-       }
+		
+		
+		SubscriberUI.mainController.goBack();
+		
+		
+//        try {
+//            // Close the current window
+//            ((Node) event.getSource()).getScene().getWindow().hide();
+//
+//            // Load the previous screen (Main Menu)
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+//            Pane root = loader.load();
+//
+//            // Set up the new stage
+//            Stage stage = new Stage();
+//            Scene scene = new Scene(root);
+//            stage.setTitle("Main Menu");
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("Failed to load MainMenu.fxml.");
+//       }
     }
 	
 	//alert massage to present to user. 

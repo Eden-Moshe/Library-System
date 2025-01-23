@@ -25,7 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class BorrowHistoryController extends BaseController   {
+public  class BorrowExtensionsController extends BaseController   {
 	
 	UserManager UM = UserManager.getInstance();
 
@@ -89,7 +89,12 @@ public  class BorrowHistoryController extends BaseController   {
             tableView.setItems(FXCollections.observableArrayList());
             return;
         }
-
+    	
+		
+		
+		//iterate over borrowHistory to view it in the window
+		//make sure it is chronlogically ordered by date of borrow
+		
 		 //  Set the cell value factories to match the fields in Borrow
 		bookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
 		bookReturnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));

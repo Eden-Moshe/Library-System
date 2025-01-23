@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import static common.GenericMessage.Action.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -23,82 +24,73 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import common.*;
 
-public class SubscriberFormController extends BaseController implements Initializable {
+public class SubscriberFormController extends BaseController {
 	private Subscriber s;
-	
-	@FXML
-	private Label lblSID;
-	@FXML
-	private Label lblName;
-	@FXML
-	private Label lblHistoryID;
-	@FXML
-	private Label lblPhoneNum;
-	@FXML
-	private Label lblEmail;
-	
-	
-	@FXML
-	private TextField txtSID;
-	@FXML
-	private TextField txtName;
-	@FXML
-	private TextField txtHistory;
-	@FXML
-	private TextField txtPhoneNum;
-	@FXML
-	private TextField txtEmail;
-	
-	@FXML
-	private Button btnclose=null;
-	
-	
-	
-	@FXML
-	private TextField idText;
-	
-	@FXML
-	private Button saveButton;
+	 @FXML
+	    private Button btnGoBack;
+
+	    @FXML
+	    private Button btnViewAccountStatusHistory;
+
+	    @FXML
+	    private TextField txtUserID;
+	    
+	    @FXML
+	    private TextField txtUserName;
+
+	    @FXML
+	    private TextField txtPassword;
+
+	    @FXML
+	    private TextField txtPhoneNumber;
+
+	    @FXML
+	    private TextField txtEmail;
+
+	    @FXML
+	    private TextField txtStatus;
+	    
 	
 	ObservableList<String> list;
+	
+	public void onLoad()
+	{
+		loadSubscriber(UM.s1);
+	}
 		
+	public void goBack(ActionEvent event)
+	{
+		SubscriberUI.mainController.goBack();
+	}
 	public void loadSubscriber(Subscriber s1) {
 		this.s=s1;
 		this.txtEmail.setText(s.getEmail());
-		this.txtName.setText(s.getName());		
-		this.txtPhoneNum.setText(s.getPNumber()); 
-		this.txtSID.setText(s.getSID());
+		this.txtUserName.setText(s.getName());		
+		this.txtPhoneNumber.setText(s.getPNumber()); 
+		this.txtUserID.setText(s.getSID());
 		
 		
 	}
 	
 	
-	public void getExitBtn(ActionEvent event) throws Exception {
-		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-		SubscriberUI.primaryStage.show();
-	}
-	
-	public void start(Stage primaryStage) throws Exception {	
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/SubscriberFrom.fxml"));
-				
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/SubscriberFrom.css").toExternalForm());
-		primaryStage.setTitle("Subscriber Managment Tool");
-		primaryStage.setScene(scene);
+	public void updatePassword(ActionEvent event) throws Exception {
+		UserManager UM = UserManager.getInstance();
 		
-		primaryStage.show();	 	   
+		GenericMessage changePass = new GenericMessage();
+		changePass.action = set_New_Password;
+		changePass.subscriber = UM.s1;
+		changePass.fieldVal = txtPassword.getText();
+		
+		UM.send(changePass);
+		
+		
+		
+		
 	}
 	
-//	public void save(ActionEvent event) throws Exception {
-//		
-//		Student newStudent = new Student(idText.getText() , txtName.getText() , txtSurname.getText() ,faculty);
-//		ClientUI.chat.saveStudentInfo(newStudent , s);
-//		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-//		ClientUI.primaryStage.show();
-//	}
 	
 	
-	public void save(ActionEvent event) throws Exception {
+	public void updateInformation(ActionEvent event) throws Exception {
 		UserManager UM = UserManager.getInstance();
 		SubMessage sm=new SubMessage();
         sm.editBool=true;
@@ -107,7 +99,7 @@ public class SubscriberFormController extends BaseController implements Initiali
 		if (s != null) {
 	        // Update the existing subscriber's email and phone number
 	        String newEmail = txtEmail.getText();
-	        String newPhoneNumber = txtPhoneNum.getText();
+	        String newPhoneNumber = txtPhoneNumber.getText();
 
 	        if (newEmail != null && !newEmail.trim().isEmpty() && newEmail!=s.getEmail()) 
 	        {
@@ -128,9 +120,7 @@ public class SubscriberFormController extends BaseController implements Initiali
 	        }
 
 			
-	        // Close the current window and show the primary stage
-	        ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-	        SubscriberUI.primaryStage.show();
+	        
     	} 
 		else 
 	    {
@@ -140,9 +130,5 @@ public class SubscriberFormController extends BaseController implements Initiali
 	}
 	
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {	
-		//setFacultyComboBox();		
-	}
 	
 }

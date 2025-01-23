@@ -41,22 +41,25 @@ public  class LibrarianMenuController extends BaseController  {
 		
 
 	public void btnCreateSubscriber(ActionEvent event) throws Exception {
-
-		FXMLLoader loader = new FXMLLoader();
 		
-		UserManager UM = UserManager.getInstance();
 		
+		SubscriberUI.mainController.switchView("/gui/CreateSubscriberForm.fxml");
 
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
-
-		
-		Scene scene = new Scene(root);			
-		primaryStage.setTitle("Subscriber Creation Tool");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+//		FXMLLoader loader = new FXMLLoader();
+//		
+//		UserManager UM = UserManager.getInstance();
+//		
+//
+//		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+//		Stage primaryStage = new Stage();
+//		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
+//
+//		
+//		Scene scene = new Scene(root);			
+//		primaryStage.setTitle("Subscriber Creation Tool");
+//
+//		primaryStage.setScene(scene);		
+//		primaryStage.show();
 
 	}
 	
@@ -88,23 +91,22 @@ public  class LibrarianMenuController extends BaseController  {
 		
 
 	}
-	public void btnLendBook() {
-		
-		UM = UserManager.getInstance();
-		
-		SubscriberUI.mainController.switchView("/gui/BorrowForm.fxml");
-		
-	}
+	
 	public void btnSearchBook(ActionEvent event) throws IOException {
-	    // load the new screen
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
-	    Parent root = loader.load();
-	    Stage stage = new Stage();
-	    stage.setTitle("Search for Books");
-	    stage.setScene(new Scene(root));
-	    stage.show();
-
-	    ((Node) event.getSource()).getScene().getWindow().hide();
+		
+		
+		SubscriberUI.mainController.switchView("/gui/SearchBook.fxml");
+		
+		
+//	    // load the new screen
+//	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
+//	    Parent root = loader.load();
+//	    Stage stage = new Stage();
+//	    stage.setTitle("Search for Books");
+//	    stage.setScene(new Scene(root));
+//	    stage.show();
+//
+//	    ((Node) event.getSource()).getScene().getWindow().hide();
 	}
 
 	public void btnReturnBook(ActionEvent event) throws Exception {
@@ -114,21 +116,25 @@ public  class LibrarianMenuController extends BaseController  {
 	
 	public void btnExtendBorrow(ActionEvent event) throws Exception {
 		
-		FXMLLoader loader = new FXMLLoader();
 		
+		SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
+
 		
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
-		
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
-		primaryStage.setTitle("Borrow Managment Tool");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+//		FXMLLoader loader = new FXMLLoader();
+//		
+//		
+//		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
+//		Stage primaryStage = new Stage();
+//		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
+//		//BorrowWindowController borrowWindowController = loader.getController();		
+//		//borrowWindowController.loadBorrow(UM.b);
+//	
+//		
+//		Scene scene = new Scene(root);			
+//		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
+//		primaryStage.setTitle("Borrow Managment Tool");
+//		primaryStage.setScene(scene);		
+//		primaryStage.show();
 	}
 		
 	

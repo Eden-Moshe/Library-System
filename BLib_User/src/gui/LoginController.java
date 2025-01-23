@@ -40,6 +40,12 @@ public  class LoginController extends BaseController   {
 	
 	public void btnLogin(ActionEvent event) throws Exception {
 
+		//clearing previous user if any
+		UM.logOut();
+		
+		
+		UM.login();
+		
 		FXMLLoader loader = new FXMLLoader();
 		
 		String id=getID();
@@ -55,7 +61,6 @@ public  class LoginController extends BaseController   {
 		UM.setPass(pass);
 		UM.send(lm);
 		
-		System.out.println("pre null instance");
 		//received null. something went wrong. temp code
 		if (UM.inb.getMessage().contains("null"))
 			return;

@@ -3,6 +3,8 @@ package gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,6 +25,8 @@ import java.util.Date;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import client.SubscriberUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -47,6 +51,40 @@ public class BookResultsController extends BaseController implements Initializab
 
     @FXML
     private TableColumn<Book, String> colReturnDate;
+    
+    
+    @Override
+    public void onLoad()
+    {
+    	
+    	Object response = UM.inb.getObj();
+    	if (response instanceof ArrayList<?>) {
+    		ArrayList<Book> searchResults = (ArrayList<Book>) response;
+    		if (!searchResults.isEmpty()) {
+    			
+    			setBookResults(searchResults);
+			}
+    		else {
+    			showAlert("No Results", "No books were found matching the search criteria.");
+    		}
+		}
+    	else {
+			showAlert("Error", "Unexpected response received from the server.");
+		}
+    	
+    	
+    	
+	}
+    	
+    
+    // Show an alert with the specified title and content text
+    private void showAlert(String title, String contentText) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(contentText);
+        alert.showAndWait(); // Show the alert
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -107,6 +145,10 @@ public class BookResultsController extends BaseController implements Initializab
     }
 
     public void setBookResults(ArrayList<Book> searchResults) {
+    	
+    	
+    	
+    	
         try {
             if (searchResults != null && tblResults != null) {
                 ObservableList<Book> data = FXCollections.observableArrayList(searchResults);
@@ -120,17 +162,21 @@ public class BookResultsController extends BaseController implements Initializab
 
     @FXML
     public void handleBackAction(ActionEvent event) {
-        try {
-            ((Node) event.getSource()).getScene().getWindow().hide();
-            Stage primaryStage = new Stage();
-            Pane root = FXMLLoader.load(getClass().getResource("/gui/SearchBook.fxml"));
-            Scene scene = new Scene(root);
-            primaryStage.setTitle("Search Book");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error loading SearchBook.fxml: " + e.getMessage());
-        }
+    	
+    	SubscriberUI.mainController.goBack();
+    	
+    	
+//        try {
+//            ((Node) event.getSource()).getScene().getWindow().hide();
+//            Stage primaryStage = new Stage();
+//            Pane root = FXMLLoader.load(getClass().getResource("/gui/SearchBook.fxml"));
+//            Scene scene = new Scene(root);
+//            primaryStage.setTitle("Search Book");
+//            primaryStage.setScene(scene);
+//            primaryStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.err.println("Error loading SearchBook.fxml: " + e.getMessage());
+//        }
     }
 }

@@ -171,7 +171,7 @@ public class server extends AbstractServer{
 					client.sendToClient(borrowController.borrowList(genericMsg.subscriber));
 				}
 				
-				if (genericMsg.action == get_Account_Status)
+				if (genericMsg.action == get_Account_Status_History)
 				{
 					client.sendToClient(subscriberController.getAccountStatus(genericMsg.subscriber));
 				}
@@ -193,6 +193,11 @@ public class server extends AbstractServer{
 				if (genericMsg.action == set_Librarian_Messages_Read)
 				{
 					client.sendToClient(librarianController.markRead((ArrayList<InboxMessage>)genericMsg.Obj));
+				}
+				if (genericMsg.action == set_New_Password)
+				{
+					subscriberController.editPassword(genericMsg.subscriber.getSID(), genericMsg.fieldVal);
+					client.sendToClient("password changed succesfully");
 				}
 				
 			}

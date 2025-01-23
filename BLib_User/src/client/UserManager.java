@@ -59,15 +59,31 @@ public final class UserManager extends AbstractClient
   {
     super(host, port); //Call the superclass constructor
 	udata = new BLibData();
-	inb=new MyInbox();
-    openConnection();
   }
   public void logOut()
   {
 	  librarian=null;
 	  myPass=null;
 	  s1=null;
+	  
+	  try {
+		closeConnection();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  }
+  public void login()
+  {
 	  inb=new MyInbox();
+	  
+	  try {
+		openConnection();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  
   }
   public void setSub(Subscriber newS)
   {
