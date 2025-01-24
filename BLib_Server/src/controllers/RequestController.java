@@ -83,6 +83,7 @@ public class RequestController {
         if (extendedDate == null) {
             return("Extended date is null. Cannot extend borrow.");
         }
+        
         //check order_book table and see if book already has an existing order
         //if so deny request
         //else continue to set up the request
@@ -155,22 +156,12 @@ public class RequestController {
         String fields[] = {"librarian_id", "sender", "message"};
     	String values[] = {librarian_id, "server", msg};
     	
-    	db.insertRow("librarian_message", fields, values);
-        
-	    //implement message sent to librarian inbox in this format:
-        
-        //UM.librarian.send(msg);
+    	db.insertRow("librarian_messages", fields, values);
         
         // Update the Borrow object's return date
         borrow.setReturnDate(extendedDate);
         return ("Request approved, date of return was updated accordingly.");
     }
 
-    // Method to send a notification to the librarian about the extension
-    private void sendLibrarianNotification(Borrow b, Subscriber s) {
-        String message = "A borrow extension has been granted for the book '" + b.bo.getBookName() + 
-                         "' by subscriber " + s.getName() + ".";
-        // Send notification (you would implement this logic based on your system's notification service)
-        System.out.println("Librarian Notification: " + message);
-    }
+
 }

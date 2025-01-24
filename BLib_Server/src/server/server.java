@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +35,7 @@ public class server extends AbstractServer{
 		private SearchController searchController;
 		private LibrarianController librarianController;
 		private OrderController orderController;
+		private ReportController reportController;
 		
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
@@ -59,45 +63,95 @@ public class server extends AbstractServer{
   		searchController = SearchController.getInstance();
   		librarianController = LibrarianController.getInstance();
 		orderController=OrderController.getInstance();
+		reportController = ReportController.getInstance();
 	  }
 
 	  
 	  
-	  //test this
-	  public class DailyTaskRunner {
-
-		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
-		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-		        Runnable dailyTask = () -> {
-		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
-		            task.run();
-		        };
-
-		        long initialDelay = calculateInitialDelay(hour, minute);
-		        long period = 24 * 60 * 60; // 24 hours in seconds
-
-		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
-		    }
-
-		    private static long calculateInitialDelay(int hour, int minute) {
-		        LocalTime now = LocalTime.now();
-		        LocalTime targetTime = LocalTime.of(hour, minute);
-
-		        if (now.isAfter(targetTime)) {
-		            targetTime = targetTime.plusHours(24); // Schedule for the next day
-		        }
-
-		        return Duration.between(now, targetTime).getSeconds();
-		    }
-
-		    public static void main(String[] args) {
-		        scheduleDailyTask(() -> {
-		            System.out.println("Running the scheduled daily task!");
-		            // Your function logic here
-		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
-		    }
-		}
+//	  //test this
+//	  public class DailyTaskRunner {
+//
+//		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
+//		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//
+//		        Runnable dailyTask = () -> {
+//		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
+//		            task.run();
+//		        };
+//
+//		        long initialDelay = calculateInitialDelay(hour, minute);
+//		        long period = 24 * 60 * 60; // 24 hours in seconds
+//
+//		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
+//		    }
+//
+//		    private static long calculateInitialDelay(int hour, int minute) {
+//		        LocalTime now = LocalTime.now();
+//		        LocalTime targetTime = LocalTime.of(hour, minute);
+//
+//		        if (now.isAfter(targetTime)) {
+//		            targetTime = targetTime.plusHours(24); // Schedule for the next day
+//		        }
+//
+//		        return Duration.between(now, targetTime).getSeconds();
+//		    }
+//
+//		    public static void main(String[] args) {
+//		        scheduleDailyTask(() -> {
+//		            System.out.println("Running the scheduled daily task!");
+//		            // Your function logic here
+//		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
+//		    }
+//		}
+	  
+	  
+	
+	public class DailyTaskRunner {
+	    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	    private static LocalDate lastFetchDate = null; // Store last fetch date in memory
+	
+	    public static void scheduleDailyTask(Runnable dailyTask, Runnable monthlyTask, int hour, int minute) {
+	        Runnable combinedTask = () -> {
+	            System.out.println("Executing daily task at: " + LocalDateTime.now());
+	            dailyTask.run();
+	
+	            if (shouldRunMonthlyTask()) {
+	                System.out.println("Executing monthly task...");
+	                monthlyTask.run();
+	                lastFetchDate = LocalDate.now(); // Update last fetch date
+	            }
+	        };
+	
+	        long initialDelay = calculateInitialDelay(hour, minute);
+	        long period = 24 * 60 * 60; // 24 hours in seconds
+	
+	        scheduler.scheduleAtFixedRate(combinedTask, initialDelay, period, TimeUnit.SECONDS);
+	    }
+	
+	    private static boolean shouldRunMonthlyTask() {
+	        LocalDate today = LocalDate.now();
+	        return lastFetchDate == null || lastFetchDate.getMonthValue() != today.getMonthValue();
+	    }
+	
+	    private static long calculateInitialDelay(int hour, int minute) {
+	        LocalTime now = LocalTime.now();
+	        LocalTime targetTime = LocalTime.of(hour, minute);
+	
+	        if (now.isAfter(targetTime)) {
+	            targetTime = targetTime.plusHours(24); // Schedule for the next day
+	        }
+	
+	        return Duration.between(now, targetTime).getSeconds();
+	    }
+	
+	    public static void main(String[] args) {
+	        scheduleDailyTask(
+	            () -> System.out.println("Running the scheduled daily task!"), // Daily task
+	            () -> System.out.println("Running the scheduled monthly task!"), // Monthly task
+	            8, 0 // Run at 08:00 AM
+	        );
+	    }
+	}
 
 	
 	
@@ -156,6 +210,8 @@ public class server extends AbstractServer{
 		GenericMessage genericMsg;
 		GetReturnDateMessage getReturnDateMessage;
 		OrderMessage orderMessage;
+		ReportMessage reportMsg;
+		
 		try {
 		
 			if (msg instanceof GenericMessage)
@@ -354,6 +410,24 @@ public class server extends AbstractServer{
 			    // and send the result back to the client
 			    client.sendToClient(searchController.performSearch(searchMessage.bookName, searchMessage.bookGenre, searchMessage.bookDescription));
 			}
+			
+			if (msg instanceof ReportMessage) {
+	            reportMsg = (ReportMessage) msg;
+	            //report Message is for borrowing report
+	            if (reportMsg.statusReport) {
+	            	reportController.statusReport(reportMsg);
+	            	//returning count of active and frozen to client
+	            	String returnMsg = String.format("active = %d frozen = %d", reportMsg.getActiveCount(),reportMsg.getFrozenCount());
+	            	client.sendToClient(returnMsg);
+	            }
+	            if (reportMsg.borrowReport)	{
+		            //report message is for status report
+		            // Call borrowReport() and get the list of borrow records
+		            List<BorrowRecord> borrowRecords = reportController.borrowReport();
+		            client.sendToClient(borrowRecords);
+	            }
+	            
+	        }
 		
 		
 		

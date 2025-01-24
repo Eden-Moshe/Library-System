@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="516.0" prefWidth="626.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LibrarianMenuController">
+<AnchorPane prefHeight="516.0" prefWidth="626.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LibrarianMenuController">
     <children>
 
         <!-- Back Button -->
         <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;">
             <children>
-                <Button fx:id="handleBack" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
+                <Button fx:id="btnBack" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
             </children>
         </HBox>
                <!-- LOGO IMAGE -->
@@ -31,13 +31,10 @@
 
                 <Button fx:id="btnLendBook" onAction="#btnLendBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Lend Book" />
 
-                <Button fx:id="btnViewHistory" onAction="#btnViewHistory" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Return Book" />
-
                 <Button fx:id="btnSearchBook" onAction="#btnSearchBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Search Book" />
 
-                <Button fx:id="btnExtendBorrow" onAction="#btnExtendBorrow" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View Lend Reports" />
+                <Button fx:id="btnViewReports" onAction="#btnViewReports" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View Reports" />
 
-                <Button fx:id="btnReturnBook" onAction="#btnReturnBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View User Reports" />
             </children>
         </VBox>
       <Button fx:id="btnMessage" layoutX="530.0" layoutY="26.0" onAction="#ViewMessageInbox" prefHeight="40.0" prefWidth="91.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Message" />
