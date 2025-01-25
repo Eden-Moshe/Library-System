@@ -1,61 +1,77 @@
 package gui;
 
-import java.io.IOException;
+import client.SubscriberUI;
 import client.UserManager;
 import common.GetReturnDateMessage;
 import common.OrderMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import java.util.Date;
 
 public class OrderWindowController extends BaseController {
+
     @FXML
     private Button btnBack;
-    
+
     @FXML
     private Button btnOrder;
-    
+
     @FXML
     private Text bookNameText;
-    
+
     @FXML
     private Text returnDateText;
-    
+
     @FXML
     private Text statusMessage;
+
     private String bookName;
+    private static String tempBookName; // Static variable to store the book name
     private Date returnDate;
+
+    /**
+     * Set the name of the book and update the UI to display it.
+     * 
+     * @param bookName The name of the book to be set.
+     */
     public void setBookName(String bookName) {
         this.bookName = bookName;
         if (bookNameText != null) {
             bookNameText.setText("Book Name: " + bookName);
-            // Fetch return date after setting book name
+            // Fetch return date after setting the book name
             fetchReturnDate();
         } else {
-        	System.out.println("somthing wrong in OWC");
+            System.out.println("Something went wrong in OrderWindowController.");
         }
     }
-    
+
+    /**
+     * Set a temporary book name for use before initializing the controller.
+     * 
+     * @param bookName The name of the book to be temporarily stored.
+     */
+    public static void setTempBookName(String bookName) {
+        tempBookName = bookName;
+    }
+
+    /**
+     * Fetch the expected return date for the book and update the UI.
+     */
     private void fetchReturnDate() {
         UserManager userManager = UserManager.getInstance();
-        
+
         // Create a message to request the return date
         GetReturnDateMessage dateMessage = new GetReturnDateMessage();
         dateMessage.bookName = bookName;
-        
-        // Send message and get response
+
+        // Send the message and get the response
         userManager.send(dateMessage);
         Object response = userManager.inb.getObj();
-        
+
         if (response instanceof Date) {
             returnDate = (Date) response;
             returnDateText.setText("Expected Return Date: " + returnDate.toString());
@@ -63,13 +79,25 @@ public class OrderWindowController extends BaseController {
             returnDateText.setText("Expected Return Date: Not available");
         }
     }
-    
+
+    /**
+     * Initialize the UI components and set the book name using the temporary value.
+     */
     public void initialize() {
-        // Only initialize UI components, don't fetch data here
         statusMessage.setText("");  // Clear any previous status
-        btnOrder.setDisable(false); // Enable order button
+        btnOrder.setDisable(false); // Enable the order button
+
+        if (tempBookName != null) {
+            setBookName(tempBookName); // Use the static value to set the book name
+            tempBookName = null; // Clear the static value to avoid unintended reuse
+        }
     }
-    
+
+    /**
+     * Handle the order action when the user clicks the order button.
+     * 
+     * @param event The action event triggered by the button click.
+     */
     @FXML
     private void handleOrderAction(ActionEvent event) {
         try {
@@ -79,18 +107,16 @@ public class OrderWindowController extends BaseController {
                 showAlert("Error", "Please enter a book name.");
                 return;
             }
-            
-            // Create and send order message
+
+            // Create and send the order message
             OrderMessage orderMessage = new OrderMessage();
-            orderMessage.bookName=bookName;
-            orderMessage.subscriberId=Integer.parseInt(subscriberId);
-            //orderMessage.bookName=bookName;
-            //orderMessage.subscriberId=Integer.parseInt(subscriberId);
+            orderMessage.bookName = bookName;
+            orderMessage.subscriberId = Integer.parseInt(subscriberId);
             UM.send(orderMessage);
-            
-            // Get response from server
+
+            // Get the response from the server
             Object response = UM.inb.getObj();
-            
+
             if (response instanceof Boolean && (Boolean) response) {
                 statusMessage.setText("Order placed successfully!");
                 btnOrder.setDisable(true);
@@ -102,37 +128,32 @@ public class OrderWindowController extends BaseController {
         } catch (NumberFormatException e) {
             showAlert("Error", "Invalid subscriber ID format.");
         } catch (Exception e) {
-        	e.printStackTrace();
-            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
             e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
         }
     }
-    
+
+    /**
+     * Handle the action of going back to the previous screen.
+     * 
+     * @param event The action event triggered by the button click.
+     */
     @FXML
     private void handleBackAction(ActionEvent event) {
-        try {
-            ((Node) event.getSource()).getScene().getWindow().hide();
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
-            Parent root = loader.load();
-            
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Main Menu");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load MainMenu.fxml");
-        }
+        SubscriberUI.mainController.goBack();
     }
-    
-  //alert massage to present to user. 
-  	private void showAlert(String title, String content) {
-          Alert alert = new Alert(AlertType.INFORMATION);
-          alert.setTitle(title);
-          alert.setHeaderText(null);
-          alert.setContentText(content);
-          alert.showAndWait();
-      }
+
+    /**
+     * Display an alert message to the user.
+     * 
+     * @param title   The title of the alert dialog.
+     * @param content The content message displayed in the alert dialog.
+     */
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

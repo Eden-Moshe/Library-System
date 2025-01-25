@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="194.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CheckAvailabilityWindowController">
-   <children>
-      <Button id="btnCheckAvailability" fx:id="btnCheckAvailability" layoutX="143.0" layoutY="131.0" mnemonicParsing="false" onAction="#btnCheckAvailability" prefHeight="34.0" prefWidth="110.0" text="check Availability" />
-      <TextField id="lblID" fx:id="bookName" layoutX="175.0" layoutY="71.0" />
-      <Label layoutX="72.0" layoutY="75.0" text="enter book name: " />
-      <Label layoutX="154.0" layoutY="14.0" text="BLib Order book" />
-      <Button id="btnBack" fx:id="btnBack" layoutX="17.0" layoutY="140.0" mnemonicParsing="false" onAction="#getBackBtn" prefHeight="25.0" prefWidth="73.0" text="Back" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="194.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CheckAvailabilityWindowController">
+            fx:controller="gui.CheckAvailabilityWindowController"
+            prefHeight="580" prefWidth="580"
+            style="-fx-background-color: #355457; -fx-padding: 35;">
+    
+    <!-- Back Button (Arrow at Top Left) -->
+    <HBox layoutX="0" layoutY="10" alignment="TOP_LEFT">
+        <Button text="←" fx:id="btnBack" onAction="#getBackBtn"
+                style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;"/>
+    </HBox>
+
+    <!-- Title with Icon (Centered at the Top) -->
+    <HBox alignment="CENTER" layoutX="145" layoutY="80" spacing="10">
+        <Label text="🔍" style="-fx-font-size: 32px; -fx-text-fill: #d9a762;"/>
+        <Label text="Check Book Availability" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- Form Section -->
+    <VBox alignment="CENTER" layoutX="90" layoutY="200" spacing="25">
+        <Label text="📖 Enter Book Name:" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <TextField fx:id="bookName" promptText="Enter book name" 
+                   style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" 
+                   prefWidth="250"/>
+
+        <!-- Buttons Section -->
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Check Availability" fx:id="btnCheckAvailability" onAction="#btnCheckAvailability"
+                    style="-fx-font-size: 16px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 35; -fx-padding: 14 50; -fx-font-weight: bold;"/>
+        </HBox>
+    </VBox>
 </AnchorPane>
