@@ -77,14 +77,14 @@ public class BookResultsController extends BaseController implements Initializab
 	}
     	
     
-    // Show an alert with the specified title and content text
-    private void showAlert(String title, String contentText) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(contentText);
-        alert.showAndWait(); // Show the alert
-    }
+//    // Show an alert with the specified title and content text
+//    private void showAlert(String title, String contentText) {
+//        Alert alert = new Alert(AlertType.ERROR);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(contentText);
+//        alert.showAndWait(); // Show the alert
+//    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

@@ -164,14 +164,14 @@ public class SearchBookController extends BaseController{
         primaryStage.show(); // Show the window
     }
 
-    // Show an alert with the specified title and content text
-    private void showAlert(String title, String contentText) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(contentText);
-        alert.showAndWait(); // Show the alert
-    }
+//    // Show an alert with the specified title and content text
+//    private void showAlert(String title, String contentText) {
+//        Alert alert = new Alert(AlertType.ERROR);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(contentText);
+//        alert.showAndWait(); // Show the alert
+//    }
 
     // Exit the application (for testing purposes, you might want to replace this in production)
     public void getExitBtn(ActionEvent event) throws Exception {

@@ -49,7 +49,7 @@ public class DBController {
 		}
 		
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=Asia/Jerusalem","root","eden1234");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=Asia/Jerusalem","root","Aa123456");
 		} catch (SQLException e) {
 			System.out.print("cannot connect to the DB : " + e.getMessage());
 			return false;
@@ -103,10 +103,7 @@ public class DBController {
 	    
 	    
 
-	    // Print the categorized fields for verification
-	    System.out.println("Integer Fields: " + intFields);
-	    System.out.println("Date Fields: " + dateFields);
-	    System.out.println("Boolean Fields: " + boolFields);
+	  
 	}
 	
 	
@@ -165,7 +162,17 @@ public class DBController {
 	
 		
 		if (intFields.contains(field))
-			stmt.setInt(index, Integer.parseInt(value));
+		{
+			int intValue=-1;
+			try {
+				intValue = Integer.parseInt(value);
+			}catch(NumberFormatException e)
+			{
+				//do nothing.
+			}
+			
+			stmt.setInt(index,intValue);
+		}	
 	    // Handling date fields
 	    else if (dateFields.contains(field)) {
 	        if (value == null || value.equals("null")) {
@@ -306,7 +313,6 @@ public class DBController {
     	    }
         	
         }
-        System.out.println("Generated query: " + query.toString());
         
         PreparedStatement stmt;
 		try {

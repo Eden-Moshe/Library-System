@@ -143,17 +143,12 @@ public class OrderWindowController extends BaseController {
         SubscriberUI.mainController.goBack();
     }
 
-    /**
-     * Display an alert message to the user.
-     * 
-     * @param title   The title of the alert dialog.
-     * @param content The content message displayed in the alert dialog.
-     */
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+//   
+//    private void showAlert(String title, String content) {
+//        Alert alert = new Alert(AlertType.INFORMATION);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(content);
+//        alert.showAndWait();
+//    }
 }

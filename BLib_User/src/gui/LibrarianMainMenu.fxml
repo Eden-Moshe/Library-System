@@ -36,9 +36,8 @@
 
                 <Button fx:id="btnSearchBook" onAction="#btnSearchBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Search Book" />
 
-                <Button fx:id="btnExtendBorrow" onAction="#btnExtendBorrow" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View Lend Reports" />
-
-                <Button fx:id="btnReturnBook" onAction="#btnReturnBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View User Reports" />
+               
+                <Button fx:id="btnViewReports" onAction="#btnViewReports" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View Reports" />
             </children>
         </VBox>
       <Button fx:id="btnMessage" layoutX="530.0" layoutY="26.0" onAction="#ViewMessageInbox" prefHeight="40.0" prefWidth="91.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Message" />

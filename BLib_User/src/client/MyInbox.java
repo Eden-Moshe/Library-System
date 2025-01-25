@@ -1,10 +1,12 @@
 package client;
 
+import common.Subscriber;
+
 public class MyInbox {
 	private String immediate_message="no new message";
 	private Object objMsg;
 	private Object arr[];
-	
+	private Subscriber handleSubscriber;
 	
 	public void setMessage(Object msg)
 	{
@@ -15,6 +17,14 @@ public class MyInbox {
 		
 	}
 	
+	public void handledSubscriber(Subscriber handle)
+	{
+		handleSubscriber=handle;
+	}
+	public Subscriber getHandledSubscriber()
+	{
+		return handleSubscriber;
+	}
 	
 	//one time use
 	public Object getObj()

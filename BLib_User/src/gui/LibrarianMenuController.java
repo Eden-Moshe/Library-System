@@ -137,21 +137,7 @@ public  class LibrarianMenuController extends BaseController  {
 		
 		SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
 
-//		FXMLLoader loader = new FXMLLoader();
-//		
-//		
-//		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
-//		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
-		//BorrowWindowController borrowWindowController = loader.getController();		
-		//borrowWindowController.loadBorrow(UM.b);
-	
-		
-//		Scene scene = new Scene(root);			
-//		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
-//		primaryStage.setTitle("Borrow Managment Tool");
-//		primaryStage.setScene(scene);		
-//		primaryStage.show();
+
 	}
 		
 	

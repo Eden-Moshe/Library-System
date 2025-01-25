@@ -74,34 +74,21 @@ public  class MainMenuController extends BaseController  {
 		
 		GenericMessage msg = new GenericMessage();
 		
-		if (UM.librarian != null)
-		{
-			//enter user id window
-			System.out.println("viewHistory librarian");
-		}
-		else
-		{
+		
 			
-			System.out.println("viewHistory else");
 			//get the subscriber that's using this client 
-			msg.subscriber = UM.s1;
-			
-			msg.action=get_Borrow_History;
-			
-			UM.send(msg);
-			
-			SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
+		msg.subscriber = UM.s1;
+		
+		msg.action=get_Borrow_History;
+		
+		UM.send(msg);
+		
+		SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
 		
 			
-		}
-		
-		
-		
 
 	}
-	public void btnLendBook() {
-		
-	}
+	
 	public void btnSearchBook(ActionEvent event) throws IOException {
 		
 		SubscriberUI.mainController.switchView("/gui/SearchBook.fxml");

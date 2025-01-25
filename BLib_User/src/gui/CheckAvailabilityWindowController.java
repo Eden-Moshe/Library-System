@@ -101,12 +101,12 @@ public class CheckAvailabilityWindowController extends BaseController {
 
     }
 	
-	//alert massage to present to user. 
-	private void showAlert(String title, String content) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+//	//alert massage to present to user. 
+//	private void showAlert(String title, String content) {
+//        Alert alert = new Alert(AlertType.INFORMATION);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(content);
+//        alert.showAndWait();
+//    }
 }

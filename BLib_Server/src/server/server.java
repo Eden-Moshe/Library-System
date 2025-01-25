@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +72,10 @@ public class server extends AbstractServer{
   		searchController = SearchController.getInstance();
   		librarianController = LibrarianController.getInstance();
 		orderController = OrderController.getInstance();
+		bokRetCont = BookReturnController.getInstance();
+		
+		reportController = ReportController.getInstance();
+		
 	  }
 	  
 	  

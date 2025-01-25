@@ -57,6 +57,8 @@ public  class BorrowHistoryController extends BaseController   {
 	    @FXML
 	    private void viewExtensions() {
 	        // TODO: Implement the logic for viewing borrow extensions.
+	    	
+	    	
 	    }
 
 	    /**

@@ -22,16 +22,16 @@ public class ViewUserInfoWindow extends BaseController {
     UserManager UM = UserManager.getInstance();
     
     // Subscriber object representing the current user
-    Subscriber sub = (Subscriber) UM.inb.getObj();
-    
+    //Subscriber sub = (Subscriber) UM.inb.getObj();
+    Subscriber sub;
     /**
      * Initializes the controller and loads the user data into the UI fields.
      * This method is called when the controller is initialized.
      */
-    @FXML
-    public void initialize() {
-        loadResponse();  // Call loadResponse when the controller is initialized
-    }
+//    @FXML
+//    public void initialize() {
+//        loadResponse();  // Call loadResponse when the controller is initialized
+//    }
     
     @FXML
     private Button btnBack;
@@ -63,6 +63,13 @@ public class ViewUserInfoWindow extends BaseController {
     @FXML
     private TextField statusResponse;
     
+    
+    public void onLoad()
+    {
+    	
+    	sub = UM.inb.getHandledSubscriber();
+    	loadResponse();
+    }
     /**
      * Loads the current subscriber's information into the text fields.
      * This includes subscriber ID, phone number, email, and status.
@@ -121,7 +128,8 @@ public class ViewUserInfoWindow extends BaseController {
         // Goes to Borrow History Page
         GenericMessage borrowMessage = new GenericMessage();
         borrowMessage.action = get_Borrow_History;
-        borrowMessage.subscriber = null; // waiting for implementation!!
+        borrowMessage.subscriber = sub; // waiting for implementation!!
+        UM.send(borrowMessage);
         SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
     }
     

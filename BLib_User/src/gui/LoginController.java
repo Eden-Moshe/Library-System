@@ -70,27 +70,19 @@ public  class LoginController extends BaseController   {
 			UM.s1=(Subscriber) fromServer;
 			
 	        SubscriberUI.mainController.switchView("/gui/SubscriberMainMenu.fxml");
-			
 
-			
-			
 		}
-		else {
-		if (UM.librarian != null)
+		else if (UM.librarian != null)
 		{
-			
 			
 	        SubscriberUI.mainController.switchView("/gui/LibrarianMainMenu.fxml");
 
-			
-
-			
-			}
 		}
-		//else
-		//{
-			//IMPLEMENT SHOW WRONG ID/PASS MESSAGE INTO THE UI
-		//}
+		else
+		{
+			System.out.println("wrong id or password");
+			showAlert("Wrong ID or Password","Wrong ID or Password");
+		}
 		
 	}
 

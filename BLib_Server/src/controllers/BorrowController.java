@@ -109,7 +109,7 @@ public class BorrowController {
             };
             db.insertRow("borrow", fields, values);
             db.editRow("book", "barcode", b.getBookBarcode(), "book_available", "false");
-	        
+	        db.editRow("book", "barcode", b.getBookBarcode(), "return_date", borrow.getReturnDate().toString());
 	      
 	        
 	        return "Borrow request sent successfully."; 
@@ -117,6 +117,7 @@ public class BorrowController {
             return "Account status is frozen. Cannot create borrow.";
         }
     }
+    
     
     /**
      * Checks if a subscriber is eligible to borrow books.

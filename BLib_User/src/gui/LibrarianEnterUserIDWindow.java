@@ -69,7 +69,6 @@ public class LibrarianEnterUserIDWindow extends BaseController {
      */
     @FXML
     private void ViewUserInfo(ActionEvent event) {
-        UserManager UM = UserManager.getInstance();
         String userID = getUserId();
         
         // Check no field is left empty
@@ -82,13 +81,14 @@ public class LibrarianEnterUserIDWindow extends BaseController {
         SubMessage subMsg = new SubMessage();
         subMsg.pKey = userID;
         // Alert this as a fetch message
-        subMsg.editBool = true;
+        subMsg.editBool = false;
         
         // Sending user ID to server and fetching him into next page
         UM.send(subMsg);
         
         // Check that subscriber exists
         Subscriber sub = (Subscriber) UM.inb.getObj();
+        UM.inb.handledSubscriber(sub);
         if (sub == null) {
             txtresponse.setText("The subscriber ID does not exist.");
             return;
