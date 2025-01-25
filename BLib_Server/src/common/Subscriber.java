@@ -17,7 +17,6 @@ public class Subscriber implements Serializable {
 		this.pNumber=pNumber;
 		this.email=email;
 		this.status = status;
-		this.pNumber=pNumber;
 		
 	}
 	public void setSID(String s) 

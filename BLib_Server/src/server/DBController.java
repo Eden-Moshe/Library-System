@@ -6,9 +6,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import common.BorrowRecord;
 
 
 public class DBController {
@@ -44,7 +49,7 @@ public class DBController {
 		}
 		
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=Asia/Jerusalem","root","Aa123456");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/blib?serverTimezone=Asia/Jerusalem","root","eden1234");
 		} catch (SQLException e) {
 			System.out.print("cannot connect to the DB : " + e.getMessage());
 			return false;
@@ -301,13 +306,13 @@ public class DBController {
     	    }
         	
         }
-        
-        	
-     
+        System.out.println("Generated query: " + query.toString());
         
         PreparedStatement stmt;
 		try {
 			stmt = con.prepareStatement(query.toString());
+		    // Set the value for the placeholder (e.g., "%active%" for LIKE query)
+		    stmt.setString(1, "%" + values[0] + "%");  // Assuming you're looking for the first value in the array (values[0])
 			ResultSet rs = stmt.executeQuery();
 	        rs.next(); // Move to the first and only result
 	        rows = rs.getInt(1); 
@@ -321,6 +326,44 @@ public class DBController {
         return rows;
     
 	}
+	
+	
+	// method creates a list of borrow records fetched from table
+	public List<BorrowRecord> getBorrowRecords() {
+	    List<BorrowRecord> records = new ArrayList<>();
+	    String query = "SELECT borrow_date, return_date, actual_returned_date FROM borrow";
+
+	    try (PreparedStatement stmt = con.prepareStatement(query); 
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            // Handling borrow_date
+	            LocalDate borrowDate = rs.getDate("borrow_date") != null
+	                ? rs.getDate("borrow_date").toLocalDate()
+	                : null;
+	                
+	            // Handling return_date
+	            LocalDate returnDate = rs.getDate("return_date") != null
+	                ? rs.getDate("return_date").toLocalDate()
+	                : null;
+	                
+	            // Handling actual_return_date (can be NULL)
+	            LocalDate actualReturnDate = rs.getDate("actual_returned_date") != null
+	                ? rs.getDate("actual_returned_date").toLocalDate()
+	                : null;
+
+	            // Add the borrow record to the list
+	            records.add(new BorrowRecord(borrowDate, returnDate, actualReturnDate));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();  // Log the exception or handle it appropriately
+	        // Optionally, rethrow or return an empty list to ensure the application continues
+	    }
+
+	    return records;
+	}
+
+
 
 
 	public void closeConnection() {

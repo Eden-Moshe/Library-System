@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -29,6 +30,15 @@ public  class LibrarianMenuController extends BaseController  {
 	@FXML
 	private Button btnCreateSubscriber = null;
 	
+    @FXML
+    private Button btnBack;
+
+    @FXML
+    private Button btnUserInfo, btnLendBook, btnSearchBook, btnExtendBorrow, btnMessage, btnViewReports;
+    
+    @FXML
+    private ImageView logo; // This line fixes the missing 'logo' field issue
+	
 	@FXML
 	private TextField lblID;
 	private TextField lblPassword;
@@ -37,6 +47,11 @@ public  class LibrarianMenuController extends BaseController  {
 	public void btnLendBook(ActionEvent event) throws Exception {
 
 		SubscriberUI.mainController.switchView("/gui/BorrowForm.fxml");
+	}
+	
+	public void btnViewReports(ActionEvent event) throws Exception {
+
+		SubscriberUI.mainController.switchView("/gui/ReportsWindow.fxml");
 	}
 		
 
@@ -120,20 +135,18 @@ public  class LibrarianMenuController extends BaseController  {
 	
 	public void btnExtendBorrow(ActionEvent event) throws Exception {
 		
-		
 		SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
 
-		
 //		FXMLLoader loader = new FXMLLoader();
 //		
 //		
 //		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary windows
 //		Stage primaryStage = new Stage();
-//		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
-//		//BorrowWindowController borrowWindowController = loader.getController();		
-//		//borrowWindowController.loadBorrow(UM.b);
-//	
-//		
+		Pane root = loader.load(getClass().getResource("/gui/ExtendBorrowForm.fxml").openStream());
+		//BorrowWindowController borrowWindowController = loader.getController();		
+		//borrowWindowController.loadBorrow(UM.b);
+	
+		
 //		Scene scene = new Scene(root);			
 //		scene.getStylesheets().add(getClass().getResource("/gui/ExtendBorrowForm.css").toExternalForm());
 //		primaryStage.setTitle("Borrow Managment Tool");
@@ -144,8 +157,6 @@ public  class LibrarianMenuController extends BaseController  {
 	
 	public void btnUserInfo(ActionEvent event) throws Exception {
 
-		
-		
 		SubscriberUI.mainController.switchView("/gui/LibrarianEnterUserID.fxml");
 
 		
@@ -157,8 +168,6 @@ public  class LibrarianMenuController extends BaseController  {
 		
 		
 		SubscriberUI.mainController.switchView("/gui/CreateSubscriberForm.fxml");
-
-		
 
 	}
 	

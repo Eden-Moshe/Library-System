@@ -2,11 +2,7 @@ package client;
 
 import java.io.IOException;
 
-import common.*;
-import gui.LoginController;
 import gui.MainController;
-import gui.MainMenuController;
-import gui.SubscriberEntryController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 // het shaked

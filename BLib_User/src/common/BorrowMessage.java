@@ -1,13 +1,33 @@
+/**
+ * The {@code BorrowMessage} class represents a message related to a borrowing transaction.
+ * It is used to transfer information between the server and client sides with the necessary details.
+ * 
+ * This class implements {@code Serializable} to support object serialization.
+ */
 package common;
 
 import java.io.Serializable;
 
 public class BorrowMessage implements Serializable {
-    //Borrow Message class hold values to transfer between server and client side with needed information as required
-	public boolean editBool;
-	public Subscriber s;
-	public Borrow borrow;
-	public Book b;
-	public String lib_id;
-	
+
+    /**
+     * The subscriber associated with the borrowing transaction.
+     */
+    public Subscriber s;
+
+    /**
+     * The borrowing transaction details.
+     */
+    public Borrow borrow;
+
+    /**
+     * The book involved in the transaction.
+     */
+    public Book b;
+
+    /**
+     * The librarian's ID handling the transaction.
+     */
+    public String lib_id;
+
 }

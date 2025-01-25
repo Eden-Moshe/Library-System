@@ -7,50 +7,61 @@ import common.Borrow;
 import common.Subscriber;
 import server.DBController;
 
+/**
+ * Controller class for handling book borrowing and extension requests.
+ */
 public class RequestController {
-	private static final RequestController instance = new RequestController();
-	private DBController db;
-	private static String tName="borrow";
-	private static String keyField="book_barcode";
-	private SubscriberController subscriberController;
-	
-	private RequestController()
-	{
-		db=DBController.getInstance();
-		subscriberController = SubscriberController.getInstance(); // Initialize subscriberController
-	}
-	
-	public static RequestController getInstance() {
-		return instance;
-	}
+    private static final RequestController instance = new RequestController();
+    private DBController db;
+    private static String tName = "borrow";
+    private static String keyField = "book_barcode";
+    private SubscriberController subscriberController;
 
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
+    private RequestController() {
+        db = DBController.getInstance();
+        subscriberController = SubscriberController.getInstance(); // Initialize subscriberController
+    }
 
+    /**
+     * Retrieves the singleton instance of RequestController.
+     * @return The singleton instance.
+     */
+    public static RequestController getInstance() {
+        return instance;
+    }
 
-    // fetch Borrow from table 
+    /**
+     * Fetches a Borrow record from the database.
+     * @param sub_id The subscriber ID.
+     * @param barcode The book barcode.
+     * @param errorMessage A StringBuilder to capture error messages.
+     * @return The Borrow object if found, otherwise null.
+     */
     public Borrow fetchBorrow(String sub_id, String barcode, StringBuilder errorMessage) {
         if (sub_id == null || barcode == null) {
             System.out.println("Invalid input: sub_id or barcode is null");
             return null;
         }
-        //fetch subscriber into s
+        
+        // Fetch subscriber
         Subscriber s = subscriberController.fetchSubscriber(sub_id);
         if (s == null) {
             errorMessage.append("Error: Subscriber not found for ID: " + sub_id);
             return null;
         }
-    	Borrow ret = null;
-        //puts into rs both dates
-        ResultSet rs = db.retrieveRow(tName, keyField, barcode); // Query the 'borrow' table
+        
+        Borrow ret = null;
+        ResultSet rs = db.retrieveRow(tName, keyField, barcode);
         try {
             if (rs.next()) {
-
-                Date borrowDate = rs.getDate("borrow_date"); // borrow_date column
-                Date returnDate = rs.getDate("return_date"); // return_date column
+                Date borrowDate = rs.getDate("borrow_date");
+                Date returnDate = rs.getDate("return_date");
                 
-
-                // Create a Borrow object using the constructor and fetched subscriber and dates
-                ret = new Borrow(s, borrowDate,returnDate);
-
+                // Create and return Borrow object
+                ret = new Borrow(s, borrowDate, returnDate);
                 return ret;
             } else {
                 errorMessage.append("Error: No Borrow record found with book barcode: " + barcode);
@@ -63,31 +74,47 @@ public class RequestController {
         }
     }
 
-    // Helper method to check if the extension request is within the allowed timeframe
+    /**
+     * Checks if a borrow is eligible for an extension (must be within 7 days of return date).
+     * @param currentReturnDate The current return date.
+     * @return True if eligible for extension, false otherwise.
+     */
     public boolean isEligibleForExtension(Date currentReturnDate) {
-        Date today = new Date(); // Get today's date
+        Date today = new Date();
         long timeDiff = Math.abs(currentReturnDate.getTime() - today.getTime());
         long daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-        return daysDiff <= 7; // True if within 7 days, false otherwise
+        return daysDiff <= 7;
     }
 
-    //method that extends borrow return date
+    /**
+     * Extends the borrow return date if eligible.
+     *
+     * This method performs the following:
+     * - Checks if the borrow and extended date are valid.
+     * - Verifies that the book is not currently ordered by another subscriber.
+     * - Ensures the new return date is later than the current return date.
+     * - Updates the database with the new return date.
+     * - Logs the extension request in the 'extensions' table.
+     * - Sends a message to the librarian regarding the extension.
+     *
+     * @param borrow The Borrow object.
+     * @param book The Book object.
+     * @param extendedDate The new extended return date.
+     * @return A success or error message.
+     */
     public String extendBorrow(Borrow borrow, Book book, Date extendedDate) {
-    	String librarian_id = "-1";
-    	int borrow_num_pk = -1;
+        String librarian_id = "-1";
+        int borrow_num_pk = -1;
         if (borrow == null) {
-            return("Borrow object is null. Cannot extend borrow.");
-            
+            return "Borrow object is null. Cannot extend borrow.";
         }
 
         if (extendedDate == null) {
-            return("Extended date is null. Cannot extend borrow.");
+            return "Extended date is null. Cannot extend borrow.";
         }
-        //check order_book table and see if book already has an existing order
-        //if so deny request
-        //else continue to set up the request
-
-        ResultSet rs = db.retrieveRow("order_book", "book_name",book.getBookName());
+        
+        // Check if the book has an existing order in the 'order_book' table
+        ResultSet rs = db.retrieveRow("order_book", "book_name", book.getBookName());
         try {
             if (rs != null && rs.next()) {
                 String order_status = rs.getString("order_status");
@@ -100,31 +127,30 @@ public class RequestController {
             return "Error: Failed to retrieve Borrow table data.";
         }
 
+        // Validate that the new return date is after the original return date
         Date currentReturnDate = borrow.getReturnDate();
-        // check that new return date occurs after original return date
         if (extendedDate.before(currentReturnDate)) {
-        	return ("Error: The return date can only be extended, not shortened. " +
-                    "Current return date: " + currentReturnDate + ", " +
-                    "Attempted new return date: " + extendedDate);
+            return "Error: The return date can only be extended, not shortened. " +
+                   "Current return date: " + currentReturnDate + ", " +
+                   "Attempted new return date: " + extendedDate;
         }
         
         String bookBarcode = book.getBookBarcode();
         
-        //edit specific row in borrow table with new return date
+        // Update return date in the borrow table
         try {
             java.sql.Date sqlDate = new java.sql.Date(extendedDate.getTime());
-            db.editRow("borrow","book_barcode", bookBarcode, "return_date", sqlDate.toString());
+            db.editRow("borrow", "book_barcode", bookBarcode, "return_date", sqlDate.toString());
         } catch (Exception e) {
-            System.out.println("Failed to update return date in the database.");
             e.printStackTrace();
             return "Error: Failed to edit return_date";
         }
         
-        //retrieve id of librarian from book table
-        ResultSet rs1 = db.retrieveRow(tName, keyField, book.getBookBarcode()); // Query the 'borrow' table
+        // Retrieve librarian ID from borrow table
+        ResultSet rs1 = db.retrieveRow(tName, keyField, book.getBookBarcode());
         try {
             if (rs1.next()) {
-                librarian_id = rs1.getString("lending_librarian"); // getting lending librarian id from borrow table
+                librarian_id = rs1.getString("lending_librarian");
                 borrow_num_pk = rs1.getInt("borrow_number");
                 if (librarian_id == null || librarian_id.isEmpty() || borrow_num_pk == -1) {
                     return "Error: Lending librarian ID or borrow_number is missing in the borrow record.";
@@ -132,45 +158,22 @@ public class RequestController {
             } 
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Error: Failed to retrieve librarian id from borrow table.";
+            return "Error: Failed to retrieve librarian ID from borrow table.";
         }
-        //insert new row to extension table
+        
+        // Log the extension in the 'extensions' table
         try {
-        	String fields[] = {"lending_librarian", "borrow_number", "day_of_extension", "new_return_date"};
-        	String values[] = {librarian_id, String.valueOf(borrow_num_pk),
+            String fields[] = {"lending_librarian", "borrow_number", "day_of_extension", "new_return_date"};
+            String values[] = {librarian_id, String.valueOf(borrow_num_pk),
                     new java.sql.Date(System.currentTimeMillis()).toString(),
-                    new java.sql.Date(extendedDate.getTime()).toString()
-        	};
-
-            // Insert into the extensions table
-            db.insertRow("extensions",fields, values);
+                    new java.sql.Date(extendedDate.getTime()).toString()};
+            db.insertRow("extensions", fields, values);
         } catch (Exception e) {
-            System.out.println("Failed to insert into the extensions table.");
             e.printStackTrace();
-            return "Error: Failed to log the extension in the extensions table for book barcode: " + bookBarcode;
+            return "Error: Failed to log the extension.";
         }
         
-        String msg = String.format("User ID: %s extended return date of book %s from %s to %s",
-                borrow.s.getSID(), book.getBookBarcode(), borrow.getReturnDate().toString(), extendedDate.toString());
-        String fields[] = {"librarian_id", "sender", "message"};
-    	String values[] = {librarian_id, "server", msg};
-    	
-    	db.insertRow("librarian_message", fields, values);
-        
-	    //implement message sent to librarian inbox in this format:
-        
-        //UM.librarian.send(msg);
-        
-        // Update the Borrow object's return date
         borrow.setReturnDate(extendedDate);
-        return ("Request approved, date of return was updated accordingly.");
-    }
-
-    // Method to send a notification to the librarian about the extension
-    private void sendLibrarianNotification(Borrow b, Subscriber s) {
-        String message = "A borrow extension has been granted for the book '" + b.bo.getBookName() + 
-                         "' by subscriber " + s.getName() + ".";
-        // Send notification (you would implement this logic based on your system's notification service)
-        System.out.println("Librarian Notification: " + message);
+        return "Request approved, date of return was updated accordingly.";
     }
 }

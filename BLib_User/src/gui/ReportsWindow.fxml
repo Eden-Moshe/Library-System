@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="850.0" style="-fx-background-color: #355457;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReportsWindow">
+    
+    <!-- Back Button -->
+    <Button fx:id="btnBack" layoutX="10" layoutY="10" onAction="#getBackBtn" style="-fx-text-fill: #f6c177; -fx-font-size: 48px; -fx-background-color: transparent;" text="←" />
+    
+    <!-- Headline with Icon -->
+    <HBox layoutX="120" layoutY="50" spacing="10" />
+    
+    <!-- Buttons -->
+    <VBox alignment="CENTER" layoutX="55.0" layoutY="191.0" spacing="20" />
+    
+    <!-- Headline -->
+    <Label layoutX="342.0" layoutY="46.0" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Reports" />
+    <Label layoutX="310.0" layoutY="48.0" style="-fx-font-size: 20px; -fx-text-fill: white;" text="📊" />
+    
+    <!-- Chart Container for Status Report -->
+	<VBox fx:id="statusChartContainer" layoutX="120.0" layoutY="200.0" prefHeight="250.0" prefWidth="600.0" spacing="20" visible="false">
+	    <!-- Bar Chart for Status Report -->
+	    <BarChart fx:id="statusChart" prefHeight="250.0" prefWidth="578.0">
+	        <xAxis>
+	            <CategoryAxis fx:id="xAxis" label="Status" />
+	        </xAxis>
+	        <yAxis>
+	            <NumberAxis fx:id="yAxis" label="Count" />
+	        </yAxis>
+	    </BarChart>
+	</VBox>
+
+	<!-- Chart Container for Borrow Report -->
+	<VBox fx:id="borrowChartContainer" layoutX="120.0" layoutY="510.0" prefHeight="300.0" prefWidth="600.0" spacing="20" />
+
+    <!-- Buttons for Reports -->
+    <Button fx:id="btnMonthlyBorrowTimes" layoutX="89.0" layoutY="113.0" onAction="#handleMonthlyBorrowTimesReport" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Monthly Borrow Times Report" />
+    <Button fx:id="btnMonthlyStatus" layoutX="473.0" layoutY="113.0" onAction="#handleMonthlyStatusReport" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Monthly Status Report" />
+</AnchorPane>
