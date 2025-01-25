@@ -80,7 +80,6 @@ public class CheckAvailabilityWindowController extends BaseController {
      * @param event The action event triggered by the user.
      */
     private void openOrderWindow(ActionEvent event) {
-		SubscriberUI.mainController.switchView("/gui/OrderWindow.fxml");
 
         String bookName = getbookName(); // Retrieve the book name entered by the user
         OrderWindowController.setTempBookName(bookName);
