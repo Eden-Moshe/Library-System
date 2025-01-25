@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookReturnWindowController" 
+      prefHeight="600.0" prefWidth="500.0" spacing="20" alignment="CENTER" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;">
+	
+   <!-- LOGO IMAGE -->
+   <ImageView fx:id="logo" fitWidth="200" preserveRatio="true" style="-fx-background-color: lightgray;">
+       <Image url="@/gui/images/BLIB.png"/>
+   </ImageView>
+	
+   <!-- Title Text -->
+   <Text text="Book Return" fill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+	
+   <!-- Borrower ID Field -->
+   <Label text="Borrower ID:" textFill="white" style="-fx-font-size: 14px;" />
+   <TextField fx:id="txtBorrowerId" prefWidth="300.0" promptText="Enter Borrower ID" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
+              onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+
+   <!-- Borrow Number Field -->
+   <Label text="Borrow Number:" textFill="white" style="-fx-font-size: 14px;" />
+   <TextField fx:id="txtBorrowNumber" prefWidth="300.0" promptText="Enter Borrow Number" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
+              onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+
+   <!-- Book Barcode Field -->
+   <Label text="Book Barcode:" textFill="white" style="-fx-font-size: 14px;" />
+   <TextField fx:id="txtbookBarcode" prefWidth="300.0" promptText="Enter Book Barcode" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
+              onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+
+   <!-- Response Field -->
+   <TextField fx:id="txtResponse" prefWidth="300.0" promptText="Response" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
+              onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+
+   <!-- Buttons Section -->
+   <HBox spacing="20" alignment="CENTER" style="-fx-padding-top: 20;">
+      <!-- Back Button -->
+      <Button fx:id="btnBack" onAction="#getBackBtn" text="Back" 
+              style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-width: 150px; -fx-min-width: 150px; -fx-max-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 10 20;"
+              onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton"/>
+
+      <!-- Reset Button -->
+      <Button fx:id="btnreset" onAction="#resetFields" text="Reset" 
+              style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-width: 150px; -fx-min-width: 150px; -fx-max-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 10 20;"
+              onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton"/>
+
+      <!-- Return Book Button -->
+      <Button fx:id="btnBookReturn" onAction="#btnBookReturn" text="Return Book" 
+              style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-width: 150px; -fx-min-width: 150px; -fx-max-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 10 20;"
+              onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton"/>
+   </HBox>
+</VBox>
