@@ -105,8 +105,14 @@ public  class MainMenuController extends BaseController  {
 	}
 
 	public void btnReturnBook(ActionEvent event) throws Exception {
-		
-		
+	    // load the new screen
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookReturn.fxml"));
+	    Parent root = loader.load();
+	    Stage stage = new Stage();
+	    stage.setTitle("Return Book Page");
+	    stage.setScene(new Scene(root));
+	    stage.show();
+	    ((Node) event.getSource()).getScene().getWindow().hide();
 	}
 	
 	public void btnExtendBorrow(ActionEvent event) throws Exception {
