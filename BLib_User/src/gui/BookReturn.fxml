@@ -13,6 +13,7 @@
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookReturnWindowController" 
       prefHeight="600.0" prefWidth="500.0" spacing="20" alignment="CENTER" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;">
 	
+    
    <!-- LOGO IMAGE -->
    <ImageView fx:id="logo" fitWidth="200" preserveRatio="true" style="-fx-background-color: lightgray;">
        <Image url="@/gui/images/BLIB.png"/>

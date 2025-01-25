@@ -50,6 +50,9 @@ public  class MainMenuController extends BaseController  {
 	public void btnCreateSubscriber(ActionEvent event) throws Exception {
 
 		FXMLLoader loader = new FXMLLoader();
+		
+		UserManager UM = UserManager.getInstance();
+		
 
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -108,6 +111,7 @@ public  class MainMenuController extends BaseController  {
 	public void btnReturnBook(ActionEvent event) throws Exception {
 	    // load the new screen
 	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookReturn.fxml"));
+	    
 	    Parent root = loader.load();
 	    Stage stage = new Stage();
 	    stage.setTitle("Return Book Page");

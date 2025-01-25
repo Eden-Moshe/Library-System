@@ -20,8 +20,8 @@ import gui.ConnectionEntryController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 import static common.GenericMessage.Action.*;
-
-
+import controllers.BookReturnController;
+import common.BookReturnMessage;
 //BLib server-side
 public class server extends AbstractServer{
 	
@@ -42,7 +42,6 @@ public class server extends AbstractServer{
 		
 		//variable to hold subscribers IDs to their connection
 		//to prevent unauthorized access to other subscribers
-		//librarians don't need this.
 		private HashMap<ConnectionToClient, String> clientToUserMap = new HashMap<>();
 		private HashMap<ConnectionToClient, String> librarianClientMap = new HashMap<>();
 
@@ -181,7 +180,7 @@ public class server extends AbstractServer{
 		OrderMessage orderMessage;
 		BookReturnMessage bokRet;
 		try {
-		
+		BookReturnMessage bokRet;
 			if (msg instanceof GenericMessage)
 			{
 				genericMsg =  (GenericMessage)msg;
@@ -284,54 +283,54 @@ public class server extends AbstractServer{
 
 			if (msg instanceof BookReturnMessage) 
 			{
-				bokRet=((BookReturnMessage)msg);
-			    //fetch subscriber and check if its even in table send message accordingly  
-			    Subscriber sub = subscriberController.fetchSubscriber(bokRet.borrowerId);
-		        if (sub == null) {
-		            bokRet.allOfCon=false;
-		            client.sendToClient("No subscriber found with that ID.");
-		            return; // Stop further processing
-		        }
-			    //fetch book and check if its even in table send message accordingly 
-		        Book bo = bookController.fetchBook(bokRet.bookBarcode);
-		        if (bo == null) {
-		        	bokRet.allOfCon=false;
-		            client.sendToClient("No book found with that barcode.");
-		            return; // Stop further processing
-		        }
-		        //check borrow number belongs to actual borrow
-		        ResultSet rs = db.retrieveRow("borrow", "borrow_number", bokRet.borrowNum);
-		        try {
-		        	if (rs.next())
-		        		{
-		        		//rs.getString(1)== borrow number   rs.getString(2)==bookbarcode  rs.getString(4)==borrowerid
+				    bokRet=((BookReturnMessage)msg);
+				    //fetch subscriber and check if its even in table send message accordingly  
+				    Subscriber sub = subscriberController.fetchSubscriber(bokRet.borrowerId);
+		                    if (sub == null) {
+		           		 bokRet.allOfCon=false;
+		          		 client.sendToClient("No subscriber found with that ID.");
+		          	         return; // Stop further processing
+		      				     }
+				    //fetch book and check if its even in table send message accordingly 
+		                    Book bo = bookController.fetchBook(bokRet.bookBarcode);
+		                    if (bo == null) {
+		                         	bokRet.allOfCon=false;
+		                                client.sendToClient("No book found with that barcode.");
+		                                return; // Stop further processing
+		                                    }
+		                    //check borrow number belongs to actual borrow
+		                    ResultSet rs = db.retrieveRow("borrow", "borrow_number", bokRet.borrowNum);
+		                    try {
+		        	   	 if (rs.next())
+		        			{
+		        			//rs.getString(1)== borrow number   rs.getString(2)==bookbarcode  rs.getString(4)==borrowerid
 		        			if(!(bokRet.borrowNum.equalsIgnoreCase(rs.getString(1)) && bokRet.borrowerId.equalsIgnoreCase(rs.getString(4)) &&
 		        					bokRet.bookBarcode.equalsIgnoreCase(rs.getString(2)) )) {
 		        				if(!(bokRet.borrowNum.equalsIgnoreCase(rs.getString(1)))) {
-			    		            bokRet.allOfCon=false;
-			    		            client.sendToClient("This is not the right borrow num");
-			    		            return; // Stop further processing		
-		        				}
+			    		           		 bokRet.allOfCon=false;
+			    		           		 client.sendToClient("This is not the right borrow num");
+			    		          		 return; // Stop further processing		
+		        			          }
 		        				if(!(bokRet.borrowerId.equalsIgnoreCase(rs.getString(4)))) {
-			    		            bokRet.allOfCon=false;
-			    		            client.sendToClient("This is not the right borrower ID");
-			    		            return; // Stop further processing		
+			    		                         bokRet.allOfCon=false;
+			    		                         client.sendToClient("This is not the right borrower ID");
+			    		                         return; // Stop further processing		
 		        				}
 		        				if(!(bokRet.bookBarcode.equalsIgnoreCase(rs.getString(2)))) {
-			    		            bokRet.allOfCon=false;
-			    		            client.sendToClient("This is not the right book barcode");
-			    		            return; // Stop further processing		
+			    		                         bokRet.allOfCon=false;
+			    		                         client.sendToClient("This is not the right book barcode");
+			    		                         return; // Stop further processing		
 		        				}	 
 		        			}
 		        			bokRet.allOfCon=true;
 		        			client.sendToClient(bokRetCont.createNewBookReturn(bokRet.borrowerId,bokRet.bookBarcode,bokRet.borrowNum));
-		            	}
-		        	else {
-		        		client.sendToClient("No borrow found with that borrow number.");
-		        		bokRet.allOfCon=false;
-		        		 }
-		            } 
-		        catch (SQLException e) {
+		            	       	      }
+		        	  	  else {
+		        			 client.sendToClient("No borrow found with that borrow number.");
+		        			 bokRet.allOfCon=false;
+		        		       }
+		                    }      
+		                    catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 									   }				
