@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import client.MyInbox;
+import client.SubscriberUI;
 import client.UserManager;
 import common.Book;
 import common.Borrow;
@@ -43,7 +44,7 @@ import javafx.scene.control.TextField;
  * It includes functionality for returning a book, resetting fields, and navigating back to the main menu.
  * </p>
  */
-public class BookReturnWindowController {
+public class BookReturnWindowController extends BaseController {
     
     /**
      * Button that navigates the user back to the previous screen (likely the main menu).
@@ -239,39 +240,56 @@ public class BookReturnWindowController {
 	    	if(response.equalsIgnoreCase("The book was returned."))fetchMsg.allOfCon=true;
 	    	else {return;}
 	    }
-	    // Load the new page to display return results
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReturnBookOption.fxml"));
-        Parent root = loader.load();
-        // Display the new page with return results
-        Stage primaryStage = new Stage();
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("book return completed");
-        primaryStage.show();
-        // Hide the current window
-        ((Node) event.getSource()).getScene().getWindow().hide();
+	    
+	    
+	   //SubscriberUI.mainController.switchView("/gui/ReturnBookOption.fxml");
+	    
+	    
+//	    // Load the new page to display return results
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReturnBookOption.fxml"));
+//        Parent root = loader.load();
+//        // Display the new page with return results
+//        Stage primaryStage = new Stage();
+//        primaryStage.setScene(new Scene(root));
+//        primaryStage.setTitle("book return completed");
+//        primaryStage.show();
+//        // Hide the current window
+//        ((Node) event.getSource()).getScene().getWindow().hide();
 	}
 	
     /**
      * This method is called when the 'Back' button is clicked.
      * It navigates the user back to the main menu or previous screen.
      */
+	
+	
+	@Override
+    public void barcodeScan(String barcode){
+		txtbookBarcode.setText(barcode);
+    	
+    }
 	public void getBackBtn(ActionEvent event) throws Exception {
-	        try {
-	            // Close the current window
-	            ((Node) event.getSource()).getScene().getWindow().hide();
-	            // Load the previous screen (Main Menu)
-	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
-	            Pane root = loader.load();
-	            // Set up the new stage
-	            Stage stage = new Stage();
-	            Scene scene = new Scene(root);
-	            stage.setTitle("Main Menu");
-	            stage.setScene(scene);
-	            stage.show();
-	            } 
-	        catch (IOException e) {
-	            e.printStackTrace();
-	            System.out.println("Failed to load MainMenu.fxml.");
-	                              }
+		
+		SubscriberUI.mainController.goBack();
+		
+		
 	}
+//	        try {
+//	            // Close the current window
+//	            ((Node) event.getSource()).getScene().getWindow().hide();
+//	            // Load the previous screen (Main Menu)
+//	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
+//	            Pane root = loader.load();
+//	            // Set up the new stage
+//	            Stage stage = new Stage();
+//	            Scene scene = new Scene(root);
+//	            stage.setTitle("Main Menu");
+//	            stage.setScene(scene);
+//	            stage.show();
+//	            } 
+//	        catch (IOException e) {
+//	            e.printStackTrace();
+//	            System.out.println("Failed to load MainMenu.fxml.");
+//	                              }
+//	}
 }

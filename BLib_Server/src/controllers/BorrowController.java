@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,9 +96,12 @@ public class BorrowController {
 	        //editing book's availability status in book table
 	        db.editRow("book","barcode",b.getBookBarcode(),"book_available","false");
 	        
+	        
+	      
+	        
 	        //changing books' availability in class instance
 	        b.setBookAvailable(false);
-	        return "Borrow request sent successfully."; 
+	        return "Borrow request sent successfully.";
 	    } else {
 	        return "Account status is frozen. Cannot create borrow.";
 	    }

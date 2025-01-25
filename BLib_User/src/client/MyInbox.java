@@ -19,9 +19,7 @@ public class MyInbox {
 	//one time use
 	public Object getObj()
 	{
-		Object temp=objMsg;
-		objMsg=null;
-		return temp;
+		return objMsg;
 	}
 	public String getMessage()
 	{

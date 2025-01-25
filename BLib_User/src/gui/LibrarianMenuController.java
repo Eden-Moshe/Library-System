@@ -111,6 +111,10 @@ public  class LibrarianMenuController extends BaseController  {
 
 	public void btnReturnBook(ActionEvent event) throws Exception {
 		
+		SubscriberUI.mainController.switchView("/gui/BookReturn.fxml");
+		
+
+		
 		
 	}
 	

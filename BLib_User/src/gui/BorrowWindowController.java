@@ -67,6 +67,11 @@ public class BorrowWindowController extends BaseController{
         return txtBookBarcode.getText();
     }
 
+    @Override
+    public void barcodeScan(String barcode){
+    	txtBookBarcode.setText(barcode);
+    	
+    }
     
     // Get borrow date from DatePicker
     private Date getBorrowDate() {

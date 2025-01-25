@@ -23,6 +23,7 @@ public class MainController extends Application {
     @FXML
     private StackPane root;
 
+    public BaseController controller;
     
     private Deque<String> windowHistory = new ArrayDeque<>();
     
@@ -43,7 +44,7 @@ public class MainController extends Application {
           
      
            
-           Scene scene = new Scene(root, 1440, 1024);
+           Scene scene = new Scene(root, 1400, 1024);
            // Load the CSS file
 //           String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
 //           scene.getStylesheets().add(cssFile);
@@ -66,7 +67,7 @@ public class MainController extends Application {
            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
            Pane view = loader.load();
            
-           BaseController controller = null;
+           controller = null;
            try {
         	   controller = loader.getController();
            }catch (Exception e)

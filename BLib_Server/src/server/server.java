@@ -180,7 +180,6 @@ public class server extends AbstractServer{
 		OrderMessage orderMessage;
 		BookReturnMessage bokRet;
 		try {
-		BookReturnMessage bokRet;
 			if (msg instanceof GenericMessage)
 			{
 				genericMsg =  (GenericMessage)msg;

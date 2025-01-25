@@ -18,6 +18,11 @@ public class BaseController {
 //    }
 	
 	
+	public void barcodeScan(String barcode)
+	{
+		//implement in each inherited class getText
+	}
+	
 	//good function for every controller class to have. 
 //	protected void showAlert(String title, String content) {
 //        Alert alert = new Alert(AlertType.INFORMATION);

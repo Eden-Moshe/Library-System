@@ -74,6 +74,12 @@ public class ExtendRequestWindowController extends BaseController{
         this.txtResponse.setText(msg);
     }
     
+    @Override
+    public void barcodeScan(String barcode){
+    	txtBookBarcode.setText(barcode);
+    	
+    }
+    
 	//resets all fields when pressing 'reset'
     @FXML
     private void resetFields(ActionEvent event) {
