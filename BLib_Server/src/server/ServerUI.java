@@ -11,7 +11,6 @@ public class ServerUI extends Application {
 	public static ConnectionEntryController conEntry;
 	
 	
-	//public static Vector<Student> students=new Vector<Student>();
 	
 	
 	public static void main( String args[] ) throws Exception
@@ -23,8 +22,12 @@ public class ServerUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 	
-		ServerPortFrameController sPort = new ServerPortFrameController(); 
-		sPort.start(primaryStage);
+		//ServerPortFrameController sPort = new ServerPortFrameController(); 
+		//sPort.start(primaryStage);
+		
+		conEntry = new ConnectionEntryController();
+		conEntry.start(primaryStage);
+		
 	}
 	
 	public static void runServer(String p)

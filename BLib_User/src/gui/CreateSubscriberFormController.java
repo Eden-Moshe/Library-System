@@ -65,8 +65,8 @@ public class CreateSubscriberFormController extends BaseController implements In
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		saveClicked=false;
-		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-		SubscriberUI.primaryStage.show();
+		
+		SubscriberUI.mainController.goBack();
 	}
 	
 	public void start(Stage primaryStage) throws Exception {	

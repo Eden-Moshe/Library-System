@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,8 @@ import static common.GenericMessage.Action.*;
 public class server extends AbstractServer{
 	
 		public static DBController db;
-		private ConnectionEntryController conEntry;
+		//private ConnectionEntryController conEntry;
+		public static ConnectionEntryController conEntry;
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
@@ -37,7 +39,12 @@ public class server extends AbstractServer{
 	
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
-
+		
+		//variable to hold subscribers IDs to their connection
+		//to prevent unauthorized access to other subscribers
+		//librarians don't need this.
+		private HashMap<ConnectionToClient, String> clientToUserMap = new HashMap<>();
+		private HashMap<ConnectionToClient, String> librarianClientMap = new HashMap<>();
 
 	  /**
 	   * The default port to listen on.
@@ -60,9 +67,15 @@ public class server extends AbstractServer{
   		requestController = RequestController.getInstance();
   		searchController = SearchController.getInstance();
   		librarianController = LibrarianController.getInstance();
-		orderController=OrderController.getInstance();
+		orderController = OrderController.getInstance();
 		bokRetCont = BookReturnController.getInstance();
 	  }
+	  
+	  
+//	  public void setUIController(ConnectionEntryController connectionController)
+//	  {
+//		  conEntry = connectionController;
+//	  }
 
 	  
 	  
@@ -118,7 +131,13 @@ public class server extends AbstractServer{
 					ResultSet ret = db.retrieveRow("librarian", "librarian_id", id);
 					if (ret.next())
 					{
+						String ip = client.getInetAddress().getHostAddress();
+						
 						Librarian newLibrarian = new Librarian(ret.getString("librarian_name"));
+						
+						librarianClientMap.put(client, id);
+						conEntry.addClient(id, ip);
+						
 						newLibrarian.setLibrarian_id(id);
 						return newLibrarian;
 
@@ -126,8 +145,9 @@ public class server extends AbstractServer{
 					
 				}
 				else {
-					
+					conEntry.addClient(id, client.getInetAddress().getHostAddress());
 					connectedSubscribers.add(client);
+	                clientToUserMap.put(client, id); // Map client to user ID
 					return subscriberController.fetchSubscriber(id);
 				}
 			}
@@ -165,6 +185,15 @@ public class server extends AbstractServer{
 			if (msg instanceof GenericMessage)
 			{
 				genericMsg =  (GenericMessage)msg;
+				//authenticating subscriber;
+				if (connectedSubscribers.contains(client))
+				{
+					//if client fails authentication
+					if (!genericMsg.userID.equals(clientToUserMap.get(client))) {
+						client.sendToClient("user ID has been tampered with. ID does not match client");
+						return;
+					}
+				}
 				
 				if (genericMsg.action == get_Borrow_History)
 				{
@@ -181,11 +210,9 @@ public class server extends AbstractServer{
 					ArrayList<InboxMessage> im = null;
 					try {
 						  im = librarianController.retrieveMessages(id);
-						  System.out.println("Fuck");
 						  client.sendToClient(im);
 						} catch (Exception e) {
 						  e.printStackTrace(); // This will show you if there's an exception
-						  System.out.println("Fuck2");
 							client.sendToClient(im);
 						}
 					
@@ -437,43 +464,6 @@ public class server extends AbstractServer{
 		
 		
 		
-		
-		
-//	  	if(msg instanceof ArrayList) {
-//	  		System.out.println("the server received the data successfully!");
-//	  		try {
-//	  			//passing off the relevant classes to handle requests
-//	  			if (((ArrayList<String>) msg).get(0).contains("subscriber"))
-//	  			{
-//	  				if (((ArrayList<String>) msg).get(0).contains("info"))
-//	  				{	
-//	  					client.sendToClient(db.inputOutput("output", (ArrayList<String>) msg));
-//	  				}
-//	  				if (((ArrayList<String>) msg).get(0).contains("edit"))
-//	  				{	
-//	  					client.sendToClient(db.inputOutput("input", (ArrayList<String>) msg));
-//	  				}
-//	  				
-//	  			}
-//	  			
-//	  			else
-//	  				client.sendToClient(db.inputOutput("input",(ArrayList<String>) msg));
-//	  				
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//	  		
-//	  	}
-//	  	else
-//  			System.out.println("poorly formatted message, message discarded");
-//	  	
-//	  	if (msg instanceof String)
-//	  		System.out.println("user " + client.toString() + " says: " + msg.toString());
-
-	    //System.out.println("Message received: " + msg + " from " + client);
-//	  }
-	
 	
 	
 
@@ -486,11 +476,7 @@ public class server extends AbstractServer{
 		  System.out.println("CLIENT CONNECTED: " + client.toString());
 		  
 		  
-		  try {
-			ServerUI.conEntry.loadConnection(client.getInetAddress().toString(), "TEMP", "connected");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 		}
 		  
 		  
@@ -517,20 +503,28 @@ public class server extends AbstractServer{
 //			primaryStage.show();
 //			System.out.println("SDGFFDSAF: " + client.toString() + "NET: " + client.getInetAddress().toString());
 
-	  }
+//	  }
 
 	  /**
 	   * removes client from the UI
 	   *
 	   * @param client the connection with the client.
 	   */
-	  synchronized protected void clientDisconnected(
-	    ConnectionToClient client) {
+	   protected synchronized void clientDisconnected(ConnectionToClient client) {
 		  
+			System.out.println("client disconnected");
+
+		  
+		  if (connectedLibrarians.contains(client))
+			  conEntry.removeClient(librarianClientMap.get(client));
+		  else
+			  conEntry.removeClient(clientToUserMap.get(client));
 		  connectedSubscribers.remove(client);
 		  connectedLibrarians.remove(client);
 		  
-		  conEntry.removeConnection();
+		  clientToUserMap.remove(client);
+		  
+		  
 
 	  }
 	

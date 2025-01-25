@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import client.UserManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -38,13 +39,20 @@ public class MainController extends Application {
            root.getChildren().add(homeView);
 
            windowHistory.push("/gui/LoginWindow.fxml");
-
+           
+          
      
            
            Scene scene = new Scene(root, 1440, 1024);
            // Load the CSS file
 //           String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
 //           scene.getStylesheets().add(cssFile);
+           
+           // Close the application completely when the window is closed
+           primaryStage.setOnCloseRequest(event -> {
+        	   UserManager.getInstance().quit();
+               System.exit(0);  // Ensures JVM exits if needed
+           });
            primaryStage.setScene(scene);
            primaryStage.setTitle("BLib Library System");
            primaryStage.show();
@@ -67,9 +75,7 @@ public class MainController extends Application {
         	   //e.printStackTrace();
            }
            if (controller != null) {
-           	System.out.println("controller is not null");
            	controller.onLoad();
-           	controller.setMainApp(this);
            }
            return view;
        }

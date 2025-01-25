@@ -20,6 +20,6 @@
       <TextField id="lblID" fx:id="idtxt" layoutX="637.0" layoutY="571.0" prefHeight="38.0" prefWidth="225.0" />
       <Label layoutX="642.0" layoutY="537.0" text="User ID" />
       <Label layoutX="642.0" layoutY="636.0" text="Password" />
-      <Button id="btnLogin" fx:id="btnLogin1" layoutX="641.0" layoutY="918.0" mnemonicParsing="false" onAction="#btnLogin" prefHeight="51.0" prefWidth="225.0" text="Search without login" />
+      <Button id="btnLogin" fx:id="btnSearchNoLogin" layoutX="641.0" layoutY="918.0" mnemonicParsing="false" onAction="#searchNoLogin" prefHeight="51.0" prefWidth="225.0" text="Search without login" />
    </children>
 </AnchorPane>

@@ -28,6 +28,7 @@
         <VBox alignment="CENTER" layoutX="101.0" layoutY="96.0" spacing="20.0">
             <children>
                 <Button fx:id="btnUserInfo" onAction="#btnUserInfo" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="View User Info" />
+            <Button fx:id="btnCreateSubscriber" onAction="#createSubscriber" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Create New Subscriber" />
 
                 <Button fx:id="btnLendBook" onAction="#btnLendBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Lend Book" />
 

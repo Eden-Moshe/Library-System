@@ -32,6 +32,7 @@ public  class MainMenuController extends BaseController  {
 
 	public void goBack(ActionEvent event)
 	{
+		UM.logOut();
 		SubscriberUI.mainController.goBack();
 
 		

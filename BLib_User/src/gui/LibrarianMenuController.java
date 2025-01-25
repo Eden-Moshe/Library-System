@@ -148,6 +148,16 @@ public  class LibrarianMenuController extends BaseController  {
 
 	}
 	
+	public void createSubscriber(ActionEvent event) {
+
+		
+		
+		SubscriberUI.mainController.switchView("/gui/CreateSubscriberForm.fxml");
+
+		
+
+	}
+	
 	public void ViewMessageInbox(ActionEvent event) throws Exception {
 		
 		

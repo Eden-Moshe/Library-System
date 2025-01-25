@@ -70,21 +70,24 @@ public class CheckAvailabilityWindowController extends BaseController {
     }
 	
 	private void openOrderWindow(ActionEvent event) {
-	    try {
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/OrderWindow.fxml"));
-	        Parent root = loader.load();
-	        OrderWindowController controller = loader.getController();
-	        controller.setBookName(getbookName()); // Crucial line: Set the book name
-	        Stage stage = new Stage();
-	        stage.setScene(new Scene(root));
-	        stage.setTitle("Place Order");
-	        stage.show();
+		SubscriberUI.mainController.switchView("/gui/OrderWindow.fxml");
 
-	        ((Node) event.getSource()).getScene().getWindow().hide();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        showAlert("Error", "Could not open order window");
-	    }
+//		
+//	    try {
+//	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/OrderWindow.fxml"));
+//	        Parent root = loader.load();
+//	        OrderWindowController controller = loader.getController();
+//	        controller.setBookName(getbookName()); // Crucial line: Set the book name
+//	        Stage stage = new Stage();
+//	        stage.setScene(new Scene(root));
+//	        stage.setTitle("Place Order");
+//	        stage.show();
+//
+//	        ((Node) event.getSource()).getScene().getWindow().hide();
+//	    } catch (IOException e) {
+//	        e.printStackTrace();
+//	        showAlert("Error", "Could not open order window");
+//	    }
 	}
 	
 	public void getBackBtn(ActionEvent event) throws Exception {
@@ -93,24 +96,7 @@ public class CheckAvailabilityWindowController extends BaseController {
 		SubscriberUI.mainController.goBack();
 		
 		
-//        try {
-//            // Close the current window
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//
-//            // Load the previous screen (Main Menu)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
-//            Pane root = loader.load();
-//
-//            // Set up the new stage
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(root);
-//            stage.setTitle("Main Menu");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("Failed to load MainMenu.fxml.");
-//       }
+
     }
 	
 	//alert massage to present to user. 

@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<Pane prefHeight="200.0" prefWidth="307.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ConnectionEntryController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="492.0" prefWidth="725.0" style="-fx-background-color: #355457;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ConnectionEntryController">
    <children>
-      <Button fx:id="btnExit" layoutX="136.0" layoutY="143.0" mnemonicParsing="false" onAction="#getExitBtn" text="Exit" />
-     
-      
-      <Label fx:id="lblCIP" layoutX="30.0" layoutY="28.0" prefHeight="17.0" prefWidth="169.0" text="ip" />
-	<Label fx:id="lblConnectionStatus" layoutX="30.0" layoutY="66.0" prefHeight="17.0" prefWidth="189.0" text="hostname" />
-	<Label fx:id="hostLabel" layoutX="30.0" layoutY="108.0" prefHeight="17.0" prefWidth="169.0" text="Status" />
-      
+      <Label layoutX="314.0" layoutY="34.0" prefHeight="30.0" prefWidth="98.0" style="-fx-text-fill: #ffffff;" text="connected clients" />
+      <TableView fx:id="tableView" layoutX="72.0" layoutY="75.0" prefHeight="342.0" prefWidth="583.0" style="-fx-background-color: #d9a762;">
+        <columns>
+          <TableColumn fx:id="userColumn" prefWidth="130.0" text="user" />
+          <TableColumn fx:id="ipColumn" prefWidth="146.0" text="IP" />
+            <TableColumn fx:id="timeColumn" prefWidth="306.0" text="time connected" />
+        </columns>
+      </TableView>
    </children>
-</Pane>
+</AnchorPane>

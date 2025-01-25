@@ -68,6 +68,7 @@ public class SubscriberFormController extends BaseController {
 		this.txtUserName.setText(s.getName());		
 		this.txtPhoneNumber.setText(s.getPNumber()); 
 		this.txtUserID.setText(s.getSID());
+		this.txtStatus.setText(s.getStatus());
 		
 		
 	}

@@ -41,17 +41,15 @@ public  class LoginController extends BaseController   {
 	public void btnLogin(ActionEvent event) throws Exception {
 
 		//clearing previous user if any
-		UM.logOut();
+		//UM.logOut();
 		
 		
 		UM.login();
 		
-		FXMLLoader loader = new FXMLLoader();
 		
 		String id=getID();
 		String pass=getPass();
 		
-		UserManager UM = UserManager.getInstance();
 		
 		LoginMessage lm = new LoginMessage();
 		lm.id=id;
@@ -65,17 +63,11 @@ public  class LoginController extends BaseController   {
 		if (UM.inb.getMessage().contains("null"))
 			return;
 		
-		System.out.println("pre sub instance");
 		//login and show subscriber menu
 		Object fromServer = UM.inb.getObj();
 		if (fromServer instanceof Subscriber)
 		{
-			System.out.println("sub instance");
 			UM.s1=(Subscriber) fromServer;
-			//UM.setSub((Subscriber)UM.inb.getObj());
-			//System.out.println("sub is" + UM.s1);
-			System.out.println("sub is" + UM.s1);
-			
 			
 	        SubscriberUI.mainController.switchView("/gui/SubscriberMainMenu.fxml");
 			
@@ -103,6 +95,12 @@ public  class LoginController extends BaseController   {
 	}
 
 	
+	public void searchNoLogin(ActionEvent event) 
+	{
+		UM.login();
+		SubscriberUI.mainController.switchView("/gui/SearchBook.fxml");
+		
+	}
 	
 	public void start(Stage primaryStage) throws Exception {	
 

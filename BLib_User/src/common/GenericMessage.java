@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class GenericMessage implements Serializable{
 
+	public String userID;
+	
 	public Action action;
 	
 	public enum Action{

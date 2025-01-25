@@ -71,7 +71,7 @@ public class ServerPortFrameController  {
 		
 			ServerUI.conEntry = loader.getController();		
 			//conEntry.loadConnection(CIP,CCON,CSTATUS);
-			ServerUI.conEntry.loadConnection("","","");
+			//ServerUI.conEntry.loadConnection("","","");
 			Scene scene = new Scene(root);			
 			primaryStage.setTitle("Client Managment Window");
 
@@ -99,11 +99,11 @@ public class ServerPortFrameController  {
 		
 		ServerUI.runServer("5555");
 		
-		Pane root = loader.load(getClass().getResource("Connection.fxml").openStream());
+		Pane root = loader.load(getClass().getResource("/gui/Connection.fxml").openStream());
 		
 		ServerUI.conEntry = loader.getController();		
 		//conEntry.loadConnection(CIP,CCON,CSTATUS);
-		ServerUI.conEntry.loadConnection("","","");
+		//ServerUI.conEntry.loadConnection("","","");
 		Scene scene = new Scene(root);			
 		primaryStage.setTitle("Client Managment Window");
 

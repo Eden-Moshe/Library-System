@@ -59,6 +59,9 @@ public final class UserManager extends AbstractClient
   {
     super(host, port); //Call the superclass constructor
 	udata = new BLibData();
+	openConnection();
+	inb=new MyInbox();
+
   }
   public void logOut()
   {
@@ -173,6 +176,17 @@ public final class UserManager extends AbstractClient
 //original send
   public void send(Object message)  
   {
+	  //adding user ID to the message for authentication on the server
+	  if (message instanceof GenericMessage)
+	  {
+		  GenericMessage temp = (GenericMessage) message;
+		  if (s1!=null)
+			  temp.userID=s1.getSID();
+		  else if (librarian!=null)
+			  temp.userID=librarian.getLibrarian_id();
+			  
+		  message = temp;
+	  }
     try
     {
     	//openConnection();//in order to send more than one message
