@@ -5,38 +5,13 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import client.MyInbox;
 import client.SubscriberUI;
 import client.UserManager;
-import common.Book;
-import common.Borrow;
-import common.BorrowMessage;
 import common.DestroyedMessage;
 import common.BookReturnMessage;
-import common.Subscriber;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 
 /**
  * Controller class for managing the Book Return window.
