@@ -73,7 +73,6 @@ public class server extends AbstractServer{
   		librarianController = LibrarianController.getInstance();
 		orderController = OrderController.getInstance();
 		bokRetCont = BookReturnController.getInstance();
-		
 		reportController = ReportController.getInstance();
 		
 	  }
@@ -237,6 +236,7 @@ public class server extends AbstractServer{
 		OrderMessage orderMessage;
 		BookReturnMessage bokRet;
 		ReportMessage reportMsg;
+		DestroyedMessage destMsg;
 		
 		try {
 			if (msg instanceof GenericMessage)
@@ -393,6 +393,19 @@ public class server extends AbstractServer{
 					e.printStackTrace();
 									   }				
 			}
+			
+			if (msg instanceof DestroyedMessage) {
+				destMsg = (DestroyedMessage) msg;
+				//fetch destroyed books from database
+				if (destMsg.fetch) {
+					client.sendToClient(bokRetCont.fetchDest());
+				}
+				String id = destMsg.id;
+				String barcode = destMsg.barcode;
+				client.sendToClient(bokRetCont.destroyBook(id,barcode));
+				
+			}
+			
 
 			
 			if (msg instanceof BorrowMessage) 

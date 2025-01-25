@@ -2,7 +2,6 @@ package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -18,8 +17,16 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.util.Duration;
 
-
+/**
+ * MainController class responsible for handling the main application window,
+ * view transitions, and the view history stack.
+ * 
+ * This controller handles the loading of views, applying smooth animations for
+ * transitioning between them, and managing the navigation history to allow users
+ * to go back to the previous views.
+ */
 public class MainController extends Application {
+
     @FXML
     private StackPane root;
 
@@ -27,137 +34,138 @@ public class MainController extends Application {
     
     private Deque<String> windowHistory = new ArrayDeque<>();
     
-    
-   	@Override
-       public void start(Stage primaryStage) throws Exception {
-   		
-   		
-   		root = new StackPane();
-   		root.setStyle("-fx-background-color: #355457;");
+    /**
+     * Initializes the main window, loads the initial view, and sets up the application.
+     * 
+     * This method is called when the application starts. It sets up the primary stage,
+     * loads the initial login view, and applies the necessary window settings.
+     * 
+     * @param primaryStage The primary stage (window) of the application.
+     * @throws Exception If an error occurs during the initialization.
+     */
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
-           // Load initial view
-           Pane homeView = loadView("/gui/LoginWindow.fxml");
-           root.getChildren().add(homeView);
+        root = new StackPane();
+        root.setStyle("-fx-background-color: #355457;");
 
-           windowHistory.push("/gui/LoginWindow.fxml");
-           
-          
-     
-           
-           Scene scene = new Scene(root, 1400, 1024);
-           // Load the CSS file
-//           String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
-//           scene.getStylesheets().add(cssFile);
-           
-           // Close the application completely when the window is closed
-           primaryStage.setOnCloseRequest(event -> {
-        	   UserManager.getInstance().quit();
-               System.exit(0);  // Ensures JVM exits if needed
-           });
-           primaryStage.setScene(scene);
-           primaryStage.setTitle("BLib Library System");
-           primaryStage.show();
-   		
-   		
-   		
-   	
-       }
-   	  // Method to load a view
-       private Pane loadView(String fxml) throws Exception {
-           FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-           Pane view = loader.load();
-           
-           controller = null;
-           try {
-        	   controller = loader.getController();
-           }catch (Exception e)
-           {
-        	   System.out.println("!!!!!!!!!!!!!!class is not baseController!!!!!!!!!!!!!!!!!!");
-        	   //e.printStackTrace();
-           }
-           if (controller != null) {
-           	controller.onLoad();
-           }
-           return view;
-       }
+        // Load initial view
+        Pane homeView = loadView("/gui/LoginWindow.fxml");
+        root.getChildren().add(homeView);
 
-       // Method to switch views
-       public void switchView(String fxml) {
-           windowHistory.push(fxml);
-           System.out.println("switchView : " + fxml);
+        windowHistory.push("/gui/LoginWindow.fxml");
 
-           try {
-//               Pane view = loadView(fxml);
-//               root.getChildren().setAll(view); // Replace the current view
-        	   
-        	    Pane newView = loadView(fxml);
+        Scene scene = new Scene(root, 1400, 1024);
+        
+        // Uncomment to load a CSS file
+        // String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
+        // scene.getStylesheets().add(cssFile);
 
-                // Set initial position and opacity
-                newView.setTranslateX(root.getWidth());
-                newView.setOpacity(0);
-                root.getChildren().setAll(newView);
+        // Set up the close request to properly quit the application
+        primaryStage.setOnCloseRequest(event -> {
+            UserManager.getInstance().quit();
+            System.exit(0); // Ensures JVM exits if needed
+        });
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("BLib Library System");
+        primaryStage.show();
+    }
 
-                // Create a fade-in animation
-                FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newView);
-                fadeIn.setFromValue(0);
-                fadeIn.setToValue(1);
+    /**
+     * Loads an FXML view and initializes its associated controller.
+     * 
+     * @param fxml The path to the FXML file to load.
+     * @return The loaded Pane representing the view.
+     * @throws Exception If an error occurs while loading the view.
+     */
+    private Pane loadView(String fxml) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+        Pane view = loader.load();
 
-                // Create a slide-in animation
-                TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
-                slideIn.setFromX(-root.getWidth());
-                slideIn.setToX(0);
+        controller = null;
+        try {
+            controller = loader.getController();
+        } catch (Exception e) {
+            System.out.println("!!!!!!!!!!!!!!class is not baseController!!!!!!!!!!!!!!!!!!");
+        }
 
-                // Play both animations together
-                ParallelTransition transition = new ParallelTransition(fadeIn, slideIn);
-                transition.play();
-        	   
-        	   
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
-       }
-       
-       public void goBack() {
-    	   
-    	windowHistory.pop();
-    	String fxml = windowHistory.getFirst();
-    	System.out.println("goBack: " + fxml);
-    	try {
-   	    Pane newView = loadView(fxml);
+        // If the controller is not null, call onLoad method to initialize the view
+        if (controller != null) {
+            controller.onLoad();
+        }
+        return view;
+    }
 
-           // Set initial position and opacity
-           newView.setTranslateX(root.getWidth());
-           newView.setOpacity(0);
-           root.getChildren().setAll(newView);
+    /**
+     * Switches to a new view and animates the transition with a fade and slide effect.
+     * 
+     * @param fxml The path to the FXML file for the new view.
+     */
+    public void switchView(String fxml) {
+        windowHistory.push(fxml);
+        System.out.println("switchView : " + fxml);
 
-           // Create a fade-in animation
-           FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newView);
-           fadeIn.setFromValue(0);
-           fadeIn.setToValue(1);
+        try {
+            Pane newView = loadView(fxml);
 
-           // Create a slide-in animation
-           TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
-           slideIn.setFromX(root.getWidth());
-           slideIn.setToX(0);
+            // Set initial position and opacity for animation
+            newView.setTranslateX(root.getWidth());
+            newView.setOpacity(0);
+            root.getChildren().setAll(newView);
 
-           // Play both animations together
-           ParallelTransition transition = new ParallelTransition(fadeIn, slideIn);
-           transition.play();
-   	   
-   	   
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-    	   
-       }
-       
-    
-    
-    
-    
-    
-    
-    
-    
+            // Create a fade-in animation
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newView);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
 
+            // Create a slide-in animation
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
+            slideIn.setFromX(-root.getWidth());
+            slideIn.setToX(0);
+
+            // Play both animations together
+            ParallelTransition transition = new ParallelTransition(fadeIn, slideIn);
+            transition.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Goes back to the previous view using the view history stack.
+     * 
+     * This method pops the top element from the history stack and loads the previous view,
+     * applying a smooth animation transition to move back to it.
+     */
+    public void goBack() {
+        windowHistory.pop();
+        String fxml = windowHistory.getFirst();
+        System.out.println("goBack: " + fxml);
+        try {
+            Pane newView = loadView(fxml);
+
+            // Set initial position and opacity for animation
+            newView.setTranslateX(root.getWidth());
+            newView.setOpacity(0);
+            root.getChildren().setAll(newView);
+
+            // Create a fade-in animation
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newView);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            // Create a slide-in animation
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), newView);
+            slideIn.setFromX(root.getWidth());
+            slideIn.setToX(0);
+
+            // Play both animations together
+            ParallelTransition transition = new ParallelTransition(fadeIn, slideIn);
+            transition.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

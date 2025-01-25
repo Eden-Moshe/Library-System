@@ -1,135 +1,132 @@
 package gui;
 
-import java.net.URL;
 import static common.GenericMessage.Action.*;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import client.SubscriberUI;
 import client.UserManager;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import common.*;
 
+/**
+ * Controller for the Subscriber Form. This class manages the subscriber's
+ * information display, updates, and password change functionality.
+ */
 public class SubscriberFormController extends BaseController {
-	private Subscriber s;
-	 @FXML
-	    private Button btnGoBack;
+    
+    private Subscriber s; // Subscriber object to hold the current subscriber's information
+    
+    @FXML
+    private Button btnGoBack; // Button to go back to the previous screen
+    
+    @FXML
+    private Button btnViewAccountStatusHistory; // Button to view account status history
+    
+    @FXML
+    private TextField txtUserID; // Text field for the user's ID
+    
+    @FXML
+    private TextField txtUserName; // Text field for the user's name
+    
+    @FXML
+    private TextField txtPassword; // Text field for the user's password
+    
+    @FXML
+    private TextField txtPhoneNumber; // Text field for the user's phone number
+    
+    @FXML
+    private TextField txtEmail; // Text field for the user's email
+    
+    @FXML
+    private TextField txtStatus; // Text field for the user's account status
+    
+    ObservableList<String> list;
 
-	    @FXML
-	    private Button btnViewAccountStatusHistory;
+    /**
+     * Loads the subscriber's information into the form when the controller is initialized.
+     */
+    public void onLoad() {
+        loadSubscriber(UM.s1);
+    }
 
-	    @FXML
-	    private TextField txtUserID;
-	    
-	    @FXML
-	    private TextField txtUserName;
+    /**
+     * Handles the "Go Back" button action. Navigates the user back to the previous screen.
+     * 
+     * @param event The action event triggered by the "Go Back" button.
+     */
+    public void goBack(ActionEvent event) {
+        SubscriberUI.mainController.goBack();
+    }
 
-	    @FXML
-	    private TextField txtPassword;
+    /**
+     * Loads the subscriber's information into the corresponding text fields.
+     * 
+     * @param s1 The Subscriber object containing the subscriber's information.
+     */
+    public void loadSubscriber(Subscriber s1) {
+        this.s = s1;
+        this.txtEmail.setText(s.getEmail());
+        this.txtUserName.setText(s.getName());
+        this.txtPhoneNumber.setText(s.getPNumber());
+        this.txtUserID.setText(s.getSID());
+        this.txtStatus.setText(s.getStatus());
+    }
 
-	    @FXML
-	    private TextField txtPhoneNumber;
-
-	    @FXML
-	    private TextField txtEmail;
-
-	    @FXML
-	    private TextField txtStatus;
-	    
-	
-	ObservableList<String> list;
-	
-	public void onLoad()
-	{
-		loadSubscriber(UM.s1);
-	}
-		
-	public void goBack(ActionEvent event)
-	{
-		SubscriberUI.mainController.goBack();
-	}
-	public void loadSubscriber(Subscriber s1) {
-		this.s=s1;
-		this.txtEmail.setText(s.getEmail());
-		this.txtUserName.setText(s.getName());		
-		this.txtPhoneNumber.setText(s.getPNumber()); 
-		this.txtUserID.setText(s.getSID());
-		this.txtStatus.setText(s.getStatus());
-		
-		
-	}
-	
-	
-	public void updatePassword(ActionEvent event) throws Exception {
-		UserManager UM = UserManager.getInstance();
-		
-		GenericMessage changePass = new GenericMessage();
-		changePass.action = set_New_Password;
-		changePass.subscriber = UM.s1;
-		changePass.fieldVal = txtPassword.getText();
-		
-		UM.send(changePass);
-		
-		
-		
-		
-	}
-	
-	
-	
-	public void updateInformation(ActionEvent event) throws Exception {
-		UserManager UM = UserManager.getInstance();
-		SubMessage sm=new SubMessage();
-        sm.editBool=true;
-        sm.pKey=s.getSID();
+    /**
+     * Updates the subscriber's password based on the input provided.
+     * 
+     * @param event The action event triggered by the password update action.
+     * @throws Exception If an error occurs while updating the password.
+     */
+    public void updatePassword(ActionEvent event) throws Exception {
+        UserManager UM = UserManager.getInstance();
         
-		if (s != null) {
-	        // Update the existing subscriber's email and phone number
-	        String newEmail = txtEmail.getText();
-	        String newPhoneNumber = txtPhoneNumber.getText();
+        // Create a message to request a password change
+        GenericMessage changePass = new GenericMessage();
+        changePass.action = set_New_Password;
+        changePass.subscriber = UM.s1;
+        changePass.fieldVal = txtPassword.getText();
+        
+        // Send the message to the server to update the password
+        UM.send(changePass);
+    }
 
-	        if (newEmail != null && !newEmail.trim().isEmpty() && newEmail!=s.getEmail()) 
-	        {
-	        	sm.fieldCol="subscriber_email";
-	        	sm.fieldVal=newEmail;
-	            UM.send(sm);
-	        }
-	        else {
-	            System.out.println("Email cannot be empty.");
-	        }
+    /**
+     * Updates the subscriber's email and phone number based on the inputs provided.
+     * 
+     * @param event The action event triggered by the update information action.
+     * @throws Exception If an error occurs while updating the subscriber's information.
+     */
+    public void updateInformation(ActionEvent event) throws Exception {
+        UserManager UM = UserManager.getInstance();
+        SubMessage sm = new SubMessage();
+        sm.editBool = true;
+        sm.pKey = s.getSID();
 
-	        if (newPhoneNumber != null && !newPhoneNumber.trim().isEmpty() && newPhoneNumber != s.getPNumber()) {
-	            sm.fieldCol="subscriber_phone_number";
-	            sm.fieldVal=newPhoneNumber;
-	            UM.send(sm);
-	        } else {
-	            System.out.println("Phone number cannot be empty.");
-	        }
+        if (s != null) {
+            // Update the existing subscriber's email and phone number
+            String newEmail = txtEmail.getText();
+            String newPhoneNumber = txtPhoneNumber.getText();
 
-			
-	        
-    	} 
-		else 
-	    {
-	        System.out.println("Subscriber object not found. Cannot update.");
-	    }
-		
-	}
-	
+            if (newEmail != null && !newEmail.trim().isEmpty() && !newEmail.equals(s.getEmail())) {
+                sm.fieldCol = "subscriber_email";
+                sm.fieldVal = newEmail;
+                UM.send(sm);
+            } else {
+                System.out.println("Email cannot be empty.");
+            }
 
-	
+            if (newPhoneNumber != null && !newPhoneNumber.trim().isEmpty() && !newPhoneNumber.equals(s.getPNumber())) {
+                sm.fieldCol = "subscriber_phone_number";
+                sm.fieldVal = newPhoneNumber;
+                UM.send(sm);
+            } else {
+                System.out.println("Phone number cannot be empty.");
+            }
+        } else {
+            System.out.println("Subscriber object not found. Cannot update.");
+        }
+    }
 }

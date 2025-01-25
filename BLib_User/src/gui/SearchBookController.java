@@ -4,24 +4,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import client.UserManager;
-import client.MyInbox;
 import client.SubscriberUI;
 import common.Book;
 import common.SearchMessage;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * Controller for searching books. This class handles the user interface logic 
+ * for the book search form, including capturing user input, sending search 
+ * requests, and processing the search results.
+ */
 public class SearchBookController extends BaseController{
 
     @FXML
@@ -41,41 +40,49 @@ public class SearchBookController extends BaseController{
 
     private ArrayList<Book> searchResults;  // Variable to store search results
 
-    // Getter for book name input
+    /**
+     * Getter for book name input.
+     * 
+     * @return The book name entered by the user.
+     */
     private String getBookName() {
         return txtBookName.getText();
     }
 
-    // Getter for book subject input
+    /**
+     * Getter for book subject input.
+     * 
+     * @return The book subject entered by the user.
+     */
     private String getBookSubject() {
         return txtBookSubject.getText();
     }
 
-    // Getter for description input
+    /**
+     * Getter for description input.
+     * 
+     * @return The book description entered by the user.
+     */
     private String getDescription() {
         return txtDescription.getText();
     }
 
-    // Handle the back button click, closes the current window and opens the main menu
+    /**
+     * Handle the back button click. Closes the current window and opens the main menu.
+     * 
+     * @param event The action event triggered by the back button.
+     */
     public void handleBack(ActionEvent event) {
-    	
-    	SubscriberUI.mainController.goBack();
-//        try {
-//            ((Node) event.getSource()).getScene().getWindow().hide(); // Hide the current window
-//            Stage primaryStage = new Stage();
-//            Pane root = FXMLLoader.load(getClass().getResource("/gui/MainMenu.fxml"));
-//            Scene scene = new Scene(root);
-//            primaryStage.setTitle("Main Menu"); // Set title for the main menu
-//            primaryStage.setScene(scene);
-//            primaryStage.show(); // Show the main menu
-//        } catch (IOException e) {
-//            showAlert("Error", "Could not return to main menu: " + e.getMessage());
-//        }
+        SubscriberUI.mainController.goBack();
     }
     
     /**
-     * Handles the search button click action, sends a search request
-     * and processes the search results.
+     * Handles the search button click action. It collects the user's search input,
+     * sends a search request, and processes the response. The search results are 
+     * displayed on a new page.
+     * 
+     * @param event The action event triggered by the search button.
+     * @throws Exception If an error occurs during the search process.
      */
     public void btnSearch(ActionEvent event) throws Exception {
         // Get values from the input fields
@@ -94,67 +101,69 @@ public class SearchBookController extends BaseController{
         UserManager userManager = UserManager.getInstance();
         userManager.send(searchMessage);
 
-        
         //23.01.25 victor change:
         //i changed the way the search results is called to conform to the newer method
         //the search results controller will now handle the response from the server.
         SubscriberUI.mainController.switchView("/gui/BookResults.fxml");
-        
-//        
-//        
-//        
-//        MyInbox inbox = UM.inb;
-//        Object response = inbox.getObj(); // Get the response from the server
+//      
+//      
+//      
+//      MyInbox inbox = UM.inb;
+//      Object response = inbox.getObj(); // Get the response from the server
 //
-//        // Check if the response is an ArrayList of Book objects
-//        if (response instanceof ArrayList<?>) {
-//            ArrayList<Book> searchResults = (ArrayList<Book>) response; // Cast the response to a list of books
+//      // Check if the response is an ArrayList of Book objects
+//      if (response instanceof ArrayList<?>) {
+//          ArrayList<Book> searchResults = (ArrayList<Book>) response; // Cast the response to a list of books
 //
-//            if (!searchResults.isEmpty()) {
-//                // Print search results for debugging purposes
-//                System.out.println("Search Results:");
-//                for (Book book : searchResults) {
-//                    System.out.println("Book Name: " + book.getBookName());
-//                    System.out.println("Genre: " + book.getBookGenre());
-//                    System.out.println("Barcode: " + book.getBookBarcode());
-//                    System.out.println("Location on Shelf: " + book.getPlaceOnShelf());
-//                    System.out.println("Description: " + book.getBookDesc());
-//                    System.out.println("Available: " + (book.isBookAvailable() ? "Yes" : "No"));
-//                    System.out.println("Return Date: " + book.getReturnDate());
-//                    System.out.println("----------------------------");
-//                }
-//                
-//             
-//                
-//                
-//                
+//          if (!searchResults.isEmpty()) {
+//              // Print search results for debugging purposes
+//              System.out.println("Search Results:");
+//              for (Book book : searchResults) {
+//                  System.out.println("Book Name: " + book.getBookName());
+//                  System.out.println("Genre: " + book.getBookGenre());
+//                  System.out.println("Barcode: " + book.getBookBarcode());
+//                  System.out.println("Location on Shelf: " + book.getPlaceOnShelf());
+//                  System.out.println("Description: " + book.getBookDesc());
+//                  System.out.println("Available: " + (book.isBookAvailable() ? "Yes" : "No"));
+//                  System.out.println("Return Date: " + book.getReturnDate());
+//                  System.out.println("----------------------------");
+//              }
+//              
+//           
+//              
+//              
+//              
 ////
-////                // Load the new page to display search results
-////                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookResults.fxml"));
-////                Parent root = loader.load();
+////              // Load the new page to display search results
+////              FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookResults.fxml"));
+////              Parent root = loader.load();
 ////
-////                // Pass the search results to the next controller
-////                BookResultsController controller = loader.getController();
-////                controller.setBookResults(searchResults);
+////              // Pass the search results to the next controller
+////              BookResultsController controller = loader.getController();
+////              controller.setBookResults(searchResults);
 ////
-////                // Display the new page with search results
-////                Stage primaryStage = new Stage();
-////                primaryStage.setScene(new Scene(root));
-////                primaryStage.setTitle("Search Results");
-////                primaryStage.show();
+////              // Display the new page with search results
+////              Stage primaryStage = new Stage();
+////              primaryStage.setScene(new Scene(root));
+////              primaryStage.setTitle("Search Results");
+////              primaryStage.show();
 //
-//                // Hide the current window
-//                //((Node) event.getSource()).getScene().getWindow().hide();
-//            } else {
-//                showAlert("No Results", "No books were found matching the search criteria.");
-//            }
-//        } else {
-//            showAlert("Error", "Unexpected response received from the server.");
-//        }
+//              // Hide the current window
+//              //((Node) event.getSource()).getScene().getWindow().hide();
+//          } else {
+//              showAlert("No Results", "No books were found matching the search criteria.");
+//          }
+//      } else {
+//          showAlert("Error", "Unexpected response received from the server.");
+//        }
     }
 
     /**
-     * Initializes the Search Book window.
+     * Initializes the Search Book window, setting up the stage, scene, 
+     * and showing the window to the user.
+     * 
+     * @param primaryStage The main window stage.
+     * @throws IOException If an error occurs while loading the FXML file.
      */
     public void start(Stage primaryStage) throws IOException {
         Pane root = FXMLLoader.load(getClass().getResource("SearchBookWindow.fxml"));
@@ -164,16 +173,12 @@ public class SearchBookController extends BaseController{
         primaryStage.show(); // Show the window
     }
 
-//    // Show an alert with the specified title and content text
-//    private void showAlert(String title, String contentText) {
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(contentText);
-//        alert.showAndWait(); // Show the alert
-//    }
-
-    // Exit the application (for testing purposes, you might want to replace this in production)
+    /**
+     * Exits the application. This method is intended for testing purposes.
+     * 
+     * @param event The action event triggered by the exit button.
+     * @throws Exception If an error occurs during the exit process.
+     */
     public void getExitBtn(ActionEvent event) throws Exception {
         System.out.println("Exiting Search Tool");
         System.exit(0); // Terminate the application

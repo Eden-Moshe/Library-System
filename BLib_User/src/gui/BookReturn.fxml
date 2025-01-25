@@ -1,70 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="gui.BookReturnWindowController" 
-      prefHeight="600.0" prefWidth="500.0" spacing="20" alignment="CENTER" 
-      style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;">
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: rgb(37, 75, 75);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookReturnWindowController">
 
-    <!-- LOGO IMAGE -->
-    <ImageView fx:id="logo" fitWidth="200" preserveRatio="true">
-        <Image url="@/gui/images/BLIB.png" />
-    </ImageView>
+    <!-- Back Button (Positioned at the top-left) -->
+    <Button fx:id="btnBack" layoutX="25.0" layoutY="14.0" onAction="#getBackBtn" style="-fx-font-size: 36px; -fx-background-color: transparent;                     -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;                     -fx-padding: 5 5 5 5;" text="←" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="14.0" />
 
-    <!-- Title Text -->
-    <Text text="Book Return" fill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    <!-- Main Content Section -->
+    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="100">
+        <!-- LOGO IMAGE -->
+        <ImageView fx:id="logo" fitWidth="200" preserveRatio="true">
+            <Image url="@/gui/images/BLIB.png" />
+        </ImageView>
 
-    <!-- Borrower ID Field -->
-    <Label text="Borrower ID:" textFill="white" style="-fx-font-size: 14px;" />
-    <TextField fx:id="txtBorrowerId" prefWidth="300.0" promptText="Enter Borrower ID" 
-               style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
-               onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+        <!-- Title Text -->
+        <Text fill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Book Return" />
 
-    <!-- Borrow Number Field -->
-    <Label text="Borrow Number:" textFill="white" style="-fx-font-size: 14px;" />
-    <TextField fx:id="txtBorrowNumber" prefWidth="300.0" promptText="Enter Borrow Number" 
-               style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
-               onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+        <!-- Borrower ID Field -->
+        <Label style="-fx-font-size: 14px;" text="Borrower ID:" textFill="white" />
+        <TextField fx:id="txtBorrowerId" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Enter Borrower ID" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
 
-    <!-- Book Barcode Field -->
-    <Label text="Book Barcode:" textFill="white" style="-fx-font-size: 14px;" />
-    <TextField fx:id="txtbookBarcode" prefWidth="300.0" promptText="Enter Book Barcode" 
-               style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
-               onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+        <!-- Borrow Number Field -->
+        <Label style="-fx-font-size: 14px;" text="Borrow Number:" textFill="white" />
+        <TextField fx:id="txtBorrowNumber" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Enter Borrow Number" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
 
-    <!-- Response Field -->
-    <TextField fx:id="txtResponse" prefWidth="300.0" promptText="Response" 
-               style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" 
-               onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" />
+        <!-- Book Barcode Field -->
+        <Label style="-fx-font-size: 14px;" text="Book Barcode:" textFill="white" />
+        <TextField fx:id="txtbookBarcode" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Enter Book Barcode" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
 
-    <!-- Buttons Section -->
-    <HBox spacing="20" alignment="CENTER" style="-fx-padding-top: 20;">
-        <!-- Back Button -->
-        <Button fx:id="btnBack" text="Back" onAction="#getBackBtn" 
-                style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; 
-                       -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; 
-                       -fx-background-radius: 15; -fx-padding: 10 20;" 
-                onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" />
+        <!-- Response Field -->
+        <TextField fx:id="txtResponse" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Response" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
 
-        <!-- Reset Button -->
-        <Button fx:id="btnreset" text="Reset" onAction="#resetFields" 
-                style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; 
-                       -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; 
-                       -fx-background-radius: 15; -fx-padding: 10 20;" 
-                onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" />
+        <!-- Buttons Section -->
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding-top: 20;">
+            <!-- Reset Button -->
+            <Button fx:id="btnreset" onAction="#resetFields" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                             -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                             -fx-background-radius: 15; -fx-padding: 10 20;" text="Reset" />
 
-        <!-- Return Book Button -->
-        <Button fx:id="btnBookReturn" text="Return Book" onAction="#btnBookReturn" 
-                style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px; 
-                       -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold; 
-                       -fx-background-radius: 15; -fx-padding: 10 20;" 
-                onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" />
-    </HBox>
-</VBox>
+            <!-- Return Book Button -->
+            <Button fx:id="btnBookReturn" onAction="#btnBookReturn" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                             -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                             -fx-background-radius: 15; -fx-padding: 10 20;" text="Return Book" />
+        </HBox>
+
+        <!-- New VBox for the Destroyed Book Button -->
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding-top: 20;">
+            <!-- Return Destroyed Book Button -->
+            <Button fx:id="btnReturnDestroyedBook" onAction="#btnReturnDestroyedBook" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                             -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                             -fx-background-radius: 15; -fx-padding: 10 20;" text="Destroyed Book" />
+        </VBox>
+    </VBox>
+</AnchorPane>

@@ -18,6 +18,7 @@ import client.UserManager;
 import common.Book;
 import common.Borrow;
 import common.BorrowMessage;
+import common.DestroyedMessage;
 import common.BookReturnMessage;
 import common.Subscriber;
 import javafx.event.ActionEvent;
@@ -105,6 +106,10 @@ public class BookReturnWindowController extends BaseController {
      * This method is called when the 'Reset' button is clicked.
      * It resets the fields (Borrower ID, Borrow Number, Book Barcode, etc.) to their initial state.
      */
+    
+    @FXML
+    private Button btnReturnDestroyedBook;
+    
     @FXML
     public void resetFields(ActionEvent event) {
         txtBorrowerId.clear();
@@ -240,8 +245,37 @@ public class BookReturnWindowController extends BaseController {
 	    	if(response.equalsIgnoreCase("The book was returned."))fetchMsg.allOfCon=true;
 	    	else {return;}
 	    }
+	}
 	    
+	    /**
+	     * This method is called when the 'Destroyed Book' button is clicked.
+	     * It processes the destroyed book logic by validating the inputs and performing necessary actions.
+	     */
+	    @FXML
+	    public void btnReturnDestroyedBook(ActionEvent event) throws SQLException, IOException {
+			DestroyedMessage destMsg = new DestroyedMessage();
+			UserManager UM = UserManager.getInstance();
+			String borrowerId = getBorrowerId();
+			String bookBarcode = getbookBarcode(); 
+			
+			// Create DestroyedMessage with:
+			// 1. borrowerId
+			// 2. Book's barcode
+			destMsg.id = borrowerId;
+		    destMsg.barcode=bookBarcode;
+
+		    UM.send(destMsg);
+		    
+		    // Wait for the response 
+		    // Get the message from MyInbox (set it in handleMessageFromServer)
+		    String response = UM.inb.getMessage();    
+		    // Set the response text in the TextBox
+		    txtResponse.setText(response);  
+
+	    }
 	    
+
+	        
 	   //SubscriberUI.mainController.switchView("/gui/ReturnBookOption.fxml");
 	    
 	    
@@ -255,7 +289,6 @@ public class BookReturnWindowController extends BaseController {
 //        primaryStage.show();
 //        // Hide the current window
 //        ((Node) event.getSource()).getScene().getWindow().hide();
-	}
 	
     /**
      * This method is called when the 'Back' button is clicked.

@@ -3,8 +3,6 @@ package gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,14 +11,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 import common.Book;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.Initializable;
-import java.io.IOException;
 import java.util.Date;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,7 +22,13 @@ import client.SubscriberUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * The BookResultsController class is responsible for managing the view 
+ * of search results related to books. It displays the results in a table 
+ * and allows the user to interact with them, such as going back to the previous screen.
+ */
 public class BookResultsController extends BaseController implements Initializable {
+    
     @FXML
     private TableView<Book> tblResults;
 
@@ -52,44 +50,36 @@ public class BookResultsController extends BaseController implements Initializab
     @FXML
     private TableColumn<Book, String> colReturnDate;
     
-    
+    /**
+     * This method is invoked when the view is loaded to populate the table 
+     * with book results based on the response from the server.
+     */
     @Override
-    public void onLoad()
-    {
-    	
-    	Object response = UM.inb.getObj();
-    	if (response instanceof ArrayList<?>) {
-    		ArrayList<Book> searchResults = (ArrayList<Book>) response;
-    		if (!searchResults.isEmpty()) {
-    			
-    			setBookResults(searchResults);
-			}
-    		else {
-    			showAlert("No Results", "No books were found matching the search criteria.");
-    		}
-		}
-    	else {
-			showAlert("Error", "Unexpected response received from the server.");
-		}
-    	
-    	
-    	
-	}
-    	
-    
-//    // Show an alert with the specified title and content text
-//    private void showAlert(String title, String contentText) {
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(contentText);
-//        alert.showAndWait(); // Show the alert
-//    }
+    public void onLoad() {
+        Object response = UM.inb.getObj();
+        if (response instanceof ArrayList<?>) {
+            ArrayList<Book> searchResults = (ArrayList<Book>) response;
+            if (!searchResults.isEmpty()) {
+                setBookResults(searchResults);
+            } else {
+                showAlert("No Results", "No books were found matching the search criteria.");
+            }
+        } else {
+            showAlert("Error", "Unexpected response received from the server.");
+        }
+    }
 
+    /**
+     * Initializes the table columns and their cell factories, 
+     * sets up the table layout, and prepares dynamic row heights.
+     * 
+     * @param location  The location used to resolve relative paths for the root object.
+     * @param resources The resources used to localize the root object.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            // Initialize basic columns
+            // Initialize basic columns with data from the Book class
             colBookName.setCellValueFactory(new PropertyValueFactory<>("bookName"));
             colBookGenre.setCellValueFactory(new PropertyValueFactory<>("bookGenre"));
             colBookDesc.setCellValueFactory(new PropertyValueFactory<>("bookDesc"));
@@ -104,16 +94,16 @@ public class BookResultsController extends BaseController implements Initializab
             });
 
             // Set up description column with text wrapping
-            colBookDesc.setCellFactory(new Callback<TableColumn<Book,String>, TableCell<Book,String>>() {
+            colBookDesc.setCellFactory(new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
                 @Override
                 public TableCell<Book, String> call(TableColumn<Book, String> param) {
                     TableCell<Book, String> cell = new TableCell<Book, String>() {
                         private Text text;
-                        
+
                         @Override
                         protected void updateItem(String item, boolean empty) {
                             super.updateItem(item, empty);
-                            
+
                             if (empty || item == null) {
                                 setGraphic(null);
                                 setText(null);
@@ -125,7 +115,7 @@ public class BookResultsController extends BaseController implements Initializab
                             }
                         }
                     };
-                    
+
                     cell.setWrapText(true);
                     return cell;
                 }
@@ -144,11 +134,12 @@ public class BookResultsController extends BaseController implements Initializab
         }
     }
 
+    /**
+     * Sets the search results to be displayed in the table.
+     * 
+     * @param searchResults List of books to be displayed in the table.
+     */
     public void setBookResults(ArrayList<Book> searchResults) {
-    	
-    	
-    	
-    	
         try {
             if (searchResults != null && tblResults != null) {
                 ObservableList<Book> data = FXCollections.observableArrayList(searchResults);
@@ -160,23 +151,14 @@ public class BookResultsController extends BaseController implements Initializab
         }
     }
 
+    /**
+     * Handles the action when the user clicks the "Back" button.
+     * Navigates the user back to the previous screen.
+     * 
+     * @param event The event that triggered the action.
+     */
     @FXML
     public void handleBackAction(ActionEvent event) {
-    	
-    	SubscriberUI.mainController.goBack();
-    	
-    	
-//        try {
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//            Stage primaryStage = new Stage();
-//            Pane root = FXMLLoader.load(getClass().getResource("/gui/SearchBook.fxml"));
-//            Scene scene = new Scene(root);
-//            primaryStage.setTitle("Search Book");
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.err.println("Error loading SearchBook.fxml: " + e.getMessage());
-//        }
+        SubscriberUI.mainController.goBack();
     }
 }

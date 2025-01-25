@@ -6,9 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 import common.Book;
 import common.Borrow;
+import common.BorrowRecord;
+import common.DestRecord;
 import server.DBController;
 
 /**
@@ -92,4 +95,42 @@ public class BookReturnController {
 
         return "The book was returned.";
     }
+    
+    /**
+     * Removes a book from the database and adds its details to the "destroyed_books" table.
+     * 
+     * This method deletes a book from the "book" table based on the given barcode, 
+     * and then inserts a record into the "destroyed_books" table with the provided 
+     * barcode and borrower ID.
+     * 
+     * @param id the ID of the borrower who destroyed the book
+     * @param barcode the barcode of the destroyed book
+     * @return a message indicating whether the operation was successful or not
+     */
+    public String destroyBook(String id, String barcode) {
+        
+        // Delete the book from the database
+        db.deleteRow("book", "barcode", barcode);
+        
+        // Add the destroyed book details to the "destroyed_books" table
+        String[] fields = {"book_barcode", "borrower_id"};
+        String[] values = {barcode, id};
+        db.insertRow("destroyed_books", fields, values);
+        
+        return "Book was successfully removed from database";
+    }
+
+    /**
+     * Fetches all records of destroyed books from the "destroyed_books" table.
+     * 
+     * This method retrieves a list of records that contains the details (barcode and borrower ID)
+     * of all destroyed books stored in the "destroyed_books" table.
+     * 
+     * @return a List of {@link DestRecord} objects representing the destroyed books
+     */
+    public List<DestRecord> fetchDest() {
+        return db.getDestRecords();
+    }
+
+    
 }

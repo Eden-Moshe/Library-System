@@ -20,68 +20,60 @@ public class ViewUserInfoWindow extends BaseController {
 
     // Instance of UserManager for managing user-related operations
     UserManager UM = UserManager.getInstance();
-    
-    // Subscriber object representing the current user
-    //Subscriber sub = (Subscriber) UM.inb.getObj();
     Subscriber sub;
+
+    @FXML
+    private Button btnBack; // Button to navigate back to the previous page
+    
+    @FXML
+    private Button btnExtendBorrow; // Button to navigate to the "Extend Borrow" page
+    
+    @FXML
+    private Button btnCheckBook; // Button to check the status of a book
+    
+    @FXML
+    private Button btnViewAccountStatusHistory; // Button to view the account status history
+    
+    @FXML
+    private Button btnViewBorrowHistory; // Button to view the borrow history
+    
+    @FXML
+    private TextField idResponse; // Text field to display the subscriber's ID
+    
+    @FXML
+    private TextField passResponse; // Text field to display the subscriber's password (not used)
+    
+    @FXML
+    private TextField phoneResponse; // Text field to display the subscriber's phone number
+    
+    @FXML
+    private TextField mailResponse; // Text field to display the subscriber's email address
+    
+    @FXML
+    private TextField statusResponse; // Text field to display the subscriber's account status
+    
+    
     /**
-     * Initializes the controller and loads the user data into the UI fields.
-     * This method is called when the controller is initialized.
+     * Initializes the view by loading the current subscriber's information.
+     * This method is called when the view is loaded.
      */
-//    @FXML
-//    public void initialize() {
-//        loadResponse();  // Call loadResponse when the controller is initialized
-//    }
-    
-    @FXML
-    private Button btnBack;
-    
-    @FXML
-    private Button btnExtendBorrow;
-    
-    @FXML
-    private Button btnCheckBook;
-    
-    @FXML
-    private Button btnViewAccountStatusHistory;
-    
-    @FXML
-    private Button btnViewBorrowHistory;
-    
-    @FXML
-    private TextField idResponse;
-    
-    @FXML
-    private TextField passResponse;
-    
-    @FXML
-    private TextField phoneResponse;
-    
-    @FXML
-    private TextField mailResponse;
-    
-    @FXML
-    private TextField statusResponse;
-    
-    
-    public void onLoad()
-    {
-    	
-    	sub = UM.inb.getHandledSubscriber();
-    	loadResponse();
+    public void onLoad() {
+        sub = UM.inb.getHandledSubscriber();
+        loadResponse();
     }
+
     /**
      * Loads the current subscriber's information into the text fields.
      * This includes subscriber ID, phone number, email, and status.
      */
     public void loadResponse() {
         this.idResponse.setText(sub.getSID());
-        this.passResponse.setText("");
+        this.passResponse.setText(""); // Password is not displayed
         this.phoneResponse.setText(sub.getPNumber());
         this.mailResponse.setText(sub.getEmail());
         this.statusResponse.setText(sub.getStatus());
     }
-    
+
     /**
      * Handles the event when the user clicks the "Check Book Status" button.
      * This method will be implemented to check the status of a book (e.g., lost or destroyed).
@@ -92,7 +84,7 @@ public class ViewUserInfoWindow extends BaseController {
     private void checkBookStatus(ActionEvent event) {
         // TODO: Implement logic to check book status (lost/destroyed)
     }
-    
+
     /**
      * Handles the event when the user clicks the "Extend Borrow" button.
      * This method navigates to the "Extend Borrow" page.
@@ -101,10 +93,10 @@ public class ViewUserInfoWindow extends BaseController {
      */
     @FXML
     private void extendBorrow(ActionEvent event) {
-        // Goes to Extend Borrow Page
+        // Navigates to the "Extend Borrow" page
         SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
     }
-    
+
     /**
      * Handles the event when the user clicks the "View Account Status History" button.
      * This method navigates to the "Account Status History" page.
@@ -113,10 +105,10 @@ public class ViewUserInfoWindow extends BaseController {
      */
     @FXML
     private void viewAccountStatusHistory(ActionEvent event) {
-        // Goes to Account Status History Page
+        // Navigates to the "Account Status History" page
         SubscriberUI.mainController.switchView("/gui/AccountStatusHistory.fxml");
     }
-    
+
     /**
      * Handles the event when the user clicks the "View Borrow History" button.
      * This method sends a request to load the borrow history and navigates to the "Borrow History" page.
@@ -125,14 +117,14 @@ public class ViewUserInfoWindow extends BaseController {
      */
     @FXML
     private void viewBorrowHistory(ActionEvent event) {
-        // Goes to Borrow History Page
+        // Sends a request to load the borrow history and navigates to the "Borrow History" page
         GenericMessage borrowMessage = new GenericMessage();
         borrowMessage.action = get_Borrow_History;
-        borrowMessage.subscriber = sub; // waiting for implementation!!
+        borrowMessage.subscriber = sub; // Sending the current subscriber's information
         UM.send(borrowMessage);
         SubscriberUI.mainController.switchView("/gui/BorrowHistory.fxml");
     }
-    
+
     /**
      * Handles the event when the user clicks the "Back" button.
      * This method navigates back to the previous page.
@@ -141,7 +133,7 @@ public class ViewUserInfoWindow extends BaseController {
      */
     @FXML
     private void getBackBtn(ActionEvent event) {
-        // Goes back one page
+        // Navigates back to the previous page
         SubscriberUI.mainController.goBack();
     }
 }
