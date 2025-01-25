@@ -1,57 +1,119 @@
+/**
+ * The {@code Borrow} class represents a borrowing transaction in a library system.
+ * It contains details about the subscriber, the book being borrowed, the borrowing date,
+ * the expected return date, the borrow number, and the librarian handling the transaction.
+ * 
+ * This class implements {@code Serializable} to support object serialization.
+ */
 package common;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class Borrow implements Serializable{
-	//class Borrow holds the following values to store as borrow occurs
-	public Subscriber s;
-	public Book bo;
+public class Borrow implements Serializable {
+    /**
+     * The subscriber involved in the borrowing transaction.
+     */
+    public Subscriber s;
+
+    /**
+     * The book being borrowed.
+     */
+    public Book bo;
+
+    /**
+     * The date when the book was borrowed.
+     */
     private Date borrowDate;
+
+    /**
+     * The expected date for returning the book.
+     */
     private Date returnDate;
+
+    /**
+     * The unique number associated with the borrowing transaction.
+     */
     private int borrow_num;
-	public Librarian l;
-    
 
+    /**
+     * The librarian handling the borrowing transaction.
+     */
+    public Librarian l;
 
-	// Constructor that initializes borrowDate and calculates returnDate
+    /**
+     * Constructs a new {@code Borrow} instance with the specified subscriber, borrow date, and return date.
+     * 
+     * @param s          the subscriber involved in the transaction
+     * @param borrowDate the date the book was borrowed
+     * @param returnDate the expected return date of the book
+     */
     public Borrow(Subscriber s, Date borrowDate, Date returnDate) {
         this.s = s;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
     }
-    
-    public String getBookName()
-    {
-    	return bo.getBookName();
-    }
-    
-    //getter for borrow number
-    public int getBorrow_num() {
-		return borrow_num;
-	}
 
-    //setter for borrow number
-	public void setBorrow_num(int borrow_num) {
-		this.borrow_num = borrow_num;
-	}
-    
-	//getter for borrow date
+    /**
+     * Gets the name of the book being borrowed.
+     * 
+     * @return the name of the book
+     */
+    public String getBookName() {
+        return bo.getBookName();
+    }
+
+    /**
+     * Gets the unique number associated with the borrowing transaction.
+     * 
+     * @return the borrow number
+     */
+    public int getBorrow_num() {
+        return borrow_num;
+    }
+
+    /**
+     * Sets the unique number associated with the borrowing transaction.
+     * 
+     * @param borrow_num the new borrow number
+     */
+    public void setBorrow_num(int borrow_num) {
+        this.borrow_num = borrow_num;
+    }
+
+    /**
+     * Gets the date when the book was borrowed.
+     * 
+     * @return the borrow date
+     */
     public Date getBorrowDate() {
         return borrowDate;
     }
-    //setter for borrow date
+
+    /**
+     * Sets the date when the book was borrowed.
+     * 
+     * @param borrowDate the new borrow date
+     */
     public void setBorrowDate(Date borrowDate) {
         this.borrowDate = borrowDate;
     }
-    //getter for return date
+
+    /**
+     * Gets the expected return date of the book.
+     * 
+     * @return the return date
+     */
     public Date getReturnDate() {
         return returnDate;
     }
-    //setter for return dated
+
+    /**
+     * Sets the expected return date of the book.
+     * 
+     * @param returnDate the new return date
+     */
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
-
-
 }

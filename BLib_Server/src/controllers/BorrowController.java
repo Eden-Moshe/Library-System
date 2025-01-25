@@ -11,136 +11,148 @@ import common.Borrow;
 import common.Subscriber;
 import server.DBController;
 
+/**
+ * Controller class responsible for managing borrow-related operations.
+ */
 public class BorrowController {
-	private static final BorrowController instance = new BorrowController();
-	private static BookController bookController = BookController.getInstance();
-	private DBController db;
-	private static String tName="borrow";
-	private static String keyField="book_barcode";
-	
-	
-	public static BorrowController getInstance() {
-		return instance;
-	}
-	
-	private BorrowController()
-	{
-		db=DBController.getInstance();
-		
-	}
-	public ArrayList<Borrow> borrowList(Subscriber sub)
-	{
-		Borrow bor;
-		String tempStr;
-		Date borrowDate;
-		Date returnDate;
-		ArrayList<Borrow> ret = new ArrayList<>();
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-	    
-		ResultSet rs = db.retrieveRow(tName, "subscriber_id", sub.getSID());
-		try {
-			while (rs.next())
-			{
-				//getting dates from the borrow row
-				tempStr = rs.getString("borrow_date");
-				borrowDate = dateFormat.parse(tempStr);
-				
-				tempStr = rs.getString("return_date");
-				returnDate = dateFormat.parse(tempStr);
-				
-				//creating borrow instance
-				bor = new Borrow(sub, borrowDate, returnDate);
-				
-				//setting the book in borrow instance
-				bor.bo = bookController.fetchBook(rs.getString("book_barcode"));
-				
-				
-				//adding the borrow instance to the ArrayList
-				ret.add(bor);
-				
-			
-			}
-			return ret;
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-
-	}
-	
-	//methods created a new row in borrow table with proper values
-	public String createBorrow(Subscriber s, Book b, Borrow borrow, String lib_id) {
-	    // Checking if account is active
-	    if (canBorrow(s)) {
-	        // Defining fields and values for the insert
-	        String[] fields = {"book_barcode", "lending_librarian", "subscriber_id",
-	        		           "borrow_date", "return_date", "actual_returned_date"};
-	        
-	        // Convert the borrow date and return date to appropriate format
-	        String[] values = {
-	            b.getBookBarcode(),
-	            lib_id,
-	            s.getSID(),
-	            new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
-	            new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
-	            null,
-	        };
-
-	        // Call insertRow method with the table, fields, and values
-	        db.insertRow("borrow", fields, values);
-
-	        //editing book's availability status in book table
-	        db.editRow("book","barcode",b.getBookBarcode(),"book_available","false");
-	        
-	        //changing books' availability in class instance
-	        b.setBookAvailable(false);
-	        return "Borrow request sent successfully."; 
-	    } else {
-	        return "Account status is frozen. Cannot create borrow.";
-	    }
-	}
-	
+    /**
+     * Singleton instance of BorrowController.
+     */
+    private static final BorrowController instance = new BorrowController();
     
-    // Method to check if subscriber status is active
+    /**
+     * Instance of BookController to fetch book details.
+     */
+    private static BookController bookController = BookController.getInstance();
+    
+    /**
+     * Database controller instance for handling database operations.
+     */
+    private DBController db;
+    
+    /**
+     * Table name for borrow records in the database.
+     */
+    private static String tName = "borrow";
+    
+    /**
+     * Retrieves the singleton instance of BorrowController.
+     * 
+     * @return the singleton instance of BorrowController
+     */
+    public static BorrowController getInstance() {
+        return instance;
+    }
+    
+    /**
+     * Private constructor to enforce singleton pattern.
+     * Initializes the database controller instance.
+     */
+    private BorrowController() {
+        db = DBController.getInstance();
+    }
+    
+    /**
+     * Retrieves a list of borrow records for a given subscriber.
+     * 
+     * @param sub the subscriber whose borrow records are retrieved
+     * @return an ArrayList of Borrow instances
+     */
+    public ArrayList<Borrow> borrowList(Subscriber sub) {
+        Borrow bor;
+        String tempStr;
+        Date borrowDate;
+        Date returnDate;
+        ArrayList<Borrow> ret = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+        
+        ResultSet rs = db.retrieveRow(tName, "subscriber_id", sub.getSID());
+        try {
+            while (rs.next()) {
+                tempStr = rs.getString("borrow_date");
+                borrowDate = dateFormat.parse(tempStr);
+                
+                tempStr = rs.getString("return_date");
+                returnDate = dateFormat.parse(tempStr);
+                
+                bor = new Borrow(sub, borrowDate, returnDate);
+                bor.bo = bookController.fetchBook(rs.getString("book_barcode"));
+                ret.add(bor);
+            }
+            return ret;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    /**
+     * Creates a new borrow record in the database.
+     * 
+     * @param s the subscriber borrowing the book
+     * @param b the book being borrowed
+     * @param borrow the borrow instance containing borrow details
+     * @param lib_id the librarian ID processing the borrow request
+     * @return a message indicating the success or failure of the borrow operation
+     */
+    public String createBorrow(Subscriber s, Book b, Borrow borrow, String lib_id) {
+        if (canBorrow(s)) {
+            String[] fields = {"book_barcode", "lending_librarian", "subscriber_id", "borrow_date", "return_date", "actual_returned_date"};
+            String[] values = {
+                b.getBookBarcode(),
+                lib_id,
+                s.getSID(),
+                new java.sql.Date(borrow.getBorrowDate().getTime()).toString(),
+                new java.sql.Date(borrow.getReturnDate().getTime()).toString(),
+                null,
+            };
+            db.insertRow("borrow", fields, values);
+            db.editRow("book", "barcode", b.getBookBarcode(), "book_available", "false");
+            return "Borrow request sent successfully."; 
+        } else {
+            return "Account status is frozen. Cannot create borrow.";
+        }
+    }
+    
+    /**
+     * Checks if a subscriber is eligible to borrow books.
+     * 
+     * @param s the subscriber to check
+     * @return true if the subscriber is active, false otherwise
+     */
     public boolean canBorrow(Subscriber s) {
         return "active".equalsIgnoreCase(s.getStatus());
     }
     
-
-    
-    
-    
-    // Method to send return reminder to the subscriber
+    /**
+     * Sends a return reminder to the subscriber one day before the return date.
+     * 
+     * @param borrow the borrow record associated with the subscriber
+     * @param subscriber the subscriber receiving the reminder
+     */
     public void sendReturnReminder(Borrow borrow, Subscriber subscriber) {
-        // Step 1: Calculate the reminder date (one day before the return date)
         Date returnDate = borrow.getReturnDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(returnDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -1); // Subtract one day from return date
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date reminderDate = calendar.getTime();
-
-        // Step 2: Check if the current date matches the reminder date
-        Date currentDate = new Date(); // Get the current date
-
+        Date currentDate = new Date();
+        
         if (isSameDay(currentDate, reminderDate)) {
-            // Step 3: Send reminder to the subscriber via email, SMS, and system message
             String message = "Reminder: The book you borrowed is due for return tomorrow. Please return it by " + borrow.getReturnDate().toString() + ".";
-
-            // Send Email
             sendEmail(subscriber.getEmail(), "Book Return Reminder", message);
-
-            // Send SMS (You would integrate an SMS API here)
             sendSMS(subscriber.getPNumber(), message);
-
-            // Send System Message (This could be a notification or logging the message)
             sendSystemMessage(subscriber.getSID(), message);
         }
     }
-
-    // Helper method to compare two dates (ignores time part)
+    
+    /**
+     * Compares two dates to check if they are the same day, ignoring the time component.
+     * 
+     * @param date1 the first date
+     * @param date2 the second date
+     * @return true if the dates are the same, false otherwise
+     */
     private boolean isSameDay(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(date1);
@@ -149,27 +161,36 @@ public class BorrowController {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
-
-    // Method to send an email (you will need an actual email service, e.g., JavaMail API)
+    
+    /**
+     * Sends an email notification to the subscriber.
+     * 
+     * @param toEmail the recipient's email address
+     * @param subject the email subject
+     * @param body the email content
+     */
     private void sendEmail(String toEmail, String subject, String body) {
-        // Code to send email (using an email API/service like JavaMail)
         System.out.println("Sending email to " + toEmail + " with subject: " + subject);
         System.out.println("Message: " + body);
     }
-
-    // Method to send an SMS (you would need an SMS API here, like Twilio)
+    
+    /**
+     * Sends an SMS notification to the subscriber.
+     * 
+     * @param phoneNumber the recipient's phone number
+     * @param message the SMS content
+     */
     private void sendSMS(String phoneNumber, String message) {
-        // Code to send SMS (using an SMS API like Twilio)
         System.out.println("Sending SMS to " + phoneNumber + " with message: " + message);
     }
-
-    // Method to send a system message (This could be a log or a UI notification)
+    
+    /**
+     * Sends a system notification message to the subscriber.
+     * 
+     * @param subscriberId the ID of the subscriber
+     * @param message the message content
+     */
     private void sendSystemMessage(String subscriberId, String message) {
-        // Code to send system message (logging, or showing a notification on the UI)
         System.out.println("System message for subscriber " + subscriberId + ": " + message);
     }
-    
-	
-
-	
 }
