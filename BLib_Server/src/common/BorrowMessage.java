@@ -9,7 +9,6 @@ package common;
 import java.io.Serializable;
 
 public class BorrowMessage implements Serializable {
-
     /**
      * The subscriber associated with the borrowing transaction.
      */
