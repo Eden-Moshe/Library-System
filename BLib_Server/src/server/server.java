@@ -295,17 +295,7 @@ public class server extends AbstractServer{
 				}
 				client.sendToClient(newUser);
 
-				
-//				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
-//					client.sendToClient("wrong user id or password");
-//					return;//exiting the function to prevent it from completing DB operations on unverified user.
-//				}
-//				else
-//				{
-//					connectedSubscribers.add(client);
-//					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
-//					
-//				}
+
 			}
 			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
 			{
