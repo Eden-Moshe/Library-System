@@ -503,7 +503,7 @@ public class server extends AbstractServer{
 				//checking if original return date is not more than a week away
 				if (requestController.isEligibleForExtension(reqMessage.borrow.getReturnDate())) {
 					//update return date in database
-					client.sendToClient(requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
+					client.sendToClient(requestController.extendBorrow(reqMessage.s,reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
 				}
 				
 				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");

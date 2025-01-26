@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="OCSF"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
+	<classpathentry kind="lib" path="C:/Users/EDENM/Desktop/Blib_Jars/CommonBlib_Client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
