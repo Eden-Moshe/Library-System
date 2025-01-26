@@ -62,6 +62,58 @@ public class OrderController {
 	public String getUserId() {
 		return this.userId;
 	}
+	
+	public void checkAndCancelExpiredOrders() {
+	    try {
+	        // Find books that have been returned more than 2 days ago
+	    	Date date = new Date();
+	    	Calendar calendar = Calendar.getInstance();
+	    	
+	        calendar.setTime(date);
+	        calendar.add(Calendar.DAY_OF_MONTH, -2);
+	        Date twoDaysBefore = calendar.getTime();
+	        
+	        ResultSet rs = db.retrieveRow("borrow", "actual_returned_date", twoDaysBefore.toString());
+	        LocalDate today = LocalDate.now();
+
+	        while (rs != null && rs.next()) {
+	            Date actualReturnDate = rs.getDate("actual_returned_date");
+	            Date expectedReturnDate = rs.getDate("return_date");
+	            
+	            if (actualReturnDate != null) {
+	                LocalDate returnLocalDate = new java.sql.Date(actualReturnDate.getTime()).toLocalDate();
+	                
+	                // Check if the return is more than 2 days old
+	                if (returnLocalDate.plusDays(2).isEqual(today)) {
+	                    String bookBarcode = rs.getString("book_barcode");
+	                    
+	                    // Find the book details using the barcode
+	                    ResultSet bookRs = db.retrieveRow("book", "barcode", bookBarcode);
+	                    
+	                    if (bookRs != null && bookRs.next()) {
+	                        String bookName = bookRs.getString("book_name");
+	                        
+	                        // Find corresponding order in order_book
+	                        ResultSet orderRs = db.retrieveRowsWithConditions("order_book", 
+	                            new String[]{"book_name", "nearest_book_return"}, 
+	                            new String[]{bookName, expectedReturnDate.toString()});
+	                        
+	                        while (orderRs != null && orderRs.next()) {
+	                            // Cancel the order if it's still waiting
+	                            if ("waiting".equals(orderRs.getString("order_status"))) {
+	                                db.editRow("order_book", "book_name", bookName, "order_status", "cancelled");
+	                                System.out.println("Cancelled order for book: " + bookName);
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error checking and cancelling expired orders: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
 
 	/**
 	 * Check if a book can be ordered by checking existing orders and copies

@@ -39,6 +39,7 @@ public class server extends AbstractServer{
 		private LibrarianController librarianController;
 		private OrderController orderController;
 		private BookReturnController bokRetCont;
+		private TimedTasks timedTasks;
 	
 		private ReportController reportController;
 		
@@ -76,100 +77,31 @@ public class server extends AbstractServer{
 		
 		reportController = ReportController.getInstance();
 		
+		timedTasks = new TimedTasks();
+		dailyTasks();
+	  }
+	  /**
+	   * this function runs all the other functions that need to be run once a day
+	   */
+	  private void dailyTasks()
+	  {
+		  timedTasks.scheduleTask(() -> {
+	            try {
+	            	//add all the calls to functions that need to run every day
+	            	
+	                borrowController.sendReminders();
+	                orderController.checkAndCancelExpiredOrders();
+	            	
+	                System.out.println("Daily tasks completed successfully.");
+	            } catch (Exception e) {
+	                System.err.println("Daily tasks failed: " + e.getMessage());
+	            }
+	        });
 	  }
 	  
-	  
-//	  public void setUIController(ConnectionEntryController connectionController)
-//	  {
-//		  conEntry = connectionController;
-//	  }
 
 	  
-	  
-//	  //test this
-//	  public class DailyTaskRunner {
-//
-//		    public static void scheduleDailyTask(Runnable task, int hour, int minute) {
-//		        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-//
-//		        Runnable dailyTask = () -> {
-//		            System.out.println("Executing task at: " + java.time.LocalDateTime.now());
-//		            task.run();
-//		        };
-//
-//		        long initialDelay = calculateInitialDelay(hour, minute);
-//		        long period = 24 * 60 * 60; // 24 hours in seconds
-//
-//		        scheduler.scheduleAtFixedRate(dailyTask, initialDelay, period, TimeUnit.SECONDS);
-//		    }
-//
-//		    private static long calculateInitialDelay(int hour, int minute) {
-//		        LocalTime now = LocalTime.now();
-//		        LocalTime targetTime = LocalTime.of(hour, minute);
-//
-//		        if (now.isAfter(targetTime)) {
-//		            targetTime = targetTime.plusHours(24); // Schedule for the next day
-//		        }
-//
-//		        return Duration.between(now, targetTime).getSeconds();
-//		    }
-//
-//		    public static void main(String[] args) {
-//		        scheduleDailyTask(() -> {
-//		            System.out.println("Running the scheduled daily task!");
-//		            // Your function logic here
-//		        }, 8, 0); // Schedule the task to run daily at 08:00 AM
-//		    }
-//		}
-	  
-	  
 	
-	public class DailyTaskRunner {
-	    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-	    private static LocalDate lastFetchDate = null; // Store last fetch date in memory
-	
-	    public static void scheduleDailyTask(Runnable dailyTask, Runnable monthlyTask, int hour, int minute) {
-	        Runnable combinedTask = () -> {
-	            System.out.println("Executing daily task at: " + LocalDateTime.now());
-	            dailyTask.run();
-	
-	            if (shouldRunMonthlyTask()) {
-	                System.out.println("Executing monthly task...");
-	                monthlyTask.run();
-	                lastFetchDate = LocalDate.now(); // Update last fetch date
-	            }
-	        };
-	
-	        long initialDelay = calculateInitialDelay(hour, minute);
-	        long period = 24 * 60 * 60; // 24 hours in seconds
-	
-	        scheduler.scheduleAtFixedRate(combinedTask, initialDelay, period, TimeUnit.SECONDS);
-	    }
-	
-	    private static boolean shouldRunMonthlyTask() {
-	        LocalDate today = LocalDate.now();
-	        return lastFetchDate == null || lastFetchDate.getMonthValue() != today.getMonthValue();
-	    }
-	
-	    private static long calculateInitialDelay(int hour, int minute) {
-	        LocalTime now = LocalTime.now();
-	        LocalTime targetTime = LocalTime.of(hour, minute);
-	
-	        if (now.isAfter(targetTime)) {
-	            targetTime = targetTime.plusHours(24); // Schedule for the next day
-	        }
-	
-	        return Duration.between(now, targetTime).getSeconds();
-	    }
-	
-	    public static void main(String[] args) {
-	        scheduleDailyTask(
-	            () -> System.out.println("Running the scheduled daily task!"), // Daily task
-	            () -> System.out.println("Running the scheduled monthly task!"), // Monthly task
-	            8, 0 // Run at 08:00 AM
-	        );
-	    }
-	}
 
 	
 	
@@ -342,13 +274,7 @@ public class server extends AbstractServer{
 			if (msg instanceof BookReturnMessage) 
 			{
 				    bokRet=((BookReturnMessage)msg);
-				    //fetch subscriber and check if its even in table send message accordingly  
-				    Subscriber sub = subscriberController.fetchSubscriber(bokRet.borrowerId);
-		                    if (sub == null) {
-		           		 bokRet.allOfCon=false;
-		          		 client.sendToClient("No subscriber found with that ID.");
-		          	         return; // Stop further processing
-		      				     }
+				    
 				    //fetch book and check if its even in table send message accordingly 
 		                    Book bo = bookController.fetchBook(bokRet.bookBarcode);
 		                    if (bo == null) {
@@ -357,36 +283,24 @@ public class server extends AbstractServer{
 		                                return; // Stop further processing
 		                                    }
 		                    //check borrow number belongs to actual borrow
-		                    ResultSet rs = db.retrieveRow("borrow", "borrow_number", bokRet.borrowNum);
+		                    ResultSet rs = db.retrieveRow("book", "barcode", bokRet.bookBarcode);
 		                    try {
 		        	   	 if (rs.next())
 		        			{
-		        			//rs.getString(1)== borrow number   rs.getString(2)==bookbarcode  rs.getString(4)==borrowerid
-		        			if(!(bokRet.borrowNum.equalsIgnoreCase(rs.getString(1)) && bokRet.borrowerId.equalsIgnoreCase(rs.getString(4)) &&
-		        					bokRet.bookBarcode.equalsIgnoreCase(rs.getString(2)) )) {
-		        				if(!(bokRet.borrowNum.equalsIgnoreCase(rs.getString(1)))) {
-			    		           		 bokRet.allOfCon=false;
-			    		           		 client.sendToClient("This is not the right borrow num");
-			    		          		 return; // Stop further processing		
-		        			          }
-		        				if(!(bokRet.borrowerId.equalsIgnoreCase(rs.getString(4)))) {
-			    		                         bokRet.allOfCon=false;
-			    		                         client.sendToClient("This is not the right borrower ID");
-			    		                         return; // Stop further processing		
-		        				}
-		        				if(!(bokRet.bookBarcode.equalsIgnoreCase(rs.getString(2)))) {
-			    		                         bokRet.allOfCon=false;
-			    		                         client.sendToClient("This is not the right book barcode");
-			    		                         return; // Stop further processing		
-		        				}	 
+		        	   		 
+		        	   		 if (rs.getBoolean("book_available"))
+		        	   		 {
+		        	   			client.sendToClient("this book is not borrowed.");
+		                         return; // Stop further processing	
+		        	   		 }
+		        	   		 
+
 		        			}
 		        			bokRet.allOfCon=true;
-		        			client.sendToClient(bokRetCont.createNewBookReturn(bokRet.bookBarcode,bokRet.borrowNum));
-		            	       	      }
-		        	  	  else {
-		        			 client.sendToClient("No borrow found with that borrow number.");
-		        			 bokRet.allOfCon=false;
-		        		       }
+		        			client.sendToClient(bokRetCont.createNewBookReturn(bokRet.bookBarcode));
+		            	       	      
+		                    
+		        	  	  
 		                    }      
 		                    catch (SQLException e) {
 					// TODO Auto-generated catch block

@@ -59,9 +59,7 @@ public  class LoginController extends BaseController   {
 		UM.setPass(pass);
 		UM.send(lm);
 		
-		//received null. something went wrong. temp code
-		if (UM.inb.getMessage().contains("null"))
-			return;
+		
 		
 		//login and show subscriber menu
 		Object fromServer = UM.inb.getObj();

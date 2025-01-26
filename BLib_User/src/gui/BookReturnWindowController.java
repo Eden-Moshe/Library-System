@@ -216,19 +216,19 @@ public class BookReturnWindowController extends BaseController {
 		BookReturnMessage fetchMsg = new BookReturnMessage();
 	    while(fetchMsg.allOfCon==false) {
 		    UserManager UM = UserManager.getInstance();
-		    String borrowerId = getBorrowerId();
-		    String borrowNumber = getBorrowNumber();
+		   // String borrowerId = getBorrowerId();
+		    //String borrowNumber = getBorrowNumber();
 		    String bookBarcode = getbookBarcode();
-		    if (borrowerId.trim().isEmpty() || borrowNumber.trim().isEmpty() || bookBarcode.trim().isEmpty()) 
-		    {   txtResponse.setText("All fields are required.");
+		    if (bookBarcode.trim().isEmpty()) 
+		    {   txtResponse.setText("book Barcode is required.");
 		        return;
 		    }    
 		    // Create BookReturnMessage with:
 		    // 1. borrowerId
 		    // 2. borrowNumber
 		    // 3. Book's barcode
-	    	fetchMsg.borrowerId = borrowerId;
-	    	fetchMsg.borrowNum=borrowNumber;
+	    	//fetchMsg.borrowerId = borrowerId;
+	    	//fetchMsg.borrowNum=borrowNumber;
 	    	fetchMsg.bookBarcode = bookBarcode;
 	    	// Send the BookReturnMessage
 	    	UM.send(fetchMsg);

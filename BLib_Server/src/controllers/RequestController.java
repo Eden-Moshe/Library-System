@@ -55,7 +55,13 @@ public class RequestController {
         }
         
         Borrow ret = null;
-        ResultSet rs = db.retrieveRow(tName, keyField, barcode);
+        
+        String [] fields = {keyField, "actual_returned_date"};
+        String [] Values = {barcode, null};
+        
+        ResultSet rs = db.retrieveRowsWithConditions(tName, fields, Values);
+        
+        //ResultSet rs = db.retrieveRow(tName, keyField, barcode);
         try {
             if (rs.next()) {
                 Date borrowDate = rs.getDate("borrow_date");

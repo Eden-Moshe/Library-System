@@ -31,6 +31,62 @@ public class SearchController {
      * @return A list of books matching the search criteria.
      */
     public List<Book> performSearch(String bookName, String bookGenre, String bookDescription) {
+        // Create the conditions for the query based on user input
+        ArrayList<String> fields = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>();
+
+        // Add conditions for each field
+        if (bookName != null && !bookName.isEmpty()) {
+            fields.add("book_name");
+            values.add(bookName);
+        }
+        if (bookGenre != null && !bookGenre.isEmpty()) {
+            fields.add("book_genre");
+            values.add(bookGenre);
+        }
+        if (bookDescription != null && !bookDescription.isEmpty()) {
+            fields.add("book_description");
+            values.add(bookDescription);
+        }
+
+        // If no conditions are specified, return an empty list
+        if (fields.isEmpty()) {
+            System.out.println("Please enter at least one search term (book name, genre, or description).");
+            return Collections.emptyList();
+        }
+
+        // Get the DBController instance
+        DBController dbController = DBController.getInstance();
+
+        // Perform the query with the provided fields and values
+        ResultSet resultSet = dbController.retrieveRowsWithConditions("book", 
+                                                                    fields.toArray(new String[0]), 
+                                                                    values.toArray(new String[0]));
+        List<Book> bookList = new ArrayList<>();
+
+        try {
+            while (resultSet != null && resultSet.next()) {
+                // Create a Book object for each result
+                Book book = new Book(
+                    resultSet.getString("book_name"),
+                    resultSet.getString("book_genre"),
+                    resultSet.getString("barcode"),
+                    resultSet.getString("shelf_location"),
+                    resultSet.getString("book_description"),
+                    resultSet.getBoolean("book_available"),
+                    resultSet.getDate("return_date")
+                );
+                bookList.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Return the list of books
+        return bookList;
+    }
+
+   /* public List<Book> performSearch(String bookName, String bookGenre, String bookDescription) {
     	
         Connection con = db.getConnection();
         
@@ -88,39 +144,7 @@ public class SearchController {
             
             
             
-            /// me fucking around trying to convert the function to use DBController. 
-//            
-//        	List<Book> bookList = new ArrayList<>();
-//        	try {
-//        	
-//        	String []fields = { "book_description"};
-//        	String []values = {bookDescription};
-//        	//ResultSet result = db.retrieveRowsWithConditions(bookDescription, fields, values)
-//        	ResultSet result = db.retrieveRowsWithConditions(tName, fields, values);
-//                // Creating Book objects from the results and adding them to the list
-//                while (result.next()) {
-//                    Book book = new Book(
-//                        result.getString("book_name"),          // Book Name
-//                        result.getString("book_genre"),         // Book Genre
-//                        result.getString("barcode"),            // Barcode
-//                        result.getString("shelf_location"),     // Shelf Location
-//                        result.getString("book_description"),   // Book Description
-//                        result.getBoolean("book_available"),    // Book Availability
-//                        result.getDate("return_date")   // Closest Return Date
-//                    );
-//                    
-//                    // Adding the book to the list
-//                    bookList.add(book);
-//                }
-//        	
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//            
-//            
-//            
-            
-            
+       
             
             
             
@@ -148,4 +172,5 @@ public class SearchController {
         // Returning the list of books that match the query
         return bookList;
     }
+    */
 }

@@ -131,44 +131,53 @@ public class BorrowController {
         return "active".equalsIgnoreCase(s.getStatus());
     }
     
+    
+    
     /**
-     * Sends a return reminder to the subscriber one day before the return date.
+     * Sends reminders to book borrowers who have not returned books one day before their due date.
      * 
-     * @param borrow the borrow record associated with the subscriber
-     * @param subscriber the subscriber receiving the reminder
+     * Performs the following steps:
+     * - Calculates the date one day before the current date
+     * - Retrieves borrowers with unreturned books from the database
+     * - Sends email and SMS reminders to each borrower
+     * 
      */
-    public void sendReturnReminder(Borrow borrow, Subscriber subscriber) {
-        Date returnDate = borrow.getReturnDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(returnDate);
+    public void sendReminders()
+    {
+    	Date date = new Date();
+    	Calendar calendar = Calendar.getInstance();
+    	
+        calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
-        Date reminderDate = calendar.getTime();
-        Date currentDate = new Date();
-        
-        if (isSameDay(currentDate, reminderDate)) {
-            String message = "Reminder: The book you borrowed is due for return tomorrow. Please return it by " + borrow.getReturnDate().toString() + ".";
-            sendEmail(subscriber.getEmail(), "Book Return Reminder", message);
-            sendSMS(subscriber.getPNumber(), message);
-            sendSystemMessage(subscriber.getSID(), message);
-        }
-    }
+        Date oneDayBefore = calendar.getTime();
+        String [] fields = {"return_date", "actual_returned_date"};
+    	String [] values = {oneDayBefore.toString(), null};
+    	
+    	ResultSet borrows = db.retrieveRowsWithConditions("borrow", fields, values);
     
-    /**
-     * Compares two dates to check if they are the same day, ignoring the time component.
-     * 
-     * @param date1 the first date
-     * @param date2 the second date
-     * @return true if the dates are the same, false otherwise
-     */
-    private boolean isSameDay(Date date1, Date date2) {
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(date1);
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date2);
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-               cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    	
+    	String subscriber_id;
+    	String message = "hello BLib subscriber,\nThis is an automated message reminding you to return book: ";
+    	String borrow_barcode="";
+    	try {
+			while (borrows.next())
+			{
+				try {
+					borrow_barcode = borrows.getString("book_barcode");
+					subscriber_id = borrows.getString("subscriber_id");
+					Subscriber subscriber = SubscriberController.getInstance().fetchSubscriber(subscriber_id);
+					sendEmail(subscriber.getEmail(),"book return reminder from BLib", message + borrow_barcode);
+					sendSMS(subscriber.getPNumber(),message + borrow_barcode);
+					
+				} catch (SQLException e) {
+					System.out.println("failed to send reminder to borrower of borrow_num: " + borrows.getString("borrow_number"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
     }
-    
+   
     /**
      * Sends an email notification to the subscriber.
      * 
@@ -191,13 +200,4 @@ public class BorrowController {
         System.out.println("Sending SMS to " + phoneNumber + " with message: " + message);
     }
     
-    /**
-     * Sends a system notification message to the subscriber.
-     * 
-     * @param subscriberId the ID of the subscriber
-     * @param message the message content
-     */
-    private void sendSystemMessage(String subscriberId, String message) {
-        System.out.println("System message for subscriber " + subscriberId + ": " + message);
-    }
 }

@@ -71,7 +71,7 @@ public class MainController extends Application {
         	   controller = loader.getController();
            }catch (Exception e)
            {
-        	   System.out.println("!!!!!!!!!!!!!!class is not baseController!!!!!!!!!!!!!!!!!!");
+        	   System.out.println("class is not baseController");
         	   //e.printStackTrace();
            }
            if (controller != null) {
