@@ -47,7 +47,7 @@ public class DestroyedBooksWindow extends BaseController {
         // Bind the TableView to the list of records
         destroyedBooksTable.getItems().setAll(records);
         
-        // Set the cell value factories for the columns
+        // Set the cell value factories for the columns,
         bookBarcodeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId()));
         subscriberIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBarcode()));
     }
