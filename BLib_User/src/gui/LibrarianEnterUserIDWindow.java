@@ -70,7 +70,6 @@ public class LibrarianEnterUserIDWindow extends BaseController {
     @FXML
     private void ViewUserInfo(ActionEvent event) {
         String userID = getUserId();
-        
         // Check no field is left empty
         if (userID.trim().isEmpty()) {
             txtresponse.setText("ID field is required.");
