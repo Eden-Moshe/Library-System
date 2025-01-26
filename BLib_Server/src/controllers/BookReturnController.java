@@ -46,12 +46,43 @@ public class BookReturnController {
      * @param borrowNum The borrow number associated with the returned book.
      * @return A message indicating the success of the book return operation.
      */
-    public String createNewBookReturn(String bookBarcode, String borrowNum) {
-        // Update the actual_returned_date in the borrow table
-        db.editRow("borrow", "borrow_number", borrowNum, "actual_returned_date", LocalDate.now().toString());
+    public String createNewBookReturn(String bookBarcode) {
+    	
+    	String fields[] = {"book_barcode","actual_returned_date"};
+    	String values[] = {bookBarcode, null};
+    	
+    	String borrow_number="";
+    	
+    	ResultSet rs = db.retrieveRowsWithConditions("borrow", fields, values);
+    	
+    	try {
+			if (rs.next())
+			{
+				borrow_number = rs.getString("borrow_number");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    	
+    	// Update the actual_returned_date in the borrow table
+        db.editRow("borrow", "borrow_number", borrow_number, "actual_returned_date", LocalDate.now().toString());
 
         // Set the book's availability to true in the book table
         db.editRow("book", "barcode", bookBarcode, "book_available", "true");
+        // Set the book's return_date to null in the book table
+        db.editRow("book", "barcode", bookBarcode, "return_date", "null");
+        
+        
+    	
+        //old
+//        // Update the actual_returned_date in the borrow table
+//        db.editRow("borrow", "borrow_number", borrowNum, "actual_returned_date", LocalDate.now().toString());
+//
+//        // Set the book's availability to true in the book table
+//        db.editRow("book", "barcode", bookBarcode, "book_available", "true");
 
         return "The book was returned.";
     }

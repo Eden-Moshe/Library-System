@@ -6,11 +6,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import common.BorrowRecord;
@@ -125,7 +128,11 @@ public class DBController {
 	    
 	    for (int i = 0; i < fieldLen; i++) {
 	        query.append(fields[i]);
-	        query.append(" LIKE ?");
+	        if (values[i]==null)
+	        	query.append(" IS ?");
+	        else
+	        	query.append(" LIKE ?");
+	        
 	        if (i < fieldLen - 1) {
 	            query.append(" AND ");
 	        }
@@ -137,6 +144,7 @@ public class DBController {
 	            //stmt.setString(i + 1, "%" + values[i] + "%");
 	            setStmt(stmt,i+1,fields[i],"%" + values[i] + "%");
 	        }
+	        System.out.println(stmt.toString());
 	        return stmt.executeQuery();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -159,7 +167,8 @@ public class DBController {
 
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
-	
+		System.out.println("value is :" + value);
+
 		
 		if (intFields.contains(field))
 		{
@@ -173,22 +182,35 @@ public class DBController {
 			
 			stmt.setInt(index,intValue);
 		}	
+
 	    // Handling date fields
-	    else if (dateFields.contains(field)) {
-	        if (value == null || value.equals("null")) {
-	            // If the value is null or "null" (as a string), set the value to SQL NULL
-	            stmt.setNull(index, java.sql.Types.DATE);
-	        } else {
-	            try {
-	                // Convert the string to java.sql.Date (ensure it's in yyyy-MM-dd format)
-	                java.sql.Date sqlDate = java.sql.Date.valueOf(value); // Direct conversion
-	                stmt.setDate(index, sqlDate);
-	            } catch (IllegalArgumentException e) {
-	                // Handle invalid date format
-	                throw new SQLException("Invalid date format for field: " + field + " with value: " + value);
-	            }
-	        }
-	    }
+		else if (dateFields.contains(field)) {
+		    if (value == null) {
+		        System.out.println("value is null");
+		        stmt.setNull(index, java.sql.Types.DATE);
+		    } else if (value.contains("null")) {
+		        System.out.println("value is null string");
+		        stmt.setNull(index, java.sql.Types.DATE);
+		    } else {
+		        try {
+		            java.sql.Date sqlDate;
+		            if (value.matches("\\d{4}-\\d{2}-\\d{2}")) {
+		                String cleanValue = value.replaceAll("%", "").trim();
+		                // Handle yyyy-MM-dd format
+		                sqlDate = java.sql.Date.valueOf(cleanValue);
+		            } else {
+		                // Handle Date.toString() format (e.g., "Wed Dec 31 00:00:00 PST 1969")
+		                String cleanValue = value.replaceAll("%", "").trim();
+		                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+		                java.util.Date parsed = format.parse(cleanValue);
+		                sqlDate = new java.sql.Date(parsed.getTime());
+		            }
+		            stmt.setDate(index, sqlDate);
+		        } catch (IllegalArgumentException | ParseException e) {
+		            throw new SQLException("Invalid date format for field: " + field + " with value: " + value);
+		        }
+		    }
+		}
 		else if (boolFields.contains(field))
 			stmt.setBoolean(index, value.contains("true"));//if value = "true" will set true.
 		else
@@ -201,7 +223,11 @@ public class DBController {
 		try
 		{
 			//stmt = con.createStatement();
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM " +table +" WHERE " + field + " = ?");
+			PreparedStatement stmt;
+			if (val==null)
+				 stmt = con.prepareStatement("SELECT * FROM " +table +" WHERE " + field + " IS ?");
+			else
+				 stmt = con.prepareStatement("SELECT * FROM " +table +" WHERE " + field + " = ?");
 			
 			System.out.println(stmt.toString());
 			//stmt.setString(1, key);
