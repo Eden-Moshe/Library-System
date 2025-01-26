@@ -138,7 +138,7 @@ public  class MainMenuController extends BaseController  {
 	
 	public void btnUserInfo(ActionEvent event) throws Exception {
 
-		SubscriberUI.mainController.switchView("SubscriberInformationPersonal.fxml");
+		SubscriberUI.mainController.switchView("/gui/SubscriberInformationPersonal.fxml");
 		
 	}
 

@@ -381,7 +381,7 @@ public class server extends AbstractServer{
 		        				}	 
 		        			}
 		        			bokRet.allOfCon=true;
-		        			client.sendToClient(bokRetCont.createNewBookReturn(bokRet.borrowerId,bokRet.bookBarcode,bokRet.borrowNum));
+		        			client.sendToClient(bokRetCont.createNewBookReturn(bokRet.bookBarcode,bokRet.borrowNum));
 		            	       	      }
 		        	  	  else {
 		        			 client.sendToClient("No borrow found with that borrow number.");

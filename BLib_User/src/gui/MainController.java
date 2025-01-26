@@ -33,7 +33,7 @@ public class MainController extends Application {
    		
    		
    		root = new StackPane();
-   		root.setStyle("-fx-background-color: #355457;");
+   		//root.setStyle("-fx-background-color: #355457;");
 
            // Load initial view
            Pane homeView = loadView("/gui/LoginWindow.fxml");
@@ -44,14 +44,13 @@ public class MainController extends Application {
           
      
            
-           Scene scene = new Scene(root, 1400, 1024);
+           Scene scene = new Scene(root, 960, 720);
            // Load the CSS file
-//           String cssFile = getClass().getResource("/styles/app.css").toExternalForm();
-//           scene.getStylesheets().add(cssFile);
+           String cssFile = getClass().getResource("unified_style.css").toExternalForm();
+          scene.getStylesheets().add(cssFile);
            
            // Close the application completely when the window is closed
            primaryStage.setOnCloseRequest(event -> {
-        	   UserManager.getInstance().quit();
                System.exit(0);  // Ensures JVM exits if needed
            });
            primaryStage.setScene(scene);

@@ -1,6 +1,7 @@
 package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import common.Book;
 import common.Borrow;
@@ -176,4 +177,28 @@ public class RequestController {
         borrow.setReturnDate(extendedDate);
         return "Request approved, date of return was updated accordingly.";
     }
+    
+    
+    
+//    public <RequestMessage>ArrayList extensionHistory(String subscriber_id)
+//    {
+//    	
+//    	
+//    	ResultSet rs = db.retrieveRow("borrow", "subscriber_id" , subscriber_id);
+//    	
+//    	
+//    	try {
+//			while (rs.next())
+//			{
+//				
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	
+//    	return null;
+//    }
+    
+    
 }

@@ -55,29 +55,6 @@ public  class LibrarianMenuController extends BaseController  {
 	}
 		
 
-	public void btnCreateSubscriber(ActionEvent event) throws Exception {
-		
-		
-		SubscriberUI.mainController.switchView("/gui/CreateSubscriberForm.fxml");
-
-//		FXMLLoader loader = new FXMLLoader();
-//		
-//		UserManager UM = UserManager.getInstance();
-//		
-//
-//		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-//		Stage primaryStage = new Stage();
-//		Pane root = loader.load(getClass().getResource("/gui/CreateSubscriberForm.fxml").openStream());
-//
-//		
-//		Scene scene = new Scene(root);			
-//		primaryStage.setTitle("Subscriber Creation Tool");
-//
-//		primaryStage.setScene(scene);		
-//		primaryStage.show();
-
-	}
-	
 	
 	
 	public void btnInbox(ActionEvent event) throws Exception {

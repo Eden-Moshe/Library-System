@@ -114,6 +114,11 @@ public class ViewUserInfoWindow extends BaseController {
     @FXML
     private void viewAccountStatusHistory(ActionEvent event) {
         // Goes to Account Status History Page
+    	GenericMessage getStatus = new GenericMessage();
+		getStatus.subscriber=sub;
+		getStatus.action = get_Account_Status_History;
+		
+		UM.send(getStatus);
         SubscriberUI.mainController.switchView("/gui/AccountStatusHistory.fxml");
     }
     
