@@ -64,8 +64,10 @@
 
     <!-- Buttons Section -->
     <VBox alignment="CENTER" layoutY="370" spacing="15" />
-     <Button fx:id="btnExtendBorrow" layoutX="90.0" layoutY="187.0" onAction="#extendBorrow" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Extend Borrow" />
-     <Button fx:id="btnViewAccountStatusHistory" layoutX="75.0" layoutY="266.0" onAction="#viewAccountStatusHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="View Status History" />
-     <Button fx:id="btnViewBorrowHistory" layoutX="71.0" layoutY="350.0" onAction="#viewBorrowHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="View Borrow History" />
+     <Button fx:id="btnExtendBorrow" layoutX="87.0" layoutY="128.0" onAction="#extendBorrow" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Extend Borrow" />
+     <Button fx:id="btnViewAccountStatusHistory" layoutX="72.0" layoutY="207.0" onAction="#viewAccountStatusHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="View Status History" />
+     <Button fx:id="btnViewBorrowHistory" layoutX="68.0" layoutY="291.0" onAction="#viewBorrowHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="View Borrow History" />
+   <Button fx:id="btnViewBorrowHistory1" layoutX="100.0" layoutY="360.0" onAction="#viewBorrowHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Lost Books" />
+   <Button fx:id="btnViewBorrowHistory11" layoutX="80.0" layoutY="435.0" onAction="#viewBorrowHistory" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="Destroyed Books" />
     
 </AnchorPane>
