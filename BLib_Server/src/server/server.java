@@ -64,7 +64,10 @@ public class server extends AbstractServer{
 	   */
 	  public server(int port) 
 	  {
+		  
 	    super(port);
+	    System.out.println("classpath is: " + System.getProperty("java.class.path"));
+		System.out.println("started server");
   		db = DBController.getInstance();
   		subscriberController = SubscriberController.getInstance();
   		borrowController = BorrowController.getInstance();
@@ -78,6 +81,10 @@ public class server extends AbstractServer{
 		
 		timedTasks = new TimedTasks();
 		dailyTasks();
+		
+		System.out.println("finished starting server");
+
+		
 	  }
 	  /**
 	   * this function runs all the other functions that need to be run once a day
@@ -88,8 +95,8 @@ public class server extends AbstractServer{
 	            try {
 	            	//add all the calls to functions that need to run every day
 	            	
-	                //borrowController.sendReminders();
-	                //orderController.checkAndCancelExpiredOrders();
+	                borrowController.sendReminders();
+	                orderController.checkAndCancelExpiredOrders();
 	            	
 	                System.out.println("Daily tasks completed successfully.");
 	            } catch (Exception e) {
@@ -161,6 +168,8 @@ public class server extends AbstractServer{
 	   */
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
 	{
+		System.out.println("handle message from client");
+
 		SubMessage sm;
 		LoginMessage lm = null;
 		BorrowMessage borrowMessage;
@@ -308,9 +317,8 @@ public class server extends AbstractServer{
 				if (destMsg.fetch) {
 					client.sendToClient(bokRetCont.fetchDest());
 				}
-				String id = destMsg.id;
 				String barcode = destMsg.barcode;
-				client.sendToClient(bokRetCont.destroyBook(id,barcode));
+				client.sendToClient(bokRetCont.destroyBook(barcode));
 				
 			}
 			

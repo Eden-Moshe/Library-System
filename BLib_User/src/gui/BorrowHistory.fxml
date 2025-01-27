@@ -1,50 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="gui.BorrowHistoryController"
-    alignment="CENTER"
-    spacing="10"
-    style="-fx-background-color: #1F4044;"
-    prefWidth="960" 
-    prefHeight="720">
+<VBox alignment="CENTER" prefHeight="720" prefWidth="960" spacing="10" style="-fx-background-color: #1F4044;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BorrowHistoryController">
 
     <!-- Header section with back button and title -->
     <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
         <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 20;">
-            <Button fx:id="handleBack" onAction="#goBack" 
-                style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"
-                text="←"/>
+            <Button fx:id="handleBack" onAction="#goBack" style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;" text="←" />
         </HBox>
-        <Label text="Subscriber's Borrow History" 
-            style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Label style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;" text="Subscriber's Borrow History" />
     </VBox>
 
     <!-- Main content container -->
     <VBox alignment="CENTER" spacing="15" style="-fx-padding: 10;">
         <!-- Table container with styling -->
         <VBox style="-fx-background-color: #2A565B; -fx-padding: 20; -fx-background-radius: 15;">
-            <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
-                style="-fx-min-height: 400; -fx-pref-width: 750;">
+            <TableView fx:id="tableView" style="-fx-min-height: 400; -fx-pref-width: 750;" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="bookNameColumn" text="Book Name" 
-                        style="-fx-pref-width: 250;"/>
-                    <TableColumn fx:id="bookBorrowDateColumn" text="Borrow Date"
-                        style="-fx-pref-width: 250;"/>
-                    <TableColumn fx:id="bookReturnDateColumn" text="Return Date"
-                        style="-fx-pref-width: 250;"/>
+                    <TableColumn fx:id="bookNameColumn" style="-fx-pref-width: 250;" text="Book Name" />
+                    <TableColumn fx:id="bookBorrowDateColumn" style="-fx-pref-width: 250;" text="Borrow Date" />
+                    <TableColumn fx:id="bookReturnDateColumn" prefWidth="399.0" style="-fx-pref-width: 250;" text="Return Date" />
                 </columns>
             </TableView>
         </VBox>
 
         <!-- Button section -->
-        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10 0;">
-            <Button fx:id="btnExtensions" text="View Borrow Extensions" 
-                onAction="#viewExtensions"
-                style="-fx-font-size: 14; -fx-padding: 12 25; -fx-min-width: 200;"/>
-        </HBox>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10 0;" />
     </VBox>
 </VBox>

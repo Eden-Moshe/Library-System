@@ -5,34 +5,121 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="720.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookResultsController">
+<BorderPane prefHeight="720.0" prefWidth="960.0"
+           xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="gui.BookResultsController"
+           style="-fx-background-color: #355457;">
     
     <top>
-        <Button onAction="#handleBackAction" styleClass="nav-button" text="←">
+        <Button onAction="#handleBackAction"
+                text="←"
+                style="-fx-background-color: #e4b970; 
+                       -fx-text-fill: #355457; 
+                       -fx-font-size: 24;
+                       -fx-min-width: 50; 
+                       -fx-min-height: 50; 
+                       -fx-background-radius: 20;">
             <BorderPane.margin>
                 <Insets bottom="20" left="20" top="20" />
             </BorderPane.margin>
         </Button>
     </top>
-    
+
     <center>
-        <TableView fx:id="tblResults" styleClass="modern-table">
+        <TableView fx:id="tblResults"
+                   style="-fx-background-color: #2e4e4e;
+                          -fx-control-inner-background: #2e4e4e;
+                          -fx-table-cell-border-color: #355457;
+                          -fx-text-fill: white;">
             <columns>
-                <TableColumn fx:id="colBookName" prefWidth="200" text="Book Name" />
-            <TableColumn fx:id="colBookBarcode" prefWidth="200" text="Barcode" />
-                <TableColumn fx:id="colBookGenre" prefWidth="120" text="Genre" />
-                <TableColumn fx:id="colBookDesc" prefWidth="300" text="Description" />
-                <TableColumn fx:id="colBookExists" prefWidth="80" text="Available" />
-                <TableColumn fx:id="colPlaceOnShelf" prefWidth="100" text="Location" />
-                <TableColumn fx:id="colReturnDate" prefWidth="150" text="Return Date" />
+                <TableColumn fx:id="colBookName" 
+                            prefWidth="200" 
+                            text="Book Name"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
+                
+                <TableColumn fx:id="colBookBarcode" 
+                            prefWidth="120" 
+                            text="Barcode"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
+                
+                <TableColumn fx:id="colBookGenre" 
+                            prefWidth="120" 
+                            text="Genre"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
+                
+                <TableColumn fx:id="colBookDesc" 
+                            prefWidth="300" 
+                            text="Description"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
+                
+                <TableColumn fx:id="colBookExists" 
+                            prefWidth="80" 
+                            text="Available"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER;" />
+                
+                <TableColumn fx:id="colPlaceOnShelf" 
+                            prefWidth="100" 
+                            text="Location"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
+                
+                <TableColumn fx:id="colReturnDate" 
+                            prefWidth="150" 
+                            text="Return Date"
+                            style="-fx-font-size: 14; 
+                                   -fx-text-fill: white; 
+                                   -fx-alignment: CENTER-LEFT;" />
             </columns>
+            
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
+            
             <BorderPane.margin>
                 <Insets bottom="20" left="20" right="20" />
             </BorderPane.margin>
+            
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+
+            <style>
+                -fx-background-color: #2e4e4e;
+                -fx-control-inner-background: #2e4e4e;
+                -fx-table-cell-border-color: #355457;
+                -fx-text-fill: white;
+                
+                /* New styles for row height adjustment */
+                -fx-cell-size: -1;
+            </style>
+            
+            <!-- Style class for all cells in the table -->
+            <styleClass>
+                .table-cell {
+                    -fx-padding: 10;
+                    -fx-alignment: top-left;
+                    -fx-wrap-text: true;
+                }
+                
+                .table-row-cell {
+                    -fx-cell-size: -1;
+                    -fx-min-height: 50;
+                }
+            </styleClass>
         </TableView>
     </center>
 </BorderPane>

@@ -230,13 +230,11 @@ public class BookReturnWindowController extends BaseController {
 	    public void btnReturnDestroyedBook(ActionEvent event) throws SQLException, IOException {
 			DestroyedMessage destMsg = new DestroyedMessage();
 			UserManager UM = UserManager.getInstance();
-			String borrowerId = getBorrowerId();
 			String bookBarcode = getbookBarcode(); 
 			
 			// Create DestroyedMessage with:
 			// 1. borrowerId
 			// 2. Book's barcode
-			destMsg.id = borrowerId;
 		    destMsg.barcode=bookBarcode;
 
 		    UM.send(destMsg);

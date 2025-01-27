@@ -17,7 +17,8 @@ import java.util.Date;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import javafx.geometry.Insets;
+import javafx.scene.layout.Region;
 import client.SubscriberUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -84,7 +85,7 @@ public class BookResultsController extends BaseController implements Initializab
     public void initialize(URL location, ResourceBundle resources) {
         try {
             // Initialize basic columns with data from the Book class
-        	colBookBarcode.setCellValueFactory(new PropertyValueFactory<>("bookBarcode"));
+            colBookBarcode.setCellValueFactory(new PropertyValueFactory<>("bookBarcode"));
             colBookName.setCellValueFactory(new PropertyValueFactory<>("bookName"));
             colBookGenre.setCellValueFactory(new PropertyValueFactory<>("bookGenre"));
             colBookDesc.setCellValueFactory(new PropertyValueFactory<>("bookDesc"));
@@ -98,39 +99,44 @@ public class BookResultsController extends BaseController implements Initializab
                 return new SimpleStringProperty(returnDate == null ? "N/A" : returnDate.toString());
             });
 
-            // Set up description column with text wrapping
-            colBookDesc.setCellFactory(new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
-                @Override
-                public TableCell<Book, String> call(TableColumn<Book, String> param) {
-                    TableCell<Book, String> cell = new TableCell<Book, String>() {
-                        private Text text;
-
-                        @Override
-                        protected void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-
-                            if (empty || item == null) {
-                                setGraphic(null);
-                                setText(null);
-                            } else {
-                                text = new Text(item);
-                                text.setTextAlignment(TextAlignment.CENTER);
-                                text.setWrappingWidth(230); // Adjust width as needed
-                                setGraphic(text);
-                            }
+            // Create a generic cell factory for text wrapping
+            Callback<TableColumn<Book, String>, TableCell<Book, String>> cellFactory = column -> {
+                return new TableCell<Book, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (item == null || empty) {
+                            setText(null);
+                            setStyle("-fx-alignment: CENTER-LEFT;");
+                        } else {
+                            // Create wrapped text
+                            setText(item);
+                            setWrapText(true);
+                            setStyle("-fx-alignment: CENTER-LEFT;");
+                            
+                            // Add padding
+                            setPadding(new Insets(5, 5, 5, 5));
                         }
-                    };
+                    }
+                };
+            };
 
-                    cell.setWrapText(true);
-                    return cell;
-                }
-            });
+            // Apply the cell factory to all text columns
+            colBookName.setCellFactory(cellFactory);
+            colBookBarcode.setCellFactory(cellFactory);
+            colBookGenre.setCellFactory(cellFactory);
+            colBookDesc.setCellFactory(cellFactory);
+            colBookExists.setCellFactory(cellFactory);
+            colPlaceOnShelf.setCellFactory(cellFactory);
+            colReturnDate.setCellFactory(cellFactory);
 
-            // Configure table for dynamic row heights
-            tblResults.setFixedCellSize(-1);
+            // Configure table properties
+            tblResults.setFixedCellSize(Region.USE_COMPUTED_SIZE);
             tblResults.setRowFactory(tv -> {
                 TableRow<Book> row = new TableRow<>();
-                row.setMinHeight(50); // Minimum height for rows
+                row.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                row.setMinHeight(50);
                 return row;
             });
 
@@ -138,7 +144,6 @@ public class BookResultsController extends BaseController implements Initializab
             e.printStackTrace();
         }
     }
-
     /**
      * Sets the search results to be displayed in the table.
      * 

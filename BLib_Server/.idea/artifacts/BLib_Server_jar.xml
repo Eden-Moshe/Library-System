@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BLib_Server:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/BLib_Server_jar</output-path>
+    <root id="archive" name="BLib_Server.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../../jar tests/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

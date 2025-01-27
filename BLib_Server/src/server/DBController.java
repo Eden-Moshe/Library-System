@@ -45,7 +45,8 @@ public class DBController {
 	}
 
 	private boolean connectToDB() {
-		
+		System.out.println("connec to db");
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -59,7 +60,8 @@ public class DBController {
 			System.out.print("cannot connect to the DB : " + e.getMessage());
 			return false;
 		}
-		
+		System.out.println("finish connec to db");
+
 		return true;
 	}
 //

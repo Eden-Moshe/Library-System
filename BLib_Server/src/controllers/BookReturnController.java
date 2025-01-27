@@ -132,18 +132,36 @@ public class BookReturnController {
      * and then inserts a record into the "destroyed_books" table with the provided 
      * barcode and borrower ID.
      * 
-     * @param id the ID of the borrower who destroyed the book
      * @param barcode the barcode of the destroyed book
      * @return a message indicating whether the operation was successful or not
      */
-    public String destroyBook(String id, String barcode) {
+    public String destroyBook(String barcode) {
         
+    	
+    	String subscriber_id="0";
+    	String [] fields1 = {"book_barcode", "actual_returned_date"};
+    	String [] values1 = {barcode, null};
+    	
+    	ResultSet rs = db.retrieveRowsWithConditions("borrow", fields1, values1);
+    	
+    	try {
+			if (rs.next())
+			{
+				subscriber_id = rs.getString("subscriber_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    	
         // Delete the book from the database
         db.deleteRow("book", "barcode", barcode);
         
         // Add the destroyed book details to the "destroyed_books" table
         String[] fields = {"book_barcode", "borrower_id"};
-        String[] values = {barcode, id};
+        String[] values = {barcode, subscriber_id};
         db.insertRow("destroyed_books", fields, values);
         
         return "Book was successfully removed from database";
