@@ -1,4 +1,3 @@
-/*unified_style.css */
 /* Unified CSS for the project (Updated Colors) */
 
 /* General Layout */
@@ -10,17 +9,23 @@
 
 /* Buttons */
 .button {
-    -fx-background-color: #f6c177; /* Light gold */
-    -fx-text-fill: #355457; /* Dark green text */
-    -fx-font-weight: bold;
-    -fx-padding: 10px 15px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.2, 0, 2);
+    -fx-background-color: #e4b970;
+    -fx-text-fill: rgb(37, 75, 75);
+    -fx-font-family: 'Arial';
+    -fx-font-weight: normal;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease-in-out;
 }
 .button:hover {
     -fx-background-color: #d9a762; /* Slightly darker gold */
 }
+.button:hover {
+    -fx-background-color: #d9a450;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.25, 0, 4);
+}
+
 
 /* Tables */
 .table-view {
@@ -82,3 +87,56 @@
 .scroll-bar .increment-button, .scroll-bar .decrement-button {
     -fx-background-color: #355457; /* Subtle dark tone */
 }
+
+
+
+
+
+/* DatePicker Styling */
+.date-picker {
+    -fx-background-color: #1F4044;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #e4b970;
+    -fx-background-radius: 0 8 8 0;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #d9a762;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #1F4044;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup {
+    -fx-background-color: #2A565B;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #1F4044;
+}
+
+.date-picker-popup .calendar-grid {
+    -fx-background-color: #2A565B;
+}
+
+.date-picker-popup .cell {
+    -fx-background-color: #2A565B;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .cell:hover {
+    -fx-background-color: #e4b970;
+    -fx-text-fill: #1F4044;
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: #e4b970;
+    -fx-text-fill: #1F4044;
+}
+
+
+

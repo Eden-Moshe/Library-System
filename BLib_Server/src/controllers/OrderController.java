@@ -102,7 +102,6 @@ public class OrderController {
 	                            // Cancel the order if it's still waiting
 	                            if ("waiting".equals(orderRs.getString("order_status"))) {
 	                                db.editRow("order_book", "book_name", bookName, "order_status", "cancelled");
-	                                System.out.println("Cancelled order for book: " + bookName);
 	                            }
 	                        }
 	                    }
@@ -153,7 +152,6 @@ public class OrderController {
 				currentOrders++;
 			}
 
-			System.out.println("can be orderd:" + (unavailableCopies > currentOrders));
 			// Return if the number of active orders is less than the available copies
 			return unavailableCopies > currentOrders;
 		} catch (SQLException e) {
@@ -285,7 +283,6 @@ public class OrderController {
 	    List<Book> books = performSearchByBookName(bookName);
 
 	    if (books.isEmpty()) {
-	        System.out.println("No books found with the name: " + bookName);
 	        return null;
 	    }
 
@@ -323,7 +320,6 @@ public class OrderController {
 	        }
 	    }
 
-	    System.out.println("Nearest return date found: " + nearestReturnDate);
 	    return nearestReturnDate;
 	}
 
@@ -354,9 +350,7 @@ public class OrderController {
 				String location = resultSet.getString("shelf_location");
 				boolean available = resultSet.getBoolean("book_available");
 				Date returnDate = resultSet.getDate("return_date");
-				// Print values for debugging
-				System.out.println("Retrieved from DB - Return Date: " + returnDate);
-
+		
 				Book book = new Book(barcode, // Barcode first
 						name, // Book name second
 						genre, // Genre third
@@ -371,10 +365,7 @@ public class OrderController {
 			e.printStackTrace();
 		}
 
-		// Debug print the results
-		for (Book book : bookList) {
-			System.out.println("Book in list - Return Date: " + book.getReturnDate());
-		}
+	
 
 		return bookList;
 	}
@@ -390,19 +381,16 @@ public class OrderController {
 			ResultSet rsSubscriber = db.retrieveRow("subscriber", "subscriber_id", String.valueOf(subscriberId));
 			// First check if we have any results
 			if (rsSubscriber == null) {
-				System.out.println("No subscriber found with ID: " + subscriberId);
 				return false;
 			}
 			// Move to first row and check if we have data
 			if (rsSubscriber.next()) {
 				String status = rsSubscriber.getString("subscriber_status");
 				if (!"active".equalsIgnoreCase(status)) {
-					System.out.println("Subscriber is not active. Status: " + status);
 					return false;
 				}
 				return true;
 			} else {
-				System.out.println("No subscriber found with ID: " + subscriberId);
 				return false;
 			}
 

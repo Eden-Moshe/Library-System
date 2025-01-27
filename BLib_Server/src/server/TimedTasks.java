@@ -15,16 +15,17 @@ public class TimedTasks {
     
     public void scheduleTask(Runnable task) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 21); 
-        calendar.set(Calendar.MINUTE, 21);
-        calendar.set(Calendar.SECOND, 55);
+        //daily tasks will run at 13:00 each day
+        calendar.set(Calendar.HOUR_OF_DAY, 13); 
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         
       
         // for debugging
-        Date now =  new Date();
-        calendar.setTime(now);
-        calendar.add(Calendar.SECOND, 1);
+//        Date now =  new Date();
+//        calendar.setTime(now);
+//        calendar.add(Calendar.SECOND, 1);
         
         
         // If the time has already passed today, schedule for tomorrow

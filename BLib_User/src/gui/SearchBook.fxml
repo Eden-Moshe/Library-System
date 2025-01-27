@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
 
-<Pane prefHeight="698.0" prefWidth="562.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" stylesheets="@SearchBook.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SearchBookController">
-   <children>
-       <!-- Back Button (Arrow at Top Left) -->
-       <Button fx:id="handleBack" layoutX="10.0" layoutY="10.0" onAction="#handleBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
-   
-       <!-- LOGO IMAGE -->
-       <ImageView fx:id="logo" fitHeight="273.0" fitWidth="225.0" layoutX="170.0" layoutY="51.0" preserveRatio="true">
-           <image>
-               <Image url="@/gui/images/BLIB.png" />
-           </image>
-       </ImageView>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.SearchBookController"
+    alignment="CENTER"
+    spacing="15"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
 
-       <!-- Book Name Label and Field -->
-       <Label layoutX="131.0" layoutY="339.0" styleClass="label" text="Book Name:" />
-       <TextField fx:id="txtBookName" layoutX="131.0" layoutY="358.0" styleClass="text-field" />
+    <!-- Back button container -->
+    <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 30;">
+        <Button fx:id="handleBack" onAction="#handleBack" text="←"
+            style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"/>
+    </HBox>
 
-       <!-- Book Subject Label and Field -->
-       <Label layoutX="138.0" layoutY="403.0" styleClass="label" text="Book Subject:" />
-       <TextField fx:id="txtBookSubject" layoutX="131.0" layoutY="424.0" styleClass="text-field" />
+    <!-- Main content container -->
+    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 0 30 30 30;">
+        <!-- Logo -->
+        <ImageView fx:id="logo" fitHeight="150" fitWidth="150" preserveRatio="true">
+            <image>
+                <Image url="@/gui/images/BLIB.png"/>
+            </image>
+        </ImageView>
 
-       <!-- Description Label and Field -->
-       <Label layoutX="133.0" layoutY="471.0" styleClass="label" text="Description:" />
-       <TextField fx:id="txtDescription" layoutX="131.0" layoutY="492.0" styleClass="text-field" />
+        <!-- Search form -->
+        <VBox spacing="15" style="-fx-background-color: #2A565B; -fx-padding: 30; -fx-background-radius: 15; -fx-min-width: 500; -fx-max-width: 500;">
+            <Label text="Search Books" style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-       <!-- Search Button -->
-       <Button fx:id="btnSearch" layoutX="181.0" layoutY="560.0" onAction="#btnSearch" styleClass="search-button" text="Search 🔍" />
-   </children>
-</Pane>
+            <!-- Book Name field -->
+            <VBox spacing="8">
+                <Label text="Book Name" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBookName" promptText="Enter book name"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
+
+            <!-- Book Subject field -->
+            <VBox spacing="8">
+                <Label text="Book Subject" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBookSubject" promptText="Enter book subject"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
+
+            <!-- Description field -->
+            <VBox spacing="8">
+                <Label text="Description" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtDescription" promptText="Enter description"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
+
+            <!-- Search button -->
+            <HBox alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                <Button fx:id="btnSearch" text="Search" onAction="#btnSearch"
+                    style="-fx-font-size: 14; -fx-padding: 12 25; -fx-min-width: 120;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</VBox>

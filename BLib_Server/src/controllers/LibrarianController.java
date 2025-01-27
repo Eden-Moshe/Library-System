@@ -36,15 +36,12 @@ public class LibrarianController {
 	}
 	public ArrayList<InboxMessage> retrieveMessages(String id)
 	{
-		System.out.println("retrievemessages id =" + id);
 		ArrayList<InboxMessage> ret = new ArrayList<>();
 		InboxMessage inboxMessage;
 		ResultSet rs = db.retrieveRow("librarian_messages", "librarian_id", id);
-		System.out.println("retrievemessages pre-while");
 		try {
 			while (rs.next())
 			{
-				System.out.println("retrievemessages in-while");
 
 				
 				inboxMessage = new InboxMessage();

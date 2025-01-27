@@ -5,49 +5,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="gui.LoginController"
-      alignment="CENTER" 
-      spacing="30" 
-      style="-fx-background-color: #1F4044;">
-    
-    <!-- Container for all content -->
-    <VBox alignment="CENTER" spacing="35" style="-fx-padding: 40;">
-        <!-- Logo Section -->
-        <ImageView fx:id="logo" fitHeight="220" fitWidth="220" preserveRatio="true">
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.LoginController"
+    alignment="CENTER"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
+
+    <!-- Main content container with adjusted padding -->
+    <VBox alignment="CENTER" spacing="25" style="-fx-padding: 30;">
+        <!-- Logo with adjusted size -->
+        <ImageView fx:id="logo" fitHeight="180" fitWidth="180" preserveRatio="true">
             <image>
                 <Image url="@/gui/images/BLIB.png"/>
             </image>
         </ImageView>
 
-        <!-- Login Form Container -->
-        <VBox spacing="25" style="-fx-background-color: #2A565B; -fx-padding: 30; -fx-background-radius: 15; -fx-max-width: 400;">
-            <Label text="Welcome" style="-fx-font-size: 26; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            
-            <!-- User ID Field -->
-            <VBox spacing="8">
-                <Label text="User ID" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+        <!-- Login form with adjusted width and padding -->
+        <VBox spacing="20" style="-fx-background-color: #2A565B; -fx-padding: 40; -fx-background-radius: 15; -fx-min-width: 500; -fx-max-width: 500;">
+            <Label text="Welcome" style="-fx-font-size: 32; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <!-- User ID field -->
+            <VBox spacing="10">
+                <Label text="User ID" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
                 <TextField fx:id="idtxt" promptText="Enter your User ID"
-                          style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
-                                 -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
             </VBox>
 
-            <!-- Password Field -->
-            <VBox spacing="8">
-                <Label text="Password" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+            <!-- Password field -->
+            <VBox spacing="10">
+                <Label text="Password" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
                 <PasswordField fx:id="passwordtxt" promptText="Enter your password"
-                             style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
-                                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
             </VBox>
 
-            <!-- Buttons Container -->
-            <HBox spacing="15" alignment="CENTER">
+            <!-- Buttons with increased size -->
+            <HBox spacing="20" alignment="CENTER">
                 <Button fx:id="btnLogin" text="Login" onAction="#btnLogin"
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                               -fx-padding: 12 35; -fx-background-radius: 8; -fx-font-size: 14;"/>
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"/>
                 <Button fx:id="btnSearchNoLogin" text="Search Books" onAction="#searchNoLogin"
-                        style="-fx-background-color: transparent; -fx-text-fill: #F6C177; -fx-border-color: #F6C177;
-                               -fx-padding: 12 35; -fx-background-radius: 8; -fx-border-radius: 8; -fx-font-size: 14;"/>
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"/>
             </HBox>
         </VBox>
     </VBox>

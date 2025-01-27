@@ -103,23 +103,19 @@ public class CreateSubscriberFormController extends BaseController implements In
 		//prevent double-clicking save, no new user can be created until the window is closed and opened again. 
 		if (saveClicked)
 		{
-			
-			System.out.println("doubleclick prevention text in createform SID.getText = "+txtSID.getText( )+"|STOP");
 			//warn user that no new user can be created. or replace button with non-clickable button
+			showAlert("Warning","clicked twice\ngo back to create a new user");
 			return;
 			
 		}
 		
 		if (email == null || name == null || phoneNum == null) 
         {
-        	//warn user fields cannot be empty.
-        }
-       
-		
-		
-		System.out.println("createform post null and notnull-doubleclick-prevention");
+        	//warn user fields cann
+			showAlert("Warning","one or more fields are empty");
 
-		
+			
+        }
 		Subscriber newSub = new Subscriber();
 		newSub.setEmail(email);
 		newSub.setName(name);

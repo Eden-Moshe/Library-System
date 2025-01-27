@@ -188,6 +188,8 @@ public class BorrowController {
     private void sendEmail(String toEmail, String subject, String body) {
         System.out.println("Sending email to " + toEmail + " with subject: " + subject);
         System.out.println("Message: " + body);
+        
+        //TODO: implement call to function that implements sending e-mails.
     }
     
     /**
@@ -198,6 +200,8 @@ public class BorrowController {
      */
     private void sendSMS(String phoneNumber, String message) {
         System.out.println("Sending SMS to " + phoneNumber + " with message: " + message);
+        //TODO: implement call to function that implements sending SMS messages.
+
     }
     
 }

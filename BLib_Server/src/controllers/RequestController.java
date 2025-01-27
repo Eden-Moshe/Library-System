@@ -43,7 +43,6 @@ public class RequestController {
      */
     public Borrow fetchBorrow(String sub_id, String barcode, StringBuilder errorMessage) {
         if (sub_id == null || barcode == null) {
-            System.out.println("Invalid input: sub_id or barcode is null");
             return null;
         }
         
@@ -185,26 +184,7 @@ public class RequestController {
     }
     
     
-    
-//    public <RequestMessage>ArrayList extensionHistory(String subscriber_id)
-//    {
-//    	
-//    	
-//    	ResultSet rs = db.retrieveRow("borrow", "subscriber_id" , subscriber_id);
-//    	
-//    	
-//    	try {
-//			while (rs.next())
-//			{
-//				
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    	
-//    	return null;
-//    }
+
     
     
 }

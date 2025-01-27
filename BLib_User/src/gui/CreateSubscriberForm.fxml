@@ -1,25 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="424.0" prefWidth="312.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateSubscriberFormController">
-   <children>
-      <Label id="lblName" layoutX="42.0" layoutY="62.0" text="Name:" />
-      <Label id="lblHistory" layoutX="34.0" layoutY="317.0" text="password" />
-      <Label id="lblPhoneNum" layoutX="21.0" layoutY="104.0" prefHeight="17.0" prefWidth="90.0" text="Phone Number" />
-      <TextField id="txtName" fx:id="txtName" layoutX="111.0" layoutY="58.0" />
-      <TextField id="txtPassword" fx:id="txtPassword" layoutX="111.0" layoutY="313.0" />
-      <Button id="btnClose" layoutX="199.0" layoutY="377.0" mnemonicParsing="false" onAction="#getExitBtn" style="-fx-background-color: blue;" text="Close" textFill="RED" />
-      <Label id="lblSID" layoutX="19.0" layoutY="271.0" prefHeight="17.0" prefWidth="81.0" text="Subscriber ID" />
-      <TextField id="idText" fx:id="txtSID" layoutX="111.0" layoutY="267.0" />
-      <Button fx:id="saveButton" layoutX="65.0" layoutY="377.0" mnemonicParsing="false" onAction="#save" style="-fx-background-color: blue;" text="Save" textFill="RED" />
-      <TextField id="lblPhoneNum" fx:id="txtPhoneNum" layoutX="111.0" layoutY="100.0" />
-      <Label id="lblEmail" layoutX="40.0" layoutY="153.0" prefHeight="17.0" prefWidth="39.0" text="Email" />
-      <TextField id="lblEmail" fx:id="txtEmail" layoutX="111.0" layoutY="149.0" />
-      <Label layoutX="71.0" layoutY="14.0" prefHeight="17.0" prefWidth="159.0" text="Enter Subscriber information" />
-      <Label id="lblGeneratedSubInfo" layoutX="62.0" layoutY="212.0" text="Generated subscriber information" />
-   </children>
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.CreateSubscriberFormController"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
+
+    <!-- Back button container -->
+    <HBox alignment="CENTER_LEFT" style="-fx-padding: 20 40;">
+        <Button id="btnClose" text="←" onAction="#getExitBtn"
+            style="-fx-font-size: 20; -fx-padding: 10 20; -fx-min-width: 50;"/>
+    </HBox>
+
+    <!-- Main content container -->
+    <VBox alignment="CENTER" spacing="25" style="-fx-padding: 0 40 40 40;" VBox.vgrow="ALWAYS">
+        <!-- Form container -->
+        <VBox spacing="20" style="-fx-background-color: #2A565B; -fx-padding: 40; -fx-background-radius: 15; -fx-min-width: 600; -fx-max-width: 600;">
+            <!-- Header -->
+            <Label text="Enter Subscriber Information" 
+                style="-fx-font-size: 32; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <!-- Personal Information Section -->
+            <Label text="Personal Information" 
+                style="-fx-font-size: 20; -fx-text-fill: #E4E4E4; -fx-font-weight: bold; -fx-padding: 10 0 0 0;"/>
+            
+            <!-- Name field -->
+            <VBox spacing="10">
+                <Label id="lblName" text="Name" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField id="txtName" fx:id="txtName" promptText="Enter full name"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Phone Number field -->
+            <VBox spacing="10">
+                <Label id="lblPhoneNum" text="Phone Number" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField id="lblPhoneNum" fx:id="txtPhoneNum" promptText="Enter phone number"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Email field -->
+            <VBox spacing="10">
+                <Label id="lblEmail" text="Email" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField id="lblEmail" fx:id="txtEmail" promptText="Enter email address"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Account Information Section -->
+            <Label text="Account Information" 
+                style="-fx-font-size: 20; -fx-text-fill: #E4E4E4; -fx-font-weight: bold; -fx-padding: 20 0 0 0;"/>
+
+            <!-- Subscriber ID field -->
+            <VBox spacing="10">
+                <Label id="lblSID" text="Subscriber ID" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField id="idText" fx:id="txtSID" promptText="Enter subscriber ID"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Password field -->
+            <VBox spacing="10">
+                <Label id="lblHistory" text="Password" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField id="txtPassword" fx:id="txtPassword" promptText="Enter password"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Save Button -->
+            <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                <Button fx:id="saveButton" text="Save" onAction="#save"
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</VBox>

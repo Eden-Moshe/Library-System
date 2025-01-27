@@ -89,8 +89,8 @@ public class server extends AbstractServer{
 	            try {
 	            	//add all the calls to functions that need to run every day
 	            	
-	                borrowController.sendReminders();
-	                orderController.checkAndCancelExpiredOrders();
+	                //borrowController.sendReminders();
+	                //orderController.checkAndCancelExpiredOrders();
 	            	
 	                System.out.println("Daily tasks completed successfully.");
 	            } catch (Exception e) {
@@ -239,6 +239,7 @@ public class server extends AbstractServer{
 //					
 //				}
 			}
+			
 			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
 			{
 				System.out.println("if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))");

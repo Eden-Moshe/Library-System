@@ -80,10 +80,8 @@ public class SubscriberController {
 	                rs.getString("subscriber_email"),              // subscriber_email column
 	                rs.getString("subscriber_status")              // subscriber_status column
 	            );
-	            System.out.println(ret);
 	            return ret;
 	        } else {
-	            System.out.println("No Subscriber found with key: " + pKey);
 	            return null;
 	        }
 	    } catch (SQLException e) {
@@ -93,26 +91,7 @@ public class SubscriberController {
 	    }
 	}
 
-	
-//	public Subscriber fetchSubscriber(String pKey)
-//	{
-//		
-//		Subscriber ret=null;
-//		ResultSet rs = db.retrieveRow(tName, keyField, pKey);
-//		try {
-//			rs.next();
-//			System.out.println(rs.getString(1)+rs.getString(2)+rs.getString(3)+rs.getString(4)+rs.getString(5)+rs.getString(6));
-//			
-//			ret = new Subscriber (rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
-//			System.out.println(ret);
-//			return ret;
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("Failed to retrieve Subscriber table data");
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
+
 	
 	public void editSubscriber(String pKey, String field, String val)
 	{
@@ -120,7 +99,6 @@ public class SubscriberController {
         Set<String> validCol = new HashSet<>(Arrays.asList("subscriber_name", "detailed_subscription_history", "subscriber_phone_number", "subscriber_email"));
         if (!validCol.contains(field))
         {	
-        	System.out.println("editSubscriber wrong field was inputted");
         	return;
         }
         
@@ -146,38 +124,30 @@ public class SubscriberController {
 
 	public Subscriber addSubscriber(Subscriber newSub)
 	{
-		System.out.println("add subscriber");
 		String[] fields = {"user_password"};
 		String tempPassword = generateTemporaryPassword();
 		String[] values = {tempPassword};
 		
 		db.insertRow("users", fields,values);
-		String lastUserNum = Integer.toString(db.countRows("users", null, null));
+		String lastUserNum = Integer.toString(db.tableCount("users"));
 		
-		System.out.println("add subscriber post insertrow");
 		
 		newSub.setSID(lastUserNum);
 		newSub.setTempPass(tempPassword);
 		newSub.setStatus("active");
 		
-		System.out.println("add subscriber lastUserNum = " + lastUserNum);
 
 		
 		ResultSet testCreation = db.retrieveRow("users", "user_id", lastUserNum);
 		
-		System.out.println("add subscriber post retrieveRow");
 
 		try {
 			if (testCreation.next())
 			{
-				System.out.println("if (testCreation.next())");
 				if (!testCreation.getString("user_password").equals(tempPassword))
 				{
 					//the last user isn't the one we inserted. perhaps a collision happened.
-					//recursively call addSubscriber until it happens. should not happen more than once or twice.
-					System.out.println("failed to create new subscriber. likely collision. trying again");
-					//uncomment this after testing.
-					//return addSubscriber(newSub);
+					return null;
 				}
 				else
 				{

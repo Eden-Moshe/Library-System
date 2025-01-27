@@ -69,7 +69,7 @@ public class BookController {
                     rs.getBoolean("book_available"),  // book_available column (boolean)
                     rs.getDate("return_date")         // return_date column (Date)
                 );
-                System.out.println(ret);
+                
                 return ret;
             } else {
                 System.out.println("No Book found with barcode: " + pKey);
