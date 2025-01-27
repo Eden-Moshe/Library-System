@@ -19,7 +19,6 @@ public class SubscriberController {
 	private DBController db;
 	private static String tName="subscriber";
 	private static String keyField="subscriber_id";
-	
 	public static SubscriberController getInstance() {
 		return instance;
 	}

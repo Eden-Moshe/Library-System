@@ -167,7 +167,6 @@ public class DBController {
 
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
-		System.out.println("value is :" + value);
 
 		
 		if (intFields.contains(field))
@@ -186,27 +185,27 @@ public class DBController {
 	    // Handling date fields
 		else if (dateFields.contains(field)) {
 		    if (value == null) {
-		        System.out.println("value is null");
 		        stmt.setNull(index, java.sql.Types.DATE);
 		    } else if (value.contains("null")) {
-		        System.out.println("value is null string");
 		        stmt.setNull(index, java.sql.Types.DATE);
 		    } else {
 		        try {
 		            java.sql.Date sqlDate;
-		            if (value.matches("\\d{4}-\\d{2}-\\d{2}")) {
-		                String cleanValue = value.replaceAll("%", "").trim();
+	                String cleanValue = value.replaceAll("%", "").trim();
+		            if (cleanValue.matches("\\d{4}-\\d{2}-\\d{2}")) {
+
 		                // Handle yyyy-MM-dd format
 		                sqlDate = java.sql.Date.valueOf(cleanValue);
+
 		            } else {
 		                // Handle Date.toString() format (e.g., "Wed Dec 31 00:00:00 PST 1969")
-		                String cleanValue = value.replaceAll("%", "").trim();
 		                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 		                java.util.Date parsed = format.parse(cleanValue);
 		                sqlDate = new java.sql.Date(parsed.getTime());
 		            }
 		            stmt.setDate(index, sqlDate);
 		        } catch (IllegalArgumentException | ParseException e) {
+
 		            throw new SQLException("Invalid date format for field: " + field + " with value: " + value);
 		        }
 		    }
@@ -214,7 +213,7 @@ public class DBController {
 		else if (boolFields.contains(field))
 			stmt.setBoolean(index, value.contains("true"));//if value = "true" will set true.
 		else
-			stmt.setString(index, value);	
+			stmt.setString(index,value);	
 	}
 	
 	public ResultSet retrieveRow(String table, String field, String val)

@@ -2,11 +2,12 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import common.Book;
@@ -92,12 +93,12 @@ public class OrderController {
 	                    
 	                    if (bookRs != null && bookRs.next()) {
 	                        String bookName = bookRs.getString("book_name");
-	                        
-	                        // Find corresponding order in order_book
+	                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // Define the desired date format
+	                        String formattedDate = format.format(expectedReturnDate); // Format the date
+
 	                        ResultSet orderRs = db.retrieveRowsWithConditions("order_book", 
 	                            new String[]{"book_name", "nearest_book_return"}, 
-	                            new String[]{bookName, expectedReturnDate.toString()});
-	                        
+	                            new String[]{bookName, formattedDate}); // Use the formatted date
 	                        while (orderRs != null && orderRs.next()) {
 	                            // Cancel the order if it's still waiting
 	                            if ("waiting".equals(orderRs.getString("order_status"))) {
@@ -432,5 +433,62 @@ public class OrderController {
 		}
 	}
 	
-	
+	public void notifyUserForReturnedBook(String bookBarcode) {
+	    try {
+	        // Step 1: Retrieve the book details using the barcode
+	        ResultSet bookRs = db.retrieveRow("book", "barcode", bookBarcode);
+
+	        if (bookRs != null && bookRs.next()) {
+	            String bookName = bookRs.getString("book_name");
+
+	            // Step 2: Retrieve the borrow record for the given book barcode to get the return date
+	            ResultSet borrowRs = db.retrieveRow("borrow", "book_barcode", bookBarcode);
+
+	            if (borrowRs != null && borrowRs.next()) {
+	                Date returnDate = borrowRs.getDate("return_date");
+
+	                // Step 3: Check if there is an order for this book with a matching return date and status "waiting"
+	                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Format to match the order_book return date
+	                String formattedReturnDate = sdf.format(returnDate);
+
+	                ResultSet orderRs = db.retrieveRowsWithConditions(
+	                    "order_book",
+	                    new String[]{"book_name", "nearest_book_return", "order_status"},
+	                    new String[]{bookName, formattedReturnDate, "waiting"}
+	                );
+
+	                if (orderRs != null && orderRs.next()) {
+	                    // Step 4: Simulate sending an email (assuming email is part of the order data)
+	                    // For this example, assuming there is a "subscriber_id" that can be used to retrieve email
+	                    int subscriberId = orderRs.getInt("subscriber_id");
+
+	                    Subscriber subscriber = SubscriberController.getInstance().fetchSubscriber(String.valueOf(subscriberId));
+	                    // Fetch the email of the subscriber
+	                    ResultSet subscriberRs = db.retrieveRow("subscriber", "subscriber_id", String.valueOf(subscriberId));
+	                    if (subscriberRs != null && subscriberRs.next()) {
+	                        //String userEmail = subscriberRs.getString("email");
+	                    	String userEmail = subscriber.getEmail();
+	                        // Simulate sending an email
+	                        System.out.println("Email to user: " + userEmail);
+	                        System.out.println("Subject: Your order for \"" + bookName + "\"");
+	                        System.out.println("Message: The book \"" + bookName + "\" is now available. Please pick it up at your earliest convenience. you have two days!");
+	                        System.out.println("-----------------------------------------------------");
+	                    } else {
+	                        System.out.println("No subscriber found with ID: " + subscriberId);
+	                    }
+	                } else {
+	                    System.out.println("No active order found for the book \"" + bookName + "\".");
+	                }
+	            } else {
+	                System.out.println("No borrow record found for the book with barcode: " + bookBarcode);
+	            }
+	        } else {
+	            System.out.println("No book found with barcode: " + bookBarcode);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error notifying user for returned book: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+
 }
