@@ -29,9 +29,6 @@ public class ViewUserInfoWindow extends BaseController {
     private Button btnExtendBorrow; // Button to navigate to the "Extend Borrow" page
     
     @FXML
-    private Button btnCheckBook; // Button to check the status of a book
-    
-    @FXML
     private Button btnViewAccountStatusHistory; // Button to view the account status history
     
     @FXML
@@ -72,17 +69,6 @@ public class ViewUserInfoWindow extends BaseController {
         this.phoneResponse.setText(sub.getPNumber());
         this.mailResponse.setText(sub.getEmail());
         this.statusResponse.setText(sub.getStatus());
-    }
-
-    /**
-     * Handles the event when the user clicks the "Check Book Status" button.
-     * This method will be implemented to check the status of a book (e.g., lost or destroyed).
-     * 
-     * @param event the event triggered by clicking the button
-     */
-    @FXML
-    private void checkBookStatus(ActionEvent event) {
-        // TODO: Implement logic to check book status (lost/destroyed)
     }
 
     /**
