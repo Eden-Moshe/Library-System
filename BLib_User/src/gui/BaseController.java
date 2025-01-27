@@ -1,3 +1,9 @@
+package gui;
+
+import client.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * The BaseController class provides a base structure for GUI controllers in the application.
  * 
@@ -7,12 +13,6 @@
  * It also includes methods that can be overridden by child classes to implement
  * specific behaviors.
  */
-package gui;
-
-import client.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
 public class BaseController {
 
     /** The UserManager instance for managing user-related operations. */
