@@ -204,4 +204,40 @@ public class BorrowController {
 
     }
     
+    
+    /**
+     * Compares the order status of a subscriber and checks if they are eligible to borrow a book 
+     * based on their order status and the book name. If the order is in a "waiting" status and 
+     * the book name matches, the order is marked as fulfilled and a borrow is created. 
+     * Otherwise, a message is returned indicating that the book is not available for borrowing.
+     *
+     * @param s the Subscriber object requesting the book
+     * @param b the Book object being requested for borrowing
+     * @param borrow the Borrow object containing borrowing information
+     * @param lib_id the ID of the librarian processing the request
+     * @return a message indicating whether the borrow was successful or not
+     */
+    public String CompareOrderID(Subscriber s, Book b, Borrow borrow, String lib_id) {
+        String st = null;
+        String bookName = null;
+        ResultSet rs = db.retrieveRow("order_book", "subscriber_id", s.getSID());
+        try {
+            while (rs.next()) {
+                st = rs.getString("order_status");
+                bookName = rs.getString("book_name");
+                // Check that the status of the order is "waiting" to be borrowed
+                // and that the book name matches the one in the order table
+                if (st.equals("waiting") && bookName.equals(b.getBookName())) {
+                    // Update the corresponding field in "order_book" table as "fulfilled"
+                    db.editRow("order_book", "subscriber_id", s.getSID(), "order_status", "fulfilled");
+                    // Create borrow record
+                    return createBorrow(s, b, borrow, lib_id);
+                }  
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.";    
+    }
+
 }

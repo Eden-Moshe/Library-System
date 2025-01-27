@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 
 import common.BorrowRecord;
+import common.DestRecord;
 
 
 public class DBController {
@@ -414,6 +415,52 @@ public class DBController {
 	    }
 
 	    return records;
+	}
+	
+	// Method creates a list of destroyed book records fetched from the table
+	public List<DestRecord> getDestRecords() {
+	    List<DestRecord> records = new ArrayList<>();
+	    String query = "SELECT book_barcode, borrower_id FROM destroyed_books";
+
+	    try (PreparedStatement stmt = con.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            // Fetch the book barcode and borrower ID from the result set
+	            String bookBarcode = rs.getString("book_barcode");
+	            String borrowerId = rs.getString("borrower_id");
+
+	            // Add the destroyed book record to the list
+	            records.add(new DestRecord(bookBarcode, borrowerId));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();  // Log the exception or handle it appropriately
+	        // Optionally, rethrow or return an empty list to ensure the application continues
+	    }
+
+	    return records;
+	}
+	
+	
+	
+	public void deleteRow(String table, String primaryKeyColumn, String primaryKeyValue) {
+	    int rows;
+	    PreparedStatement stmt = null;
+	    StringBuilder query = new StringBuilder("DELETE FROM ");
+	    query.append(table);
+	    query.append(" WHERE ");
+	    query.append(primaryKeyColumn);
+	    query.append(" = ?");
+
+	    try {
+	        stmt = con.prepareStatement(query.toString());
+	        stmt.setString(1, primaryKeyValue); // Assuming the primary key value is a string, modify this if it's a different data type
+	        rows = stmt.executeUpdate();
+	        System.out.println("Rows deleted: " + rows);
+	    } catch (SQLException e) {
+	        System.out.println("DBController.deleteRow failed");
+	        e.printStackTrace();
+	    }
 	}
 
 

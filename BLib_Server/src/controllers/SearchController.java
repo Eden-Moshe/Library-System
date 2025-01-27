@@ -65,6 +65,7 @@ public class SearchController {
 
         try {
             while (resultSet != null && resultSet.next()) {
+//        	
                 // Create a Book object for each result
                 Book book = new Book(
             		resultSet.getString("barcode"),

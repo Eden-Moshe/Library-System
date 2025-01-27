@@ -1,20 +1,17 @@
 package gui;
 
 import java.io.IOException;
-
 import client.*;
 import common.*;
 import static common.GenericMessage.Action.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
@@ -54,8 +51,6 @@ public  class LibrarianMenuController extends BaseController  {
 		SubscriberUI.mainController.switchView("/gui/ReportsWindow.fxml");
 	}
 		
-
-	
 	
 	public void btnInbox(ActionEvent event) throws Exception {
 	
@@ -68,17 +63,10 @@ public  class LibrarianMenuController extends BaseController  {
 	UM.send(msg);
 	
 	SubscriberUI.mainController.switchView("/gui/LibrarianInbox.fxml");
-	
-	
-	
 
 	}
 	
 	public void btnViewHistory(ActionEvent event) throws Exception {
-		
-	
-		
-		
 
 	}
 	
@@ -86,55 +74,39 @@ public  class LibrarianMenuController extends BaseController  {
 		
 		
 		SubscriberUI.mainController.switchView("/gui/SearchBook.fxml");
-		
-		
-//	    // load the new screen
-//	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/SearchBook.fxml"));
-//	    Parent root = loader.load();
-//	    Stage stage = new Stage();
-//	    stage.setTitle("Search for Books");
-//	    stage.setScene(new Scene(root));
-//	    stage.show();
-//
-//	    ((Node) event.getSource()).getScene().getWindow().hide();
+
 	}
 
 	public void btnReturnBook(ActionEvent event) throws Exception {
 		
 		SubscriberUI.mainController.switchView("/gui/BookReturn.fxml");
-		
 
-		
-		
 	}
 	
 	public void btnExtendBorrow(ActionEvent event) throws Exception {
-		
 		SubscriberUI.mainController.switchView("/gui/ExtendBorrowForm.fxml");
-
-
 	}
 		
 	
 	public void btnUserInfo(ActionEvent event) throws Exception {
-
 		SubscriberUI.mainController.switchView("/gui/LibrarianEnterUserID.fxml");
-
-		
-
 	}
 	
 	public void createSubscriber(ActionEvent event) {
-
-		
-		
 		SubscriberUI.mainController.switchView("/gui/CreateSubscriberForm.fxml");
-
+	}
+	
+	@FXML
+	private void viewDestroyedBooks(ActionEvent event) {
+		//fetch data from table "destroyed_books"
+		DestroyedMessage msg = new DestroyedMessage();
+		msg.fetch=true;
+		UM.send(msg);
+		SubscriberUI.mainController.switchView("/gui/DestroyedBooks.fxml");
 	}
 	
 	public void ViewMessageInbox(ActionEvent event) throws Exception {
-		
-		
+
 		GenericMessage msg = new GenericMessage();
 		
 		msg.action = get_Librarian_Messages;

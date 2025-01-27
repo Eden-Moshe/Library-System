@@ -74,7 +74,6 @@ public class server extends AbstractServer{
   		librarianController = LibrarianController.getInstance();
 		orderController = OrderController.getInstance();
 		bokRetCont = BookReturnController.getInstance();
-		
 		reportController = ReportController.getInstance();
 		
 		timedTasks = new TimedTasks();
@@ -174,6 +173,7 @@ public class server extends AbstractServer{
 		OrderMessage orderMessage;
 		BookReturnMessage bokRet;
 		ReportMessage reportMsg;
+		DestroyedMessage destMsg;
 		
 		try {
 			if (msg instanceof GenericMessage)
@@ -232,17 +232,7 @@ public class server extends AbstractServer{
 				}
 				client.sendToClient(newUser);
 
-				
-//				if (!subscriberController.verifyPassword(lm.id, lm.password)) {
-//					client.sendToClient("wrong user id or password");
-//					return;//exiting the function to prevent it from completing DB operations on unverified user.
-//				}
-//				else
-//				{
-//					connectedSubscribers.add(client);
-//					client.sendToClient(subscriberController.fetchSubscriber(lm.id));
-//					
-//				}
+
 			}
 			
 			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
@@ -311,6 +301,19 @@ public class server extends AbstractServer{
 					e.printStackTrace();
 									   }				
 			}
+			
+			if (msg instanceof DestroyedMessage) {
+				destMsg = (DestroyedMessage) msg;
+				//fetch destroyed books from database
+				if (destMsg.fetch) {
+					client.sendToClient(bokRetCont.fetchDest());
+				}
+				String id = destMsg.id;
+				String barcode = destMsg.barcode;
+				client.sendToClient(bokRetCont.destroyBook(id,barcode));
+				
+			}
+			
 
 			
 			if (msg instanceof BorrowMessage) 
@@ -340,8 +343,11 @@ public class server extends AbstractServer{
 				if (borrowMessage.b.isBookAvailable())
 					//at this point both subscriber and book details are in s and b so now we create new Borrow
 					client.sendToClient(borrowController.createBorrow(borrowMessage.s, borrowMessage.b, borrowMessage.borrow, borrowMessage.lib_id));
+				//case where book is not available to borrow
+				//check if that subscriber id has an order waiting to be fulfilled
 				else 
-					client.sendToClient("Book is not available for borrowing, consider requesting an order or searching a different barcode for the same book.");
+					client.sendToClient(borrowController.CompareOrderID(borrowMessage.s, borrowMessage.b, borrowMessage.borrow, borrowMessage.lib_id));
+					
 			}
 			if (msg instanceof CheckAvailabilityMessage) {
 	            CheckAvailabilityMessage checkMsg = (CheckAvailabilityMessage) msg;
@@ -405,7 +411,7 @@ public class server extends AbstractServer{
 				//checking if original return date is not more than a week away
 				if (requestController.isEligibleForExtension(reqMessage.borrow.getReturnDate())) {
 					//update return date in database
-					client.sendToClient(requestController.extendBorrow(reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
+					client.sendToClient(requestController.extendBorrow(reqMessage.s,reqMessage.borrow,reqMessage.b,reqMessage.returnDate));
 				}
 				
 				else client.sendToClient("Extension request can made 7 days or less from return date, request is denied.");
