@@ -70,8 +70,13 @@ public class CreateSubscriberFormController extends BaseController implements In
         SubscriberUI.mainController.goBack();
     }
 	
+    /**
+     * Handles the save action to create a new subscriber.
+     * This method sends the subscriber's data to the server, receives the response,
+     * and updates the form with the new subscriber's ID and temporary password.
+     * 
      * @param event The event that triggered the action.
-	
+     */
     public void save(ActionEvent event) throws Exception {
         UserManager UM = UserManager.getInstance();
 

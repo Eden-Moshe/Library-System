@@ -73,12 +73,13 @@ public class BookResultsController extends BaseController implements Initializab
     }
 
     
-//    // Show an alert with the specified title and content text
-//        alert.showAndWait(); // Show the alert
+    /**
+     * Initializes the table columns and their cell factories, 
+     * sets up the table layout, and prepares dynamic row heights.
      * 
      * @param location  The location used to resolve relative paths for the root object.
      * @param resources The resources used to localize the root object.
-//    }
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {

@@ -109,12 +109,6 @@ public class SubscriberController {
     }
 
 	
-//	public Subscriber fetchSubscriber(String pKey)
-     *
-     * @param pKey The subscriber's unique identifier.
-     * @param field The field to be updated.
-     * @param val The new value for the specified field.
-     */
     public void editSubscriber(String pKey, String field, String val) {
         Set<String> validCol = new HashSet<>(Arrays.asList(
                 "subscriber_name", "detailed_subscription_history", "subscriber_phone_number", "subscriber_email"

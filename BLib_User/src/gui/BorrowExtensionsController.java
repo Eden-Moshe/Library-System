@@ -104,13 +104,14 @@ public class BorrowExtensionsController extends BaseController {
         tableView.setItems(observableMessages);
     }
 
-//	
-//	public void start(Stage primaryStage) throws Exception {	
+	
+    /**
+     * Handles the action for exiting the library tool.
      * This method is triggered when the "Exit" button is clicked.
      * 
      * @param event The event that triggered the action.
      * @throws Exception if there is an error during the exit process.
-//
+     */
     public void getExitBtn(ActionEvent event) throws Exception {
         System.out.println("exit Library Tool");
         System.exit(0);
