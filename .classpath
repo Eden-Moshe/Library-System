@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="BLib_Server/OCSF"/>
+	<classpathentry kind="src" path="BLib_Server/src"/>
+	<classpathentry kind="src" path="BLib_User/OCSF"/>
+	<classpathentry kind="src" path="BLib_User/src"/>
+	<classpathentry kind="lib" path="BLib_Server/lib/CommonBlib_Server.jar"/>
+	<classpathentry kind="lib" path="BLib_Server/lib/mysql-connector-java-8.0.13.jar"/>
+	<classpathentry kind="lib" path="BLib_User/lib/CommonBlib_Client.jar"/>
+	<classpathentry kind="output" path="BLib_Server/bin"/>
+</classpath>

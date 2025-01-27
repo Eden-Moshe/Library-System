@@ -69,25 +69,7 @@ public class CreateSubscriberFormController extends BaseController implements In
 		SubscriberUI.mainController.goBack();
 	}
 	
-	public void start(Stage primaryStage) throws Exception {	
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/CreateSubscriberFrom.fxml"));
-				
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/CreateSubscriberFrom.css").toExternalForm());
-		primaryStage.setTitle("Subscriber Managment Tool");
-		primaryStage.setScene(scene);
-		
-		primaryStage.show();	 	   
-	}
-	
-//	public void save(ActionEvent event) throws Exception {
-//		
-//		Student newStudent = new Student(idText.getText() , txtName.getText() , txtSurname.getText() ,faculty);
-//		ClientUI.chat.saveStudentInfo(newStudent , s);
-//		((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-//		ClientUI.primaryStage.show();
-//	}
-	
+
 	
 	public void save(ActionEvent event) throws Exception {
 		
@@ -134,34 +116,10 @@ public class CreateSubscriberFormController extends BaseController implements In
 		this.txtSID.setText(newSub.getSID());
 		this.txtPassword.setText(newSub.getTemporaryPassword());
 		
-		System.out.println("createform post set text");
 		
 		saveClicked=true;
 		
-		
-//		//setting the user's details in their account
-//		SubMessage sm=new SubMessage();
-//        sm.editBool=true;
-//        sm.pKey=newSub.getSID();
-//        sm.password=newSub.getTemporaryPassword();
-//        
-//        //setting email
-//        sm.fieldCol="user_email";
-//        sm.fieldVal=email;
-//        
-//        UM.send(sm);
-//        
-//        //setting phone number
-//        sm.fieldCol="user_phone_number";
-//        sm.fieldVal=phoneNum;
-//        
-//        UM.send(sm);
-//        
-//        //setting their name.
-//        sm.fieldCol="user_name";
-//        sm.fieldVal=name;
-//        
-//        UM.send(sm);
+
 		
 		
 	}

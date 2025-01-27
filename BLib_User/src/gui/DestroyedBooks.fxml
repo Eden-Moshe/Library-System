@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="516.0" prefWidth="626.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DestroyedBooksWindow">
+    <children>
+        
+        <!-- Headline with Trash Can Icon -->
+        <HBox alignment="CENTER" layoutX="50.0" layoutY="20.0" spacing="10.0" />
+
+        <!-- Back Button with Arrow Icon -->
+        <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;" />
+
+        <!-- Table for Destroyed Books -->
+        <TableView fx:id="destroyedBooksTable" layoutX="50.0" layoutY="154.0" prefHeight="250.0" prefWidth="525.0">
+            <!-- Table Columns for Book Barcode and Subscriber ID -->
+            <columns>
+                <TableColumn fx:id="bookBarcodeColumn" prefWidth="250.0" text="Book Barcode" />
+                <TableColumn fx:id="subscriberIdColumn" prefWidth="250.0" text="Subscriber ID" />
+            </columns>
+        </TableView>
+
+         <!-- Title Label "Destroyed Books" with New Color -->
+         <Label layoutX="219.0" layoutY="77.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f6c177; -fx-font-family: 'Arial';" text="Destroyed Books" />
+          <Button fx:id="handleBack" layoutX="8.0" layoutY="12.0" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
+
+         <!-- Trash Can Icon -->
+         <Label layoutX="183.0" layoutY="68.0" style="-fx-font-size: 30px; -fx-text-fill: #f6c177;" text="🗑" />
+    </children>
+</AnchorPane>
