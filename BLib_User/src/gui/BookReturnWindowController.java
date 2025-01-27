@@ -87,8 +87,6 @@ public class BookReturnWindowController extends BaseController {
     
     @FXML
     public void resetFields(ActionEvent event) {
-        txtBorrowerId.clear();
-        txtBorrowNumber.clear();
         txtbookBarcode.clear();
         txtResponse.clear();
     }

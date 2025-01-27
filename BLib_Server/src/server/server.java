@@ -25,12 +25,20 @@ import ocsf.server.ConnectionToClient;
 import static common.GenericMessage.Action.*;
 import controllers.BookReturnController;
 import common.BookReturnMessage;
-//BLib server-side
+
+/**
+ * The main server class for the BLib library management system.
+ * This class handles all client-server communications, user authentication,
+ * and coordinates various controllers for different aspects of the library system.
+ * Extends AbstractServer to provide basic server functionality.
+ */
 public class server extends AbstractServer{
 	
+		/** The database controller instance */
 		public static DBController db;
-		//private ConnectionEntryController conEntry;
+	    /** Connection entry controller for managing client connections */
 		public static ConnectionEntryController conEntry;
+	    /** Various controllers for different system functionalities */
 		private SubscriberController subscriberController;
 		private BorrowController borrowController;
 		private BookController bookController;
@@ -40,14 +48,13 @@ public class server extends AbstractServer{
 		private OrderController orderController;
 		private BookReturnController bokRetCont;
 		private TimedTasks timedTasks;
-	
 		private ReportController reportController;
 		
+	    /** Lists to track connected clients */
 		private ArrayList<ConnectionToClient> connectedSubscribers =  new ArrayList<>();
 		private ArrayList<ConnectionToClient> connectedLibrarians =  new ArrayList<>();
 		
-		//variable to hold subscribers IDs to their connection
-		//to prevent unauthorized access to other subscribers
+	    /** Maps to associate connections with user IDs */
 		private HashMap<ConnectionToClient, String> clientToUserMap = new HashMap<>();
 		private HashMap<ConnectionToClient, String> librarianClientMap = new HashMap<>();
 
@@ -58,10 +65,11 @@ public class server extends AbstractServer{
 	  
 	  
 	  /**
-	   * Constructs an instance of the echo server.
-	   *
-	   * @param port The port number to connect on.
-	   */
+	     * Constructs a new server instance.
+	     * Initializes all controllers and sets up daily tasks.
+	     *
+	     * @param port The port number to listen on
+	     */
 	  public server(int port) 
 	  {
 		  
@@ -87,8 +95,9 @@ public class server extends AbstractServer{
 		
 	  }
 	  /**
-	   * this function runs all the other functions that need to be run once a day
-	   */
+	     * Schedules and runs daily maintenance tasks.
+	     * Currently includes sending reminders and checking for expired orders.
+	     */
 	  private void dailyTasks()
 	  {
 		  timedTasks.scheduleTask(() -> {
@@ -106,7 +115,9 @@ public class server extends AbstractServer{
 	  }
 	  
 
-	  
+  /**
+     * Shuts down the server and closes database connections.
+     */
 	public void shutDown() {
 
 		db.closeConnection();
@@ -115,7 +126,14 @@ public class server extends AbstractServer{
 	
 
 	
-	
+	/**
+     * Authenticates a user login attempt.
+     * 
+     * @param client The client connection attempting to log in
+     * @param id The user ID
+     * @param pass The password
+     * @return Object representing the logged-in user (Librarian or Subscriber), or null if authentication fails
+     */
 	private Object userLogin (ConnectionToClient client ,String id, String pass)
 	{
 		ResultSet auth = db.retrieveRow("users","user_id", id);
@@ -158,14 +176,14 @@ public class server extends AbstractServer{
 		return null;
 		
 	}
-	@Override
-	  /**
-	   * This method handles any messages received from the client.
-	   *
-	   * @param msg The message received from the client.
-	   * @param client The connection from which the message originated.
-	 * @throws IOException 
-	   */
+	 /**
+     * Handles messages received from clients.
+     * Processes various types of messages and routes them to appropriate controllers.
+     *
+     * @param msg The message received from the client
+     * @param client The client connection that sent the message
+     */
+    @Override
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) 
 	{
 		System.out.println("handle message from client");
@@ -474,10 +492,12 @@ public class server extends AbstractServer{
 	
 	
 
-	  /**
-	   * updates client info
-	   * @param client the connection connected to the client.
-	   */
+    /**
+     * Called when a new client connects to the server.
+     *
+     * @param client The client that connected
+     */
+    @Override
 	  public void clientConnected(ConnectionToClient client) {
 		  
 		  System.out.println("CLIENT CONNECTED: " + client.toString());

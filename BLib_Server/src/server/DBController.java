@@ -21,18 +21,54 @@ import common.BorrowRecord;
 import common.DestRecord;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * A singleton database controller class that manages database connections and operations
+ * for a library management system. This class handles all database interactions including
+ * connection management, and specialized queries for book borrowing and
+ * destruction records.
+ * 
+ * The controller maintains type-specific field sets for integers, dates, and booleans
+ * to ensure proper data type handling during database operations.
+ */
+
 public class DBController {
+    /** Singleton instance of the DBController. */
 	private static final DBController instance = new DBController();
+    /** Database connection object. */
 	private Connection con;
-	//intFields is the list of all fields that have int values in the database
-	//private static Set<String> intFields = new HashSet<>(Arrays.asList());
+    /** Set of field names that contain integer values in the database. */
 	private static Set<String> intFields;
+    /** Set of field names that contain date values in the database. */
 	private static Set<String> dateFields;
+    /** Set of field names that contain boolean values in the database. */
 	private static Set<String> boolFields;
+	
+	/**
+     * Returns the singleton instance of DBController.
+     *
+     * @return The singleton instance of DBController
+     */
 	public static DBController getInstance () {
 		return instance;
 	}
 	
+	/**
+     * Private constructor to prevent instantiation.
+     * Initializes field sets and establishes database connection.
+     */
 	private DBController() {
 		intFields=new HashSet<>(Arrays.asList());
 		dateFields=new HashSet<>(Arrays.asList());
@@ -40,10 +76,22 @@ public class DBController {
 		connectToDB();
 		initializeFields();
 	}
+	
+	/**
+     * Gets the current database connection.
+     *
+     * @return The current Connection object
+     */
 	public Connection getConnection() {
 	    return con;
 	}
 
+	
+	/**
+     * Establishes a connection to the MySQL database.
+     *
+     * @return true if connection is successful, false otherwise
+     */
 	private boolean connectToDB() {
 		System.out.println("connec to db");
 
@@ -64,9 +112,11 @@ public class DBController {
 
 		return true;
 	}
-//
 	
-	
+	/**
+     * Initializes the field type sets with appropriate column names from various tables.
+     * This method sets up which fields should be treated as integers, dates, or booleans.
+     */
 	private void initializeFields() {
 
 	    // Table: users
@@ -114,7 +164,14 @@ public class DBController {
 	}
 	
 	
-	
+	/**
+     * Retrieves database rows based on specified conditions.
+     *
+     * @param tablename The name of the table to query
+     * @param fields Array of field names to match against
+     * @param values Array of values to match with corresponding fields
+     * @return ResultSet containing matching rows, or null if query fails
+     */
 	public ResultSet retrieveRowsWithConditions(String tablename, String[] fields, String[] values) {
 
 	    StringBuilder query = new StringBuilder("SELECT * FROM ");
@@ -158,15 +215,17 @@ public class DBController {
 	    
 	}
 	
-	//consideration for changes:
-	//create a string array for keyfields and keys and concat a statement that can have as many ANDS as i want
-	//for example, i want a user, i can have an array of 1 with sub_id and keynum
-	//and if i want a book that has "harry" in the name and "fantasy" in the topic,
-	//the array can be of length 2 with fields [name,topic] and [harry,fantasy] as fields.
-	//a for loop would then create a statement that looks like this:
-	//"SELECT * FROM " + table + "WHERE keyfield[0] = ? AND keyfield[1] = ?"
-	
 
+	
+	 /**
+     * Sets a prepared statement parameter with appropriate type conversion.
+     *
+     * @param stmt The PreparedStatement to set parameters for
+     * @param index The parameter index
+     * @param field The field name to determine the type
+     * @param value The value to set
+     * @throws SQLException if there's an error setting the parameter
+     */
 	private void setStmt(PreparedStatement stmt, int index,String field ,String value) throws SQLException
 	{
 
@@ -218,6 +277,14 @@ public class DBController {
 			stmt.setString(index,value);	
 	}
 	
+	/**
+     * Retrieves a single row based on a field value.
+     *
+     * @param table The table to query
+     * @param field The field to match against
+     * @param val The value to match
+     * @return ResultSet containing the matching row, or null if query fails
+     */
 	public ResultSet retrieveRow(String table, String field, String val)
 	{
 		
@@ -245,7 +312,15 @@ public class DBController {
 		}
 			
 	}
-		
+	/**
+     * Updates a single row in the specified table.
+     *
+     * @param tableName The name of the table to update
+     * @param keyName The primary key field name
+     * @param keyVal The primary key value to match
+     * @param col The column to update
+     * @param data The new value to set
+     */
 	public void editRow(String tableName, String keyName, String keyVal, String col, String data) {
 		
 		
@@ -257,10 +332,7 @@ public class DBController {
 		
 		try {
 			stmt = con.prepareStatement("UPDATE " + tableName + " SET " + col +" = ? WHERE " + keyName + " =  ?;");
-			//handling strings and integers differently
-	
-			//stmt.setString(1, data);
-			//stmt.setString(2, keyVal);
+			
 			setStmt(stmt,1,col,data);
 			setStmt(stmt,2,keyName,keyVal);
 			
@@ -273,6 +345,14 @@ public class DBController {
 		
 	}
 	
+	
+	/**
+     * Inserts a new row into the specified table.
+     *
+     * @param table The table to insert into
+     * @param fields Array of field names
+     * @param vals Array of values corresponding to the fields
+     */
 	public void insertRow(String table, String[] fields, String[] vals) {
 		int rows;
 		PreparedStatement stmt = null;
@@ -314,8 +394,14 @@ public class DBController {
 
 
 	
-	//function counts the amount of rows that satisfy the conditions of the fields=values. 
-	//fields can be null to retrieve the table size
+	/**
+     * Counts rows in a table that match specified conditions.
+     *
+     * @param tableName The name of the table to count from
+     * @param fields Array of field names to match against (can be null)
+     * @param values Array of values to match with corresponding fields
+     * @return The count of matching rows, or -1 if query fails
+     */
 	public int countRows(String tableName, String[] fields, String[] values) {
         String newID;
         boolean keyExists;
@@ -358,7 +444,12 @@ public class DBController {
     
 	}
 	
-	
+	/**
+     * Counts total number of rows in a table.
+     *
+     * @param tableName The name of the table to count
+     * @return Total number of rows in the table, or -1 if query fails
+     */
 	public int tableCount(String tableName)
 	{
 		
@@ -384,7 +475,11 @@ public class DBController {
 	}
 	
 	
-	// method creates a list of borrow records fetched from table
+	 /**
+     * Retrieves all borrow records from the database.
+     *
+     * @return List of BorrowRecord objects containing borrow history
+     */	
 	public List<BorrowRecord> getBorrowRecords() {
 	    List<BorrowRecord> records = new ArrayList<>();
 	    String query = "SELECT borrow_date, return_date, actual_returned_date FROM borrow";
@@ -419,7 +514,12 @@ public class DBController {
 	    return records;
 	}
 	
-	// Method creates a list of destroyed book records fetched from the table
+	
+	/**
+     * Retrieves all destroyed book records from the database.
+     *
+     * @return List of DestRecord objects containing destroyed book information
+     */
 	public List<DestRecord> getDestRecords() {
 	    List<DestRecord> records = new ArrayList<>();
 	    String query = "SELECT book_barcode, borrower_id FROM destroyed_books";

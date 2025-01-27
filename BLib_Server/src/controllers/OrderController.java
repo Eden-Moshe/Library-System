@@ -64,6 +64,7 @@ public class OrderController {
 		return this.userId;
 	}
 	
+	
 	public void checkAndCancelExpiredOrders() {
 	    try {
 	        // Find books that have been returned more than 2 days ago
@@ -420,6 +421,11 @@ public class OrderController {
 		}
 	}
 	
+	/**
+	 * Notify the user of a book that he ordered has arrived. 
+	 * 
+	 * @param bookBarcode
+	 */
 	public void notifyUserForReturnedBook(String bookBarcode) {
 	    try {
 	        // Step 1: Retrieve the book details using the barcode
