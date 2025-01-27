@@ -5,60 +5,73 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="gui.BorrowWindowController"
-      spacing="20" alignment="CENTER" prefWidth="580" prefHeight="580"
-      style="-fx-background-color: #355457; -fx-padding: 35;">
-      
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.BorrowWindowController"
+    alignment="CENTER"
+    spacing="15"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
 
-    <!-- Back Button (Arrow at Top Left) -->
-    <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;">
-        <Button text="←" fx:id="btnBack" onAction="#getBackBtn"
-                style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;"/>
-    </HBox>
+    <!-- Main content container -->
+    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+        <!-- Back button container -->
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 15 0; -fx-min-width: 450;">
+            <Button fx:id="btnBack" text="←" onAction="#getBackBtn"
+                style="-fx-font-size: 20; -fx-background-color: transparent; -fx-text-fill: white;"/>
+        </HBox>
 
-    <!-- Title with Icon (Centered at the Top) -->
-    <HBox alignment="CENTER" spacing="10" style="-fx-padding-top: 10;">
-        <Label text="📚" style="-fx-font-size: 32px; -fx-text-fill: #d9a762;"/>
-        <Label text="Borrow Book" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-    </HBox>
+        <!-- Form container with matching style to login form -->
+        <VBox spacing="15" style="-fx-background-color: #2A565B; -fx-padding: 30; -fx-background-radius: 15; -fx-min-width: 450; -fx-max-width: 450;">
+            <!-- Title -->
+            <Label text="Borrow Book" style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-    <!-- Form for Book Borrowing (Well-Spaced and Aligned) -->
-    <GridPane hgap="20" vgap="25" alignment="CENTER" style="-fx-pref-width: 400px;">
-        <columnConstraints>
-            <ColumnConstraints halignment="LEFT" minWidth="140"/>
-            <ColumnConstraints hgrow="ALWAYS"/>
-        </columnConstraints>
+            <!-- Book Barcode field -->
+            <VBox spacing="8">
+                <Label text="Book Barcode" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBookBarcode" promptText="Enter book barcode"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
 
-        <!-- Labels and Text Fields -->
-        <Label text="📖 Book Barcode:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-        <TextField fx:id="txtBookBarcode" promptText="Enter book barcode" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                   style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+            <!-- Borrower ID field -->
+            <VBox spacing="8">
+                <Label text="Borrower ID" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
 
-        <Label text="🆔 Borrower ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-        <TextField fx:id="txtBorrowerId" promptText="Enter borrower ID" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                   style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+            <!-- Borrow Date field -->
+            <VBox spacing="8">
+                <Label text="Borrow Date" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <DatePicker fx:id="dpBorrowDate" promptText="Select borrow date"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
 
-        <Label text="📅 Borrow Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-        <DatePicker fx:id="dpBorrowDate" promptText="Select borrow date" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                    style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
+            <!-- Return Date field -->
+            <VBox spacing="8">
+                <Label text="Return Date" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <DatePicker fx:id="dpReturnDate" promptText="Select return date"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
 
-        <Label text="📅 Return Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-        <DatePicker fx:id="dpReturnDate" promptText="Select return date" GridPane.rowIndex="3" GridPane.columnIndex="1"
-                    style="-fx-border-color: transparent; -fx-border-radius: 25; -fx-padding: 10; -fx-background-color: white; -fx-font-size: 14px;" prefWidth="250"/>
-    </GridPane>
+            <!-- Response field -->
+            <VBox spacing="8">
+                <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 12; -fx-font-size: 14;"/>
+            </VBox>
 
-    <!-- Buttons Section (Modern and Refined) -->
-    <HBox spacing="20" alignment="CENTER">
-        <Button text="Borrow" fx:id="btnBorrow" onAction="#sendBorrowRequest"
-                style="-fx-font-size: 16px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 35; -fx-padding: 14 50; -fx-font-weight: bold;"/>
-        <Button text="Reset" fx:id="btnReset" onAction="#resetFields"
-                style="-fx-font-size: 16px; -fx-background-color: #f6c177; -fx-text-fill: black;
-                       -fx-border-width: 0; -fx-background-radius: 35; -fx-padding: 14 50; -fx-font-weight: bold;"/>
-    </HBox>
-
-    <!-- Response Box for Result Display (Stylish and Responsive) -->
-    <TextField fx:id="txtResponse" editable="false" promptText="Response will appear here"
-               style="-fx-background-color: white; -fx-border-color: transparent; -fx-border-radius: 25; 
-                      -fx-padding: 10; -fx-font-size: 14px; -fx-pref-width: 250;" />
+            <!-- Action Buttons -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="btnBorrow" text="Borrow" onAction="#sendBorrowRequest"
+                    style="-fx-font-size: 14; -fx-padding: 10 25; -fx-min-width: 100;"/>
+                <Button fx:id="btnReset" text="Reset" onAction="#resetFields"
+                    style="-fx-font-size: 14; -fx-padding: 10 25; -fx-min-width: 100;"/>
+            </HBox>
+        </VBox>
+    </VBox>
 </VBox>

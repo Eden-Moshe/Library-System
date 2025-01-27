@@ -274,22 +274,5 @@ public class BookReturnWindowController extends BaseController {
 		
 		
 	}
-//	        try {
-//	            // Close the current window
-//	            ((Node) event.getSource()).getScene().getWindow().hide();
-//	            // Load the previous screen (Main Menu)
-//	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainMenu.fxml"));
-//	            Pane root = loader.load();
-//	            // Set up the new stage
-//	            Stage stage = new Stage();
-//	            Scene scene = new Scene(root);
-//	            stage.setTitle("Main Menu");
-//	            stage.setScene(scene);
-//	            stage.show();
-//	            } 
-//	        catch (IOException e) {
-//	            e.printStackTrace();
-//	            System.out.println("Failed to load MainMenu.fxml.");
-//	                              }
-//	}
+
 }

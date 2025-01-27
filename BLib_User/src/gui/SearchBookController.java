@@ -95,62 +95,10 @@ public class SearchBookController extends BaseController{
         userManager.send(searchMessage);
 
         
-        //23.01.25 victor change:
-        //i changed the way the search results is called to conform to the newer method
         //the search results controller will now handle the response from the server.
         SubscriberUI.mainController.switchView("/gui/BookResults.fxml");
         
-//        
-//        
-//        
-//        MyInbox inbox = UM.inb;
-//        Object response = inbox.getObj(); // Get the response from the server
-//
-//        // Check if the response is an ArrayList of Book objects
-//        if (response instanceof ArrayList<?>) {
-//            ArrayList<Book> searchResults = (ArrayList<Book>) response; // Cast the response to a list of books
-//
-//            if (!searchResults.isEmpty()) {
-//                // Print search results for debugging purposes
-//                System.out.println("Search Results:");
-//                for (Book book : searchResults) {
-//                    System.out.println("Book Name: " + book.getBookName());
-//                    System.out.println("Genre: " + book.getBookGenre());
-//                    System.out.println("Barcode: " + book.getBookBarcode());
-//                    System.out.println("Location on Shelf: " + book.getPlaceOnShelf());
-//                    System.out.println("Description: " + book.getBookDesc());
-//                    System.out.println("Available: " + (book.isBookAvailable() ? "Yes" : "No"));
-//                    System.out.println("Return Date: " + book.getReturnDate());
-//                    System.out.println("----------------------------");
-//                }
-//                
-//             
-//                
-//                
-//                
-////
-////                // Load the new page to display search results
-////                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookResults.fxml"));
-////                Parent root = loader.load();
-////
-////                // Pass the search results to the next controller
-////                BookResultsController controller = loader.getController();
-////                controller.setBookResults(searchResults);
-////
-////                // Display the new page with search results
-////                Stage primaryStage = new Stage();
-////                primaryStage.setScene(new Scene(root));
-////                primaryStage.setTitle("Search Results");
-////                primaryStage.show();
-//
-//                // Hide the current window
-//                //((Node) event.getSource()).getScene().getWindow().hide();
-//            } else {
-//                showAlert("No Results", "No books were found matching the search criteria.");
-//            }
-//        } else {
-//            showAlert("Error", "Unexpected response received from the server.");
-//        }
+
     }
 
     /**

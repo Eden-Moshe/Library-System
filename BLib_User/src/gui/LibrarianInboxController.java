@@ -119,7 +119,6 @@ public class LibrarianInboxController extends BaseController {
         {
         	if (msg.is_new) {
         		currentlyDisplayed.add(msg);
-        		System.out.println("message added: "+ msg.getMessage());
         	}
         	
         }
@@ -136,7 +135,6 @@ public class LibrarianInboxController extends BaseController {
     	
     	
     	if (currentlyDisplayed == null || currentlyDisplayed.isEmpty()) {
-            System.out.println("No messages to display.");
             
             // Clear the TableView if there are no messages
             tableView.setItems(FXCollections.observableArrayList());

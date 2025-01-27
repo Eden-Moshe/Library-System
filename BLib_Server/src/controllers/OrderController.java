@@ -189,7 +189,6 @@ public class OrderController {
 	                String orderStatus = userOrders.getString("order_status");
 
 	                if (existingBookName.equals(bookName) && orderStatus.equals("waiting")) {
-	                    System.out.println("User already has an active order for this book.");
 	                    return false;  // User can't order the same book again
 	                }
 	            }

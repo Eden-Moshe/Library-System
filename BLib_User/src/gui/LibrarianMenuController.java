@@ -64,8 +64,6 @@ public  class LibrarianMenuController extends BaseController  {
 	msg.action = get_Librarian_Messages;
 	
 	msg.librarian = UM.librarian;
-	System.out.println("librarian id = " + UM.librarian.getLibrarian_id());
-	 System.out.println("librarian id = " + msg.librarian.getLibrarian_id());
 
 	UM.send(msg);
 	
@@ -142,8 +140,6 @@ public  class LibrarianMenuController extends BaseController  {
 		msg.action = get_Librarian_Messages;
 		
 		msg.librarian = UM.librarian;
-		System.out.println("librarian id = " + UM.librarian.getLibrarian_id());
-		 System.out.println("librarian id = " + msg.librarian.getLibrarian_id());
 
 		UM.send(msg);
 		

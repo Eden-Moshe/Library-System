@@ -101,6 +101,11 @@ public class server extends AbstractServer{
 	  
 
 	  
+	public void shutDown() {
+
+		db.closeConnection();
+		System.exit(0);
+	}
 	
 
 	
@@ -242,11 +247,9 @@ public class server extends AbstractServer{
 			
 			if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))
 			{
-				System.out.println("if (msg instanceof LibrarianMessage && connectedLibrarians.contains(client))");
 				LibrarianMessage LM = (LibrarianMessage) msg;
 				if (LM.funcRequest.contains("Create Subscriber"))
 				{
-					System.out.println("if (LM.funcRequest.contains(Create Subscriber))");
 					client.sendToClient(subscriberController.addSubscriber(LM.sub));
 					
 				}
@@ -471,29 +474,7 @@ public class server extends AbstractServer{
 		  
 		  
 		  
-		  
-//		  
-//		  	FXMLLoader loader = new FXMLLoader();
-//
-//			Stage primaryStage = new Stage();
-//			Pane root=null;
-//			try {
-//				root = loader.load(getClass().getResource("/gui/Connection.fxml").openStream());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			conEntry = loader.getController();		
-//			//conEntry.loadConnection(CIP,CCON,CSTATUS);
-//			conEntry.loadConnection(client.getInetAddress().toString(), "connected", client.toString());
-//			Scene scene = new Scene(root);			
-//			primaryStage.setTitle("Client Managment Window");
-//
-//			primaryStage.setScene(scene);		
-//			primaryStage.show();
-//			System.out.println("SDGFFDSAF: " + client.toString() + "NET: " + client.getInetAddress().toString());
-
-//	  }
+		 
 
 	  /**
 	   * removes client from the UI
@@ -502,7 +483,6 @@ public class server extends AbstractServer{
 	   */
 	   protected synchronized void clientDisconnected(ConnectionToClient client) {
 		  
-			System.out.println("client disconnected");
 
 		  
 		  if (connectedLibrarians.contains(client))
@@ -525,8 +505,7 @@ public class server extends AbstractServer{
 	   */
 	  protected void serverStarted()
 	  {
-	    System.out.println
-	      ("Server listening for connections on port " + getPort());
+	    System.out.println("Server listening for connections on port " + getPort());
 	    
 	    
 	  }
@@ -537,8 +516,7 @@ public class server extends AbstractServer{
 	   */
 	  protected void serverStopped()
 	  {
-	    System.out.println
-	      ("Server has stopped listening for connections.");
+	    System.out.println("Server has stopped listening for connections.");
 	  }
 	  
 

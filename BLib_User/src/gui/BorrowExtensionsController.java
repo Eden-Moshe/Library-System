@@ -79,11 +79,9 @@ public  class BorrowExtensionsController extends BaseController   {
 		ArrayList<Borrow> borrowHistory = (ArrayList<Borrow>) fromServer;
 		
 		
-		System.out.println("setting columns");
 		
 
     	if (borrowHistory == null || borrowHistory.isEmpty()) {
-            System.out.println("No messages to display.");
             
             // Clear TableView if there are no messages
             tableView.setItems(FXCollections.observableArrayList());
@@ -112,18 +110,7 @@ public  class BorrowExtensionsController extends BaseController   {
 	
 	
 	
-//	
-//	
-//	public void start(Stage primaryStage) throws Exception {	
-//
-//		Parent root = FXMLLoader.load(getClass().getResource("LoginWindow.fxml"));
-//				
-//		Scene scene = new Scene(root);
-//		primaryStage.setTitle("Login Window");
-//		primaryStage.setScene(scene);
-//		
-//		primaryStage.show();	 	   
-//	}
+
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Library Tool");

@@ -1,59 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="gui.MainMenuController"
-      prefWidth="960" prefHeight="720"
-      alignment="CENTER" 
-      spacing="20" 
-      style="-fx-background-color: #1F4044;">
-    
-    <VBox alignment="CENTER" spacing="25">
-        <!-- Back Button Section -->
-        <HBox alignment="TOP_LEFT">
-            <Button fx:id="handleBack" onAction="#goBack" 
-                    style="-fx-background-color: transparent; -fx-text-fill: #F6C177; -fx-font-size: 24;
-                           -fx-padding: 8 16;"
-                    text="←"/>
-        </HBox>
+<AnchorPane prefHeight="769.0" prefWidth="1154.0" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainMenuController">
+   <children>
 
-        <!-- Logo Section -->
-        <ImageView fx:id="logo" fitHeight="180" fitWidth="180" preserveRatio="true">
-            <image>
-                <Image url="@/gui/images/BLIB.png"/>
-            </image>
-        </ImageView>
+       <!-- Back Button (Arrow at Top Left) -->
+       <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;" />
 
-        <!-- Menu Options -->
-        <VBox spacing="12" alignment="CENTER" style="-fx-background-color: #2A565B; -fx-padding: 25; 
-                                                    -fx-background-radius: 15; -fx-max-width: 350;">
-            <Button fx:id="btnUserInfo" onAction="#btnUserInfo" text="User Info"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-                           
-            <Button fx:id="btnViewHistory" onAction="#btnViewHistory" text="Borrow History"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-                           
-            <Button fx:id="btnSearchBook" onAction="#btnSearchBook" text="Search Book"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-                           
-            <Button fx:id="btnExtendBorrow" onAction="#btnExtendBorrow" text="Borrow Extension"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-                           
-            <Button fx:id="btnOrderBook" onAction="#btnOrderBook" text="Order Book"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-                           
-            <Button fx:id="btnAccountStatus" onAction="#viewAccountStatus" text="Account Status History"
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044; -fx-font-weight: bold;
-                           -fx-padding: 10 30; -fx-background-radius: 8; -fx-font-size: 14; -fx-min-width: 250;"/>
-        </VBox>
-    </VBox>
-</VBox>
+       <!-- Button Container -->
+       <VBox layoutX="352.0" layoutY="54.0" prefHeight="619.0" prefWidth="253.0" spacing="20" style="-fx-background-color: #2A565B; -fx-padding: 30; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 5);">
+           <children>
+             
+             <!-- Logo -->
+             <ImageView fx:id="logo" fitHeight="303.0" fitWidth="193.0" preserveRatio="true">
+                 <image>
+                     <Image url="@/gui/images/BLIB.png" />
+                 </image>
+             </ImageView>
+               <!-- USER INFO BUTTON -->
+               <Button fx:id="btnUserInfo" onAction="#btnUserInfo" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="User Info" />
+               
+               <!-- BORROW HISTORY BUTTON -->
+               <Button fx:id="btnViewHistory" onAction="#btnViewHistory" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Borrow History" />
+               
+               <!-- SEARCH BOOK BUTTON -->
+               <Button fx:id="btnSearchBook" onAction="#btnSearchBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Search Book" />
+               
+               <!-- BORROW EXTENSION BUTTON -->
+               <Button fx:id="btnExtendBorrow" onAction="#btnExtendBorrow" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Borrow Extension" />
+               
+               <!-- ORDER BOOK BUTTON -->
+               <Button fx:id="btnOrderBook" onAction="#btnOrderBook" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Order Book" />
+               
+               <!-- ACCOUNT STATUS BUTTON -->
+               <Button fx:id="btnAccountStatus" onAction="#viewAccountStatus" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e4b970; -fx-text-fill: rgb(37, 75, 75); -fx-font-family: 'Arial'; -fx-font-weight: normal;" text="Account Status History" />
+           </children>
+       </VBox>
+       
+       <!-- Back Button -->
+       <Button fx:id="handleBack" layoutX="63.0" layoutY="21.0" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
+   </children>
+</AnchorPane>

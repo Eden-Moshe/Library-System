@@ -166,11 +166,9 @@ public class SubscriberController {
 							    newSub.getStatus()
 							};
 					db.insertRow(tName, subFields, subValues);
-					System.out.println("addsubscriber before returning value newSub = "+newSub.toString());
 					return newSub;
 				}
 			}
-			System.out.println("testCreationfailed");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

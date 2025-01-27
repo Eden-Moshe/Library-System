@@ -91,7 +91,6 @@ public class CreateSubscriberFormController extends BaseController implements In
 	
 	public void save(ActionEvent event) throws Exception {
 		
-		System.out.println("savebutton in createform");
 		UserManager UM = UserManager.getInstance();
 		//String pass = UM.getPass();
 		String name, phoneNum, email;
@@ -130,7 +129,6 @@ public class CreateSubscriberFormController extends BaseController implements In
 		
 		newSub = (Subscriber) UM.inb.getObj();
 		
-		System.out.println("createform post send");
 		
 		//displaying subscriber id and their temporary password
 		this.txtSID.setText(newSub.getSID());

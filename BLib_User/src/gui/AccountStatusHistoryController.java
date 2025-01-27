@@ -56,16 +56,13 @@ public  class AccountStatusHistoryController extends BaseController   {
 		
 		
 		if (accountStatus == null || accountStatus.isEmpty()) {
-            System.out.println("No messages to display.");
             
             // Clear TableView if there are no messages
-            System.out.println("no account status history");
             tableView.setItems(FXCollections.observableArrayList());
             return;
         }
 
 		
-		System.out.println("setting columns");
 		 //  Set the cell value factories to match the fields in Borrow
 		untilDateColumn.setCellValueFactory(new PropertyValueFactory<>("end_date"));
 		fromDateColumn.setCellValueFactory(new PropertyValueFactory<>("set_date"));
@@ -91,7 +88,6 @@ public  class AccountStatusHistoryController extends BaseController   {
 
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
-		System.out.println("exit Library Tool");
 		System.exit(0);
 	}
 	

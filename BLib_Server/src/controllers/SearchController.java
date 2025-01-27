@@ -67,13 +67,14 @@ public class SearchController {
             while (resultSet != null && resultSet.next()) {
                 // Create a Book object for each result
                 Book book = new Book(
+            		resultSet.getString("barcode"),
                     resultSet.getString("book_name"),
                     resultSet.getString("book_genre"),
-                    resultSet.getString("barcode"),
-                    resultSet.getString("shelf_location"),
                     resultSet.getString("book_description"),
+                    resultSet.getString("shelf_location"),
                     resultSet.getBoolean("book_available"),
                     resultSet.getDate("return_date")
+                   
                 );
                 bookList.add(book);
             }

@@ -5,69 +5,62 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="gui.LibrarianMenuController"
-      prefWidth="960" prefHeight="720"
-      style="-fx-background-color: #1F4044;">
-      
-    <!-- Main Content Container -->
-    <VBox spacing="20" style="-fx-padding: 30;">
-        <!-- Top Bar with Back and Message buttons -->
-        <HBox alignment="CENTER_LEFT" spacing="20">
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.LibrarianMenuController"
+    alignment="CENTER"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
+
+    <!-- Header with back button and message button -->
+    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20 40;">
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
             <Button fx:id="handleBack" onAction="#goBack" 
-                    style="-fx-background-color: transparent; -fx-text-fill: #F6C177; 
-                           -fx-font-size: 24; -fx-padding: 10 20;">←</Button>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="btnMessage" onAction="#ViewMessageInbox" 
-                    style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                           -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 8;"
-                    text="Messages"/>
+                text="←" 
+                style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"/>
         </HBox>
+        <Button fx:id="btnMessage" onAction="#ViewMessageInbox" 
+            text="Message" 
+            style="-fx-min-width: 120; -fx-font-size: 16;"/>
+    </HBox>
 
-        <!-- Content Section -->
-        <HBox alignment="CENTER" spacing="50" VBox.vgrow="ALWAYS">
-            <!-- Left Side - Buttons -->
-            <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-                <Button fx:id="btnUserInfo" onAction="#btnUserInfo" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="View User Info"/>
-                <Button fx:id="btnCreateSubscriber" onAction="#createSubscriber" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="Create New Subscriber"/>
-                <Button fx:id="btnLendBook" onAction="#btnLendBook" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="Lend Book"/>
-                <Button fx:id="btnReturnBook" onAction="#btnReturnBook" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="Return Book"/>
-                <Button fx:id="btnSearchBook" onAction="#btnSearchBook" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="Search Book"/>
-                <Button fx:id="btnViewReports" onAction="#btnViewReports" 
-                        style="-fx-background-color: #F6C177; -fx-text-fill: #1F4044;
-                               -fx-padding: 15 30; -fx-background-radius: 8; -fx-font-size: 14;
-                               -fx-pref-width: 250;" 
-                        text="View Reports"/>
-            </VBox>
+    <!-- Main content container -->
+    <HBox alignment="CENTER" spacing="40" VBox.vgrow="ALWAYS" style="-fx-padding: 20 40;">
+        <!-- Left side - Buttons -->
+        <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #2A565B; -fx-padding: 40; -fx-background-radius: 15; -fx-min-width: 300;">
+            <Button fx:id="btnUserInfo" onAction="#btnUserInfo" 
+                text="View User Info"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+                
+            <Button fx:id="btnCreateSubscriber" onAction="#createSubscriber" 
+                text="Create New Subscriber"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+                
+            <Button fx:id="btnLendBook" onAction="#btnLendBook" 
+                text="Lend Book"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+                
+            <Button fx:id="btnReturnBook" onAction="#btnReturnBook" 
+                text="Return Book"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+                
+            <Button fx:id="btnSearchBook" onAction="#btnSearchBook" 
+                text="Search Book"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+                
+            <Button fx:id="btnViewReports" onAction="#btnViewReports" 
+                text="View Reports"
+                style="-fx-min-width: 250; -fx-font-size: 16;"/>
+        </VBox>
 
-            <!-- Right Side - Logo -->
-            <VBox alignment="CENTER">
-                <ImageView fx:id="logo" fitHeight="300" fitWidth="300" preserveRatio="true">
-                    <image>
-                        <Image url="@/gui/images/BLIB.png"/>
-                    </image>
-                </ImageView>
-            </VBox>
-        </HBox>
-    </VBox>
+        <!-- Right side - Logo -->
+        <VBox alignment="CENTER">
+            <ImageView fx:id="logo" fitHeight="300" fitWidth="300" preserveRatio="true">
+                <image>
+                    <Image url="@/gui/images/BLIB.png"/>
+                </image>
+            </ImageView>
+        </VBox>
+    </HBox>
 </VBox>

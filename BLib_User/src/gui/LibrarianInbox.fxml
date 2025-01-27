@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #355457;" stylesheets="@LibrarianInbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LibrarianInboxController">
-   <children>
-      <ImageView fitHeight="1024.0" fitWidth="1023.0" layoutX="209.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../imageResources/BLIb%20icon%20clean.png" />
-         </image>
-      </ImageView>
-      <TableView fx:id="tableView" layoutX="290.0" layoutY="169.0" prefHeight="653.0" prefWidth="863.0" style="-fx-background-color: #3e6661;">
-        <columns>
-          <TableColumn id="senderColumn" fx:id="senderColumn" prefWidth="150.0" style="-fx-background-color: #d4e4dc;" text="Sender" />
-          <TableColumn id="messageColumn" fx:id="messageColumn" prefWidth="712.0" style="-fx-background-color: #d4e4dc;" text="Message" />
-        </columns>
-      </TableView>
-      <Label layoutX="589.0" layoutY="44.0" style="-fx-text-fill: #f6c177;" text="Message inbox:" />
-      <Button id="btnBack" fx:id="btnBack" layoutX="79.0" layoutY="87.0" mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="108.0" text="Back" />
-      <Button id="btnOtherMessages" fx:id="btnOtherMessages" layoutX="290.0" layoutY="883.0" mnemonicParsing="false" onAction="#viewOtherMessages" prefHeight="50.0" prefWidth="183.0" text="view past messages" />
-      <Button id="btnMarkAsRead" fx:id="btnMarkAsRead" layoutX="979.0" layoutY="883.0" mnemonicParsing="false" onAction="#markAsRead" prefHeight="50.0" prefWidth="174.0" text="mark messages as read" />
-      <Label fx:id="lblMessageType" layoutX="594.0" layoutY="116.0" prefHeight="43.0" prefWidth="253.0" style="-fx-text-fill: #f6c177;" text="New Messages" />
-      
-   </children>
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.LibrarianInboxController"
+    alignment="CENTER"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
+
+    <!-- Header section with back button and title -->
+    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
+        <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <Button id="btnBack" fx:id="btnBack" onAction="#goBack"
+                style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"
+                text="Back"/>
+        </HBox>
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="Message Inbox" 
+                style="-fx-font-size: 32; -fx-text-fill: #f6c177; -fx-font-weight: bold;"/>
+            <Label fx:id="lblMessageType" text="New Messages"
+                style="-fx-font-size: 20; -fx-text-fill: #f6c177;"/>
+        </VBox>
+        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
+                <image>
+                    <Image url="@/gui/images/BLIB.png"/>
+                </image>
+            </ImageView>
+        </HBox>
+    </HBox>
+
+    <!-- Main content container -->
+    <VBox spacing="20" style="-fx-padding: 20 40;">
+        <!-- Table container with styling -->
+        <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
+            style="-fx-background-color: #2e4e4e; -fx-min-height: 400;">
+            <columns>
+                <TableColumn id="senderColumn" fx:id="senderColumn" 
+                    text="Sender" 
+                    prefWidth="200"
+                    style="-fx-background-color: #355457;"/>
+                <TableColumn id="messageColumn" fx:id="messageColumn" 
+                    text="Message"
+                    prefWidth="680"
+                    style="-fx-background-color: #355457;"/>
+            </columns>
+        </TableView>
+
+        <!-- Action buttons container -->
+        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20 0;">
+            <Button id="btnOtherMessages" fx:id="btnOtherMessages"
+                text="View Past Messages"
+                onAction="#viewOtherMessages"
+                style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 200;"/>
+            <Button id="btnMarkAsRead" fx:id="btnMarkAsRead"
+                text="Mark Messages as Read"
+                onAction="#markAsRead"
+                style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 200;"/>
+        </HBox>
+    </VBox>
+</VBox>

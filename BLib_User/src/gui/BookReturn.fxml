@@ -1,40 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="500.0" spacing="20" style="-fx-background-color: rgb(37, 75, 75); -fx-padding: 30;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookReturnWindowController">
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.BookReturnWindowController"
+    alignment="CENTER"
+    spacing="15"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960"
+    prefHeight="720">
 
-    <!-- LOGO IMAGE -->
-    <ImageView fx:id="logo" fitWidth="200" preserveRatio="true">
-        <Image url="@/gui/images/BLIB.png" />
-    </ImageView>
+    <!-- Main content container with adjusted padding -->
+    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
+        <!-- Back button -->
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0; -fx-min-width: 500;">
+            <Button fx:id="btnBack" text="←" onAction="#getBackBtn"
+                style="-fx-font-size: 18; -fx-background-color: transparent; -fx-text-fill: white;"/>
+        </HBox>
 
-    <!-- Title Text -->
-    <Text fill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Book Return" />
+        <!-- Logo with adjusted size -->
+        <ImageView fx:id="logo" fitHeight="120" fitWidth="120" preserveRatio="true">
+            <image>
+                <Image url="@/gui/images/BLIB.png"/>
+            </image>
+        </ImageView>
 
-    <!-- Book Barcode Field -->
-    <Label style="-fx-font-size: 14px;" text="Book Barcode:" textFill="white" />
-    <TextField fx:id="txtbookBarcode" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Enter Book Barcode" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
+        <!-- Return form with adjusted width and padding -->
+        <VBox spacing="15" style="-fx-background-color: #2A565B; -fx-padding: 20; -fx-background-radius: 10; -fx-min-width: 450; -fx-max-width: 450;">
+            <Label text="Book Return" style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-    <!-- Response Field -->
-    <TextField fx:id="txtResponse" onMouseEntered="#onMouseEnteredTextField" onMouseExited="#onMouseExitedTextField" prefWidth="300.0" promptText="Response" style="-fx-background-color: #4b636e; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <!-- Borrower ID field -->
+            <VBox spacing="10">
+                <Label text="Borrower ID" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBorrowerId" promptText="Enter Borrower ID"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 14;"/>
+            </VBox>
 
-    <!-- Buttons Section -->
-    <HBox alignment="CENTER" spacing="20" style="-fx-padding-top: 20;">
-        <!-- Back Button -->
-        <Button fx:id="btnBack" onAction="#getBackBtn" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                         -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                         -fx-background-radius: 15; -fx-padding: 10 20;" text="Back" />
-   
-        <!-- Reset Button -->
-        <Button fx:id="btnreset" onAction="#resetFields" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                         -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                         -fx-background-radius: 15; -fx-padding: 10 20;" text="Reset" />
+            <!-- Borrow Number field -->
+            <VBox spacing="10">
+                <Label text="Borrow Number" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtBorrowNumber" promptText="Enter Borrow Number"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 14;"/>
+            </VBox>
 
-        <!-- Return Book Button -->
-        <Button fx:id="btnBookReturn" onAction="#btnBookReturn" onMouseEntered="#onMouseEnteredButton" onMouseExited="#onMouseExitedButton" style="-fx-background-color: #e4b970; -fx-text-fill: white; -fx-font-size: 14px;                         -fx-pref-width: 150px; -fx-font-family: 'Arial'; -fx-font-weight: bold;                         -fx-background-radius: 15; -fx-padding: 10 20;" text="Return Book" />
-    </HBox>
+            <!-- Book Barcode field -->
+            <VBox spacing="10">
+                <Label text="Book Barcode" style="-fx-font-size: 14; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtbookBarcode" promptText="Enter Book Barcode"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 14;"/>
+            </VBox>
+
+            <!-- Response field -->
+            <VBox spacing="10">
+                <TextField fx:id="txtResponse" promptText="Response will appear here" editable="false"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 14;"/>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="btnreset" text="Reset" onAction="#resetFields"
+                    style="-fx-font-size: 14; -fx-padding: 10 20; -fx-min-width: 100;"/>
+                <Button fx:id="btnBookReturn" text="Return Book" onAction="#btnBookReturn"
+                    style="-fx-font-size: 14; -fx-padding: 10 20; -fx-min-width: 100;"/>
+            </HBox>
+        </VBox>
+    </VBox>
 </VBox>

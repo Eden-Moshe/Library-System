@@ -71,8 +71,8 @@ public class MainController extends Application {
         	   controller = loader.getController();
            }catch (Exception e)
            {
-        	   System.out.println("class is not baseController");
-        	   //e.printStackTrace();
+        	   System.out.println("class baseController issue " + e.getMessage());
+        	   e.printStackTrace();
            }
            if (controller != null) {
            	controller.onLoad();
@@ -83,7 +83,6 @@ public class MainController extends Application {
        // Method to switch views
        public void switchView(String fxml) {
            windowHistory.push(fxml);
-           System.out.println("switchView : " + fxml);
 
            try {
 //               Pane view = loadView(fxml);
@@ -120,7 +119,6 @@ public class MainController extends Application {
     	   
     	windowHistory.pop();
     	String fxml = windowHistory.getFirst();
-    	System.out.println("goBack: " + fxml);
     	try {
    	    Pane newView = loadView(fxml);
 

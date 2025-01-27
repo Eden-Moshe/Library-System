@@ -78,7 +78,6 @@ public  class LoginController extends BaseController   {
 		}
 		else
 		{
-			System.out.println("wrong id or password");
 			showAlert("Wrong ID or Password","Wrong ID or Password");
 		}
 		

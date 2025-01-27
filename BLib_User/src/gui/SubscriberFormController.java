@@ -109,7 +109,7 @@ public class SubscriberFormController extends BaseController {
 	            UM.send(sm);
 	        }
 	        else {
-	            System.out.println("Email cannot be empty.");
+	            showAlert("warning", "email field cannot be empty");
 	        }
 
 	        if (newPhoneNumber != null && !newPhoneNumber.trim().isEmpty() && newPhoneNumber != s.getPNumber()) {
@@ -117,7 +117,7 @@ public class SubscriberFormController extends BaseController {
 	            sm.fieldVal=newPhoneNumber;
 	            UM.send(sm);
 	        } else {
-	            System.out.println("Phone number cannot be empty.");
+	            showAlert("warning", "phone number field cannot be empty");
 	        }
 
 			
@@ -125,7 +125,7 @@ public class SubscriberFormController extends BaseController {
     	} 
 		else 
 	    {
-	        System.out.println("Subscriber object not found. Cannot update.");
+            showAlert("warning", "could not update subscriber");
 	    }
 		
 	}

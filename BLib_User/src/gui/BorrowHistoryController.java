@@ -81,11 +81,9 @@ public  class BorrowHistoryController extends BaseController   {
 		ArrayList<Borrow> borrowHistory = (ArrayList<Borrow>) fromServer;
 		
 		
-		System.out.println("setting columns");
 		
 
     	if (borrowHistory == null || borrowHistory.isEmpty()) {
-            System.out.println("No messages to display.");
             
             // Clear TableView if there are no messages
             tableView.setItems(FXCollections.observableArrayList());
@@ -123,7 +121,6 @@ public  class BorrowHistoryController extends BaseController   {
 //	}
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
-		System.out.println("exit Library Tool");
 		System.exit(0);
 	}
 	

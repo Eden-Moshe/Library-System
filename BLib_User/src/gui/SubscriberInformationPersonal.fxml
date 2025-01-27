@@ -1,78 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="572.0" prefWidth="778.0" style="-fx-background-color: #355457;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SubscriberFormController">
-    
-    <!-- Back Button (Arrow at Top Left) -->
-    <Button fx:id="btnGoBack" layoutX="14.0" layoutY="23.0" onAction="#goBack" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
-    
-    <!-- Text Fields Section -->
-    <VBox alignment="CENTER" layoutX="98.0" layoutY="89.0" spacing="15">
-        
-        <!-- User ID -->
-        <HBox spacing="10">
-            <Label prefHeight="9.0" prefWidth="20.0" style="-fx-font-size: 20px; -fx-text-fill: white;" text="👤" />
-            <VBox spacing="5">
-                <Label prefHeight="20.0" prefWidth="84.0" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="User ID:" />
-                <TextField fx:id="txtUserID" editable="false" prefWidth="250" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-            </VBox>
-        </HBox>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.SubscriberFormController"
+    alignment="CENTER"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
 
-        <!-- User Password -->
-        <HBox spacing="10">
-            <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="🔒" />
-            <VBox spacing="5">
-                <Label style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="User Name" />
-                <TextField fx:id="txtUserName" editable="false" prefWidth="250" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-            </VBox>
-        </HBox>
+    <!-- Header with back button -->
+    <HBox alignment="CENTER_LEFT" style="-fx-padding: 20 40;">
+        <Button fx:id="btnGoBack" onAction="#goBack" 
+            style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"
+            text="←"/>
+    </HBox>
 
-        <!-- Phone Number -->
-        <HBox spacing="10">
-            <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="📞" />
-            <VBox spacing="5">
-                <Label style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="Phone Number:" />
-                <TextField fx:id="txtPhoneNumber" prefWidth="250" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-            </VBox>
-        </HBox>
+    <!-- Main content container -->
+    <VBox alignment="CENTER" spacing="30" style="-fx-padding: 20;">
+        <!-- Form container -->
+        <VBox spacing="25" style="-fx-background-color: #2A565B; -fx-padding: 40; -fx-background-radius: 15; -fx-min-width: 600; -fx-max-width: 800;">
+            <Label text="Subscriber Information" style="-fx-font-size: 32; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-        <!-- Email -->
-        <HBox spacing="10">
-            <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="📧" />
-            <VBox spacing="5">
-                <Label style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="Email:" />
-                <TextField fx:id="txtEmail" prefWidth="250" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-            </VBox>
-        </HBox>
+            <!-- User Information Section -->
+            <HBox spacing="40">
+                <!-- Left Column -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <!-- User ID -->
+                    <VBox spacing="10">
+                        <Label text="User ID" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtUserID" editable="false"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
 
-        <!-- Status -->
-        <HBox spacing="10">
-            <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="🛠" />
-            <VBox spacing="5">
-                <Label style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="Status:" />
-                <TextField fx:id="txtStatus" editable="false" prefWidth="250" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-            </VBox>
-        </HBox>
+                    <!-- User Name -->
+                    <VBox spacing="10">
+                        <Label text="User Name" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtUserName" editable="false"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
 
+                    <!-- Phone Number -->
+                    <VBox spacing="10">
+                        <Label text="Phone Number" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtPhoneNumber"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Right Column -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <!-- Email -->
+                    <VBox spacing="10">
+                        <Label text="Email" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtEmail"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
+
+                    <!-- Status -->
+                    <VBox spacing="10">
+                        <Label text="Status" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtStatus" editable="false"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
+
+                    <!-- New Password -->
+                    <VBox spacing="10">
+                        <Label text="New Password" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                        <TextField fx:id="txtPassword" promptText="Enter new password"
+                            style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                            -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- Buttons Section -->
+            <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                <Button fx:id="btnUpdateInformation" text="Update Information" onAction="#updateInformation"
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 180;"/>
+                <Button fx:id="btnUpdatePassword" text="Update Password" onAction="#updatePassword"
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 180;"/>
+            </HBox>
+        </VBox>
     </VBox>
-
-    <!-- Buttons Section -->
-    <VBox alignment="CENTER" layoutY="370" spacing="15" />
-     <Button fx:id="btnUpdateInformation" layoutX="134.0" layoutY="507.0" onAction="#updateInformation" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="update information" />
-   <Button fx:id="btnUpdatePassword" layoutX="485.0" layoutY="189.0" onAction="#updatePassword" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 40; -fx-font-weight: bold;" text="update password" />
-   <VBox layoutX="456.0" layoutY="89.0" spacing="5">
-      <children>
-         <Label style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" text="New Password:" />
-         <TextField fx:id="txtPassword" prefWidth="250" promptText="enter new password" style="-fx-border-color: transparent; -fx-background-color: white; -fx-font-size: 14px; -fx-border-radius: 25; -fx-padding: 10;" />
-      </children>
-   </VBox>
-   <Line endX="-100.0" endY="-483.0" layoutX="519.0" layoutY="483.0" startX="-100.0" startY="89.0" />
-    
-</AnchorPane>
+</VBox>

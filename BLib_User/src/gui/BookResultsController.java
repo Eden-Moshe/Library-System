@@ -44,6 +44,9 @@ public class BookResultsController extends BaseController implements Initializab
     private TableColumn<Book, String> colBookDesc;
 
     @FXML
+    private TableColumn<Book, String> colBookBarcode;
+    
+    @FXML
     private TableColumn<Book, String> colBookExists;
 
     @FXML
@@ -76,20 +79,12 @@ public class BookResultsController extends BaseController implements Initializab
     	
 	}
     	
-    
-//    // Show an alert with the specified title and content text
-//    private void showAlert(String title, String contentText) {
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(contentText);
-//        alert.showAndWait(); // Show the alert
-//    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             // Initialize basic columns
+        	colBookBarcode.setCellValueFactory(new PropertyValueFactory<>("bookBarcode"));
             colBookName.setCellValueFactory(new PropertyValueFactory<>("bookName"));
             colBookGenre.setCellValueFactory(new PropertyValueFactory<>("bookGenre"));
             colBookDesc.setCellValueFactory(new PropertyValueFactory<>("bookDesc"));
@@ -166,17 +161,6 @@ public class BookResultsController extends BaseController implements Initializab
     	SubscriberUI.mainController.goBack();
     	
     	
-//        try {
-//            ((Node) event.getSource()).getScene().getWindow().hide();
-//            Stage primaryStage = new Stage();
-//            Pane root = FXMLLoader.load(getClass().getResource("/gui/SearchBook.fxml"));
-//            Scene scene = new Scene(root);
-//            primaryStage.setTitle("Search Book");
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.err.println("Error loading SearchBook.fxml: " + e.getMessage());
-//        }
+
     }
 }

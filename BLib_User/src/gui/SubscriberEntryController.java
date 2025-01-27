@@ -32,50 +32,7 @@ public  class SubscriberEntryController  extends BaseController {
 		return idtxt.getText();
 	}
 	
-//	public void Send(ActionEvent event) throws Exception {
-//		String id;
-//		FXMLLoader loader = new FXMLLoader();
-//		
-//		id=getID();
-//		if(id.trim().isEmpty())
-//		{
-//
-//			System.out.println("You must enter an id number");	
-//		}
-//		else
-//		{
-//			ArrayList<String> SID = new ArrayList<String>();
-//			String toSend = "subscriber_id:";
-//			toSend=toSend.concat(id);
-//			SID.add("subscriber:info");
-//			SID.add(toSend);
-//			
-//			SubscriberUI.chat.accept(SID);
-//			
-//		
-//			if(ChatClient.s1.getSID()==null)
-//			{
-//				System.out.println("Subscriber ID Not Found");
-//				
-//			}
-//			else {
-//				System.out.println("Subscriber ID Found");
-//				((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-//				Stage primaryStage = new Stage();
-//				Pane root = loader.load(getClass().getResource("/gui/SubscriberForm.fxml").openStream());
-//				SubscriberFormController subscriberFormController = loader.getController();		
-//				//System.out.println(ChatClient.s1);
-//				subscriberFormController.loadSubscriber(ChatClient.s1);
-//			
-//				Scene scene = new Scene(root);			
-//				scene.getStylesheets().add(getClass().getResource("/gui/SubscriberForm.css").toExternalForm());
-//				primaryStage.setTitle("Subscriber Managment Tool");
-//	
-//				primaryStage.setScene(scene);		
-//				primaryStage.show();
-//			}
-//		}
-//	}
+
 	
 	public void Send(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
@@ -83,14 +40,7 @@ public  class SubscriberEntryController  extends BaseController {
 		String id=getID();
 		
 		UserManager UM = UserManager.getInstance();
-		//IMPLEMENT SENDING REQUEST FOR SUBSCRIBER DATA
-//		UserManager.udata.setKey(id);
-//		UserManager.udata.setToGetInfo();
-//		UserManager.udata.sub=true;
-//		UM.udata.setKey(id);
-//		UM.udata.setToGetInfo();
-//		UM.udata.sub=true;
-//		UM.send("hey");
+
 		
 		SubMessage getSub = new SubMessage();
 		getSub.editBool=false;
@@ -99,11 +49,7 @@ public  class SubscriberEntryController  extends BaseController {
 		UM.send(getSub);
 		
 		
-		//ChatClient.udata.setObj(new Subscriber (null,null,null,null,null));
 		
-		
-		//if(!id.trim().isEmpty() && ChatClient.s1.getSID()!=null)
-		//if(id==-1 && ChatClient.s1.getSID()!=null)
 		if(id.trim().isEmpty() || UM.s1.getSID()==null)
 			{
 	

@@ -10,6 +10,7 @@ public class ServerUI extends Application {
 	
 	public static ConnectionEntryController conEntry;
 	
+	public static server sv;
 	
 	
 	
@@ -44,7 +45,7 @@ public class ServerUI extends Application {
 	        	System.out.println("ERROR - could not convert port to int");
 	        }
 	    	
-	        server sv = new server(port);
+	        sv = new server(port);
 	        
 	        try 
 	        {

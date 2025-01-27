@@ -137,14 +137,12 @@ public final class UserManager extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
 	  
-		//System.out.println("received message");
 
 	  awaitResponse = false;
 	  
 
 	  if (msg instanceof Librarian) {
 		  librarian = (Librarian) msg;
-		  System.out.println("librarian id = " + librarian.getLibrarian_id());
 	  }
 	  if (msg == null)
 		  inb.setMessage("received null");

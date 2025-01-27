@@ -72,7 +72,6 @@ public class BookController {
                 
                 return ret;
             } else {
-                System.out.println("No Book found with barcode: " + pKey);
                 return null;
             }
         } catch (SQLException e) {

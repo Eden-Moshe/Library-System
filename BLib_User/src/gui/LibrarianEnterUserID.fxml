@@ -1,39 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="440.0" prefWidth="647.0" style="-fx-background-color: #355457;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LibrarianEnterUserIDWindow">
-    
-    <!-- Back Button (Arrow at Top Left) -->
-    <HBox alignment="TOP_LEFT" style="-fx-padding-top: 10;" />
-    
-    <!-- Title with Icon -->
-    <HBox alignment="CENTER_LEFT" layoutX="24.0" layoutY="183.0" spacing="10">
-        <Label prefHeight="33.0" prefWidth="26.0" style="-fx-font-size: 18px; -fx-text-fill:  white;" text="🔍" />
-        <Label prefHeight="32.0" prefWidth="126.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Enter User ID :" />
-    </HBox>
-    
-    <!-- Text Field with Prompt Text -->
-    <TextField fx:id="userIdField" layoutX="198.0" layoutY="179.0" prefHeight="42.0" prefWidth="222.0" promptText="Enter ID to view User Info" />
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.LibrarianEnterUserIDWindow"
+    alignment="CENTER"
+    spacing="20"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
 
-    <!-- Smaller View User Info Button -->
-    <Button fx:id="btnViewUserInfo" layoutX="445.0" layoutY="180.0" onAction="#ViewUserInfo" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-background-radius: 25; -fx-padding: 10 30; -fx-font-weight: bold;" text="View User Info" />
-    <Button fx:id="btnReset" layoutX="258.0" layoutY="360.0" onAction="#resetFields" style="-fx-font-size: 14px; -fx-background-color: #f6c177; -fx-text-fill: black; -fx-border-width: 0; -fx-background-radius: 25; -fx-padding: 10 30; -fx-font-weight: bold;" text="Reset" />
+    <!-- Main content container with adjusted padding -->
+    <VBox alignment="CENTER" spacing="25" style="-fx-padding: 30;">
+        <!-- Back button container -->
+        <HBox alignment="CENTER" style="-fx-min-width: 500;">
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <Button fx:id="btnBack" text="←" onAction="#getBackBtn"
+                    style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"/>
+            </HBox>
+            <HBox alignment="CENTER" spacing="10">
+                <Label text="🔍" style="-fx-font-size: 24; -fx-text-fill: white;"/>
+                <Label text="User Lookup" style="-fx-font-size: 32; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                <!-- Placeholder for symmetry -->
+                <Region prefWidth="50"/>
+            </HBox>
+        </HBox>
 
-    <!-- Back Button -->
-    <Button fx:id="btnBack" layoutX="14.0" layoutY="23.0" onAction="#getBackBtn" style="-fx-font-size: 36px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-border-width: 0;" text="←" />
+        <!-- Main form container -->
+        <VBox spacing="20" style="-fx-background-color: #2A565B; -fx-padding: 40; -fx-background-radius: 15; -fx-min-width: 500; -fx-max-width: 500;">
+            <!-- User ID input section -->
+            <VBox spacing="10">
+                <Label text="Enter User ID" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <HBox spacing="15" alignment="CENTER">
+                    <TextField fx:id="userIdField" promptText="Enter ID to view User Info"
+                        style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                        -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"
+                        HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnViewUserInfo" text="View User Info" onAction="#ViewUserInfo"
+                        style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"/>
+                </HBox>
+            </VBox>
 
-    <!-- Response Section -->
-    <HBox alignment="CENTER_LEFT" layoutX="24.0" layoutY="270.0" spacing="10">
-        <!-- Icon for Response -->
-        <Label prefHeight="33.0" prefWidth="26.0" style="-fx-font-size: 18px; -fx-text-fill:  white;" text="🔄" />
-        <!-- Label for Response -->
-        <Label prefHeight="32.0" prefWidth="126.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Response:" />
-        <!-- Text Field for Server Response -->
-        <TextField fx:id="txtresponse" editable="false" prefHeight="42.0" prefWidth="222.0" promptText="Server response will appear here" style="-fx-font-size: 14px; -fx-background-color: white;" />
-    </HBox>
-</AnchorPane>
+            <!-- Response section -->
+            <VBox spacing="10">
+                <Label text="Response" style="-fx-font-size: 16; -fx-text-fill: #E4E4E4;"/>
+                <TextField fx:id="txtresponse" editable="false" 
+                    promptText="Server response will appear here"
+                    style="-fx-background-color: #1F4044; -fx-text-fill: white; -fx-prompt-text-fill: #858585;
+                    -fx-background-radius: 8; -fx-padding: 15; -fx-font-size: 16;"/>
+            </VBox>
+
+            <!-- Reset button -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="btnReset" text="Reset" onAction="#resetFields"
+                    style="-fx-font-size: 16; -fx-padding: 15 30; -fx-min-width: 120;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</VBox>

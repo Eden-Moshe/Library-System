@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 import common.BorrowRecord;
 
@@ -420,9 +421,11 @@ public class DBController {
 
 	public void closeConnection() {
 		try {
-			con.close();
-		} catch (SQLException e) {
-			System.out.print("cannot close connection with the DB");
+	            //con.close();
+	        
+		} catch (Exception e) {
+			
+			//System.out.print("cannot close connection with the DB ");
 		}
 	}
 	

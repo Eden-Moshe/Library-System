@@ -11,13 +11,7 @@ public class BaseController {
 
 	protected UserManager UM = UserManager.getInstance();
 
-//	protected MainController main;
-//
-//	public void setMainApp(MainController main) {
-//		
-//        this.main = main;
-//        System.out.println("setMainApp main: " + main);
-//    }
+
 	
 	
 	public void barcodeScan(String barcode)

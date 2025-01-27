@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #355457;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BorrowHistoryController">
-    
-    <!-- Back Button -->
-    <Label layoutX="102.0" layoutY="76.0" style="-fx-text-fill: #f6c177; -fx-font-size: 48px;" text="←" />
-    
-    <!-- Table -->
-    <TableView fx:id="tableView" layoutX="411.0" layoutY="251.0" prefHeight="559.0" prefWidth="618.0">
-        <columns>
-            <TableColumn fx:id="bookNameColumn" prefWidth="176.0" text="Book Name" />
-            <TableColumn fx:id="bookBorrowDateColumn" prefWidth="226.0" text="Borrow Date" />
-            <TableColumn fx:id="bookReturnDateColumn" prefWidth="215.0" text="Return Date" />
-        </columns>
-    </TableView>
-   <Label layoutX="618.0" layoutY="146.0" prefHeight="21.0" prefWidth="217.0" text="subscriber's borrow history" />
-   <Button fx:id="btnExtensions" layoutX="803.0" layoutY="888.0" mnemonicParsing="false" onAction="#viewExtensions" prefHeight="38.0" prefWidth="226.0" text="View Borrow Extensions" />
-   <Button fx:id="btnBack" layoutX="102.0" layoutY="134.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="42.0" text="←" />
-    
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="gui.BorrowHistoryController"
+    alignment="CENTER"
+    spacing="10"
+    style="-fx-background-color: #1F4044;"
+    prefWidth="960" 
+    prefHeight="720">
+
+    <!-- Header section with back button and title -->
+    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 20;">
+            <Button fx:id="handleBack" onAction="#goBack" 
+                style="-fx-font-size: 24; -fx-background-color: transparent; -fx-text-fill: white;"
+                text="←"/>
+        </HBox>
+        <Label text="Subscriber's Borrow History" 
+            style="-fx-font-size: 28; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </VBox>
+
+    <!-- Main content container -->
+    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 10;">
+        <!-- Table container with styling -->
+        <VBox style="-fx-background-color: #2A565B; -fx-padding: 20; -fx-background-radius: 15;">
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
+                style="-fx-min-height: 400; -fx-pref-width: 750;">
+                <columns>
+                    <TableColumn fx:id="bookNameColumn" text="Book Name" 
+                        style="-fx-pref-width: 250;"/>
+                    <TableColumn fx:id="bookBorrowDateColumn" text="Borrow Date"
+                        style="-fx-pref-width: 250;"/>
+                    <TableColumn fx:id="bookReturnDateColumn" text="Return Date"
+                        style="-fx-pref-width: 250;"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <!-- Button section -->
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10 0;">
+            <Button fx:id="btnExtensions" text="View Borrow Extensions" 
+                onAction="#viewExtensions"
+                style="-fx-font-size: 14; -fx-padding: 12 25; -fx-min-width: 200;"/>
+        </HBox>
+    </VBox>
+</VBox>

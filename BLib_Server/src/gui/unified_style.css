@@ -1,0 +1,142 @@
+/* Unified CSS for the project (Updated Colors) */
+
+/* General Layout */
+.root {
+    -fx-background-color: #355457; /* Dark green background */
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-text-fill: #ffffff; /* White text by default */
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #e4b970;
+    -fx-text-fill: rgb(37, 75, 75);
+    -fx-font-family: 'Arial';
+    -fx-font-weight: normal;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease-in-out;
+}
+.button:hover {
+    -fx-background-color: #d9a762; /* Slightly darker gold */
+}
+.button:hover {
+    -fx-background-color: #d9a450;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.25, 0, 4);
+}
+
+
+/* Tables */
+.table-view {
+    -fx-background-color: #2e4e4e; /* Darker green-gray */
+    -fx-control-inner-background: #2e4e4e;
+    -fx-table-cell-border-color: #355457; /* Match root background */
+    -fx-padding: 10px;
+    -fx-text-fill: #ffffff; /* White text */
+}
+.table-view .column-header {
+    -fx-background-color: #355457; /* Match main background */
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+/* Text Inputs */
+.text-field, .password-field {
+    -fx-background-color: #ffffff; /* White background for inputs */
+    -fx-text-fill: #000000; /* Black text */
+    -fx-padding: 5px;
+    -fx-border-color: #f6c177; /* Gold border */
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #ffffff; /* White text */
+    -fx-font-size: 14px;
+}
+
+/* Tooltips */
+.tooltip {
+    -fx-background-color: #2e4e4e; /* Darker green-gray */
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+}
+
+/* Progress Indicators */
+.progress-bar {
+    -fx-accent: #f6c177; /* Gold */
+}
+.progress-indicator {
+    -fx-progress-color: #f6c177; /* Gold */
+}
+
+/* Menu Bars */
+.menu-bar {
+    -fx-background-color: #355457; /* Match root background */
+}
+.menu-bar .menu {
+    -fx-text-fill: #ffffff;
+}
+
+/* Scrollbars */
+.scroll-bar {
+    -fx-background-color: #2e4e4e;
+}
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: #355457; /* Subtle dark tone */
+}
+
+
+
+
+
+/* DatePicker Styling */
+.date-picker {
+    -fx-background-color: #1F4044;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #e4b970;
+    -fx-background-radius: 0 8 8 0;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #d9a762;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #1F4044;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup {
+    -fx-background-color: #2A565B;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #1F4044;
+}
+
+.date-picker-popup .calendar-grid {
+    -fx-background-color: #2A565B;
+}
+
+.date-picker-popup .cell {
+    -fx-background-color: #2A565B;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .cell:hover {
+    -fx-background-color: #e4b970;
+    -fx-text-fill: #1F4044;
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: #e4b970;
+    -fx-text-fill: #1F4044;
+}
+
+
+
