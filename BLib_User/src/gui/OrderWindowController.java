@@ -122,7 +122,7 @@ public class OrderWindowController extends BaseController {
                 btnOrder.setDisable(true);
                 showAlert("Success", "Order placed successfully!");
             } else {
-                statusMessage.setText("Failed to place order. Please try again.");
+                statusMessage.setText("Failed to place order. you are either frozen or already have an order for that book");
                 showAlert("Error", "Failed to place order. Please try again.");
             }
         } catch (NumberFormatException e) {

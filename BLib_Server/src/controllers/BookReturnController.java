@@ -10,6 +10,7 @@ import java.util.Date;
 import common.Book;
 import common.Borrow;
 import server.DBController;
+import controllers.OrderController;
 
 /**
  * The {@code BookReturnController} class is responsible for processing the return of books. 
@@ -21,7 +22,7 @@ import server.DBController;
 public class BookReturnController {
     private static final BookReturnController instance = new BookReturnController();
     private DBController db;
-
+    private OrderController orderController= OrderController.getInstance();
     /**
      * Retrieves the singleton instance of the {@code BookReturnController}.
      * 
@@ -65,7 +66,7 @@ public class BookReturnController {
 			e.printStackTrace();
 		}
     	
-    	
+    	orderController.notifyUserForReturnedBook(bookBarcode);
     	
     	// Update the actual_returned_date in the borrow table
         db.editRow("borrow", "borrow_number", borrow_number, "actual_returned_date", LocalDate.now().toString());

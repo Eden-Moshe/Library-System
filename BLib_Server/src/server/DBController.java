@@ -211,7 +211,7 @@ public class DBController {
 		else if (boolFields.contains(field))
 			stmt.setBoolean(index, value.contains("true"));//if value = "true" will set true.
 		else
-			stmt.setString(index, value);	
+			stmt.setString(index,value);	
 	}
 	
 	public ResultSet retrieveRow(String table, String field, String val)
