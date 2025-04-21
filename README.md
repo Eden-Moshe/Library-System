@@ -9,7 +9,7 @@ A full-stack application for managing library operations such as borrowing and r
 - Book borrowing and return tracking
 - Late return detection
 - User account creation and status management
-- Dynamic reports with visual graphs
+- Reports with visual graphs
 - Admin and user interfaces
 
 ---
